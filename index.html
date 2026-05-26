@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>פיזיקה — גולי | מבחן ייעודי תשפ"ה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060c1a;
+    --bg2: #0b1428;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --teal: #00e5c0;
+    --teal-dim: rgba(0,229,192,0.12);
+    --amber: #ffbe3d;
+    --amber-dim: rgba(255,190,61,0.12);
+    --pink: #ff6b9d;
+    --pink-dim: rgba(255,107,157,0.12);
+    --blue: #4a9eff;
+    --blue-dim: rgba(74,158,255,0.12);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.12);
+    --green: #34d399;
+    --text: #e8f0fe;
+    --text-dim: rgba(232,240,254,0.55);
+    --text-muted: rgba(232,240,254,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  /* ── CANVAS ── */
+  #starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb1 { width: 600px; height: 600px; background: var(--teal); top: -200px; right: -150px; }
+  .orb2 { width: 500px; height: 500px; background: var(--amber); bottom: -150px; left: -100px; }
+  .orb3 { width: 400px; height: 400px; background: var(--purple); top: 40%; left: 30%; opacity: 0.1; }
+
+  /* ── WRAPPER ── */
+  .wrap { position: relative; z-index: 1; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; right: 0; left: 0;
+    z-index: 100;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(6,12,26,0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 40px 60px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+  .hero-title .accent { color: var(--teal); }
+  .hero-title .line2 {
+    display: block;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0;
+    margin-top: 8px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-dim);
+    max-width: 480px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  /* ── COUNTDOWN ── */
+  .countdown {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.65s forwards;
+  }
+  .cd-block {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    min-width: 90px;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+  }
+  .cd-block::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,229,192,0.06), transparent);
+  }
+  .cd-num {
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--teal);
+    display: block;
+    line-height: 1;
+  }
+  .cd-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 6px;
+    display: block;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--teal);
+    color: var(--bg);
+    border: none;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Heebo', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,229,192,0.3); }
+  .btn-secondary {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'Heebo', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    animation: fadeIn 1s 1.5s both;
+  }
+  .scroll-arrow {
+    width: 24px;
+    height: 24px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg);
+    animation: bounce 2s infinite;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 100px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 16px;
+    color: var(--text-dim);
+    max-width: 560px;
+    line-height: 1.8;
+    margin-bottom: 56px;
+  }
+
+  /* ── TOPIC CARDS ── */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .topic-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .topic-card.visible {
+    animation: fadeUpIn 0.6s forwards;
+  }
+
+  .topic-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--card-accent);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px var(--card-accent);
+  }
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--card-tint), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .topic-card:hover::before { opacity: 1; }
+
+  .topic-card[data-color="teal"]   { --card-accent: var(--teal);   --card-tint: var(--teal-dim); }
+  .topic-card[data-color="amber"]  { --card-accent: var(--amber);  --card-tint: var(--amber-dim); }
+  .topic-card[data-color="pink"]   { --card-accent: var(--pink);   --card-tint: var(--pink-dim); }
+  .topic-card[data-color="blue"]   { --card-accent: var(--blue);   --card-tint: var(--blue-dim); }
+  .topic-card[data-color="purple"] { --card-accent: var(--purple); --card-tint: var(--purple-dim); }
+  .topic-card[data-color="green"]  { --card-accent: var(--green);  --card-tint: rgba(52,211,153,0.12); }
+
+  .topic-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--card-accent);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .topic-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    display: block;
+    line-height: 1;
+    filter: drop-shadow(0 0 12px var(--card-accent));
+  }
+  .topic-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .topic-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .topic-formulas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .formula-tag {
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    color: var(--card-accent);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .topic-weight {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .weight-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .weight-fill {
+    height: 100%;
+    background: var(--card-accent);
+    border-radius: 2px;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 0;
+  }
+  .topic-card.visible .weight-fill { width: var(--weight); }
+  .weight-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── FORMULA SHEET ── */
+  .formulas-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .fs-topic {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s;
+  }
+  .fs-topic:hover { transform: translateY(-2px); }
+  .fs-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .fs-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .fs-topic-name {
+    font-size: 15px;
+    font-weight: 700;
+    flex: 1;
+  }
+  .fs-pts {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .fs-body {
+    padding: 18px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .fs-formulas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .fs-f {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 12px 16px;
+    min-width: 150px;
+    flex: 1;
+    transition: border-color 0.2s;
+  }
+  .fs-f-name {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .fs-f-eq {
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .fs-f-unit {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+  .fs-rules {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fs-rule {
+    font-size: 13px;
+    color: rgba(232,240,254,0.78);
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.025);
+    border-radius: 8px;
+    border-right: 3px solid;
+    line-height: 1.55;
+  }
+  .fs-constants {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 18px 24px;
+    backdrop-filter: blur(8px);
+  }
+  .fs-const-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .fs-const-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .fs-const {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+  .fs-const-eq {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .fs-const-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ── STUDY PLAN ── */
+  .plan-section { max-width: 1200px; margin: 0 auto; padding: 100px 40px; }
+
+  .weeks-container { display: flex; flex-direction: column; gap: 48px; }
+
+  .week-block {
+    opacity: 0;
+    transform: translateX(24px);
+    transition: all 0.6s;
+  }
+  .week-block.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .week-badge {
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .week-badge.active { background: var(--teal); color: var(--bg); }
+  .week-badge.upcoming { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,190,61,0.3); }
+  .week-badge.final { background: var(--pink-dim); color: var(--pink); border: 1px solid rgba(255,107,157,0.3); }
+  .week-title {
+    font-size: 22px;
+    font-weight: 800;
+  }
+  .week-dates {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-right: auto;
+  }
+
+  .days-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .day-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    backdrop-filter: blur(8px);
+  }
+  .day-card:hover { border-color: var(--day-color); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+  .day-card::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--day-color);
+    border-radius: 0 16px 16px 0;
+  }
+
+  .day-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--day-color);
+    margin-bottom: 8px;
+    display: block;
+    text-transform: uppercase;
+  }
+  .day-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .day-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .day-tasks { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .day-tasks li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .task-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--day-color);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .task-check {
+    font-size: 13px;
+    color: var(--day-color);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .day-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border: 1px solid var(--glass-border);
+  }
+
+  /* Final week — full grid */
+  .final-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .final-day {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+    backdrop-filter: blur(8px);
+  }
+  .final-day:hover { border-color: var(--pink); }
+  .final-date {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--pink);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .final-day-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .final-task {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ── CHECKLIST ── */
+  .checklist-section { max-width: 1200px; margin: 0 auto; padding: 0 40px 100px; }
+
+  .checklist-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  .checklist-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 28px;
+    backdrop-filter: blur(8px);
+  }
+  .checklist-card-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .check-icon { font-size: 20px; }
+  .checklist-items { display: flex; flex-direction: column; gap: 12px; }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+  }
+  .check-item:hover { background: rgba(255,255,255,0.04); border-color: var(--glass-border); }
+  .check-item.done .check-box { background: var(--teal); border-color: var(--teal); }
+  .check-item.done .check-box::after {
+    content: '✓';
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 900;
+  }
+  .check-item.done .check-text {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--glass-border);
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .check-text {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.4;
+    font-family: monospace;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--glass-border);
+    padding: 40px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    position: relative;
+    z-index: 1;
+  }
+  footer strong { color: var(--teal); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUpIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50%       { transform: rotate(45deg) translateY(6px); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.18; } 50% { opacity: 0.28; }
+  }
+  .orb1 { animation: pulse 6s ease-in-out infinite; }
+  .orb2 { animation: pulse 8s ease-in-out 2s infinite; }
+  .orb3 { animation: pulse 10s ease-in-out 4s infinite; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 14px 20px; }
+    .nav-links { gap: 20px; }
+    section, .plan-section, .checklist-section { padding: 60px 20px; }
+    .topics-grid { grid-template-columns: 1fr 1fr; }
+    .days-grid { grid-template-columns: 1fr; }
+    .final-grid { grid-template-columns: 1fr 1fr; }
+    .checklist-grid { grid-template-columns: 1fr; }
+    .countdown { gap: 10px; }
+    .cd-block { min-width: 72px; padding: 14px 16px; }
+    .cd-num { font-size: 30px; }
+    .formulas-section { padding: 28px; }
+  }
+  @media (max-width: 600px) {
+    .topics-grid { grid-template-columns: 1fr; }
+    .hero-title { letter-spacing: -1px; }
+    .final-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<canvas id="starfield"></canvas>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="wrap">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⚛ פיזיקה | גולי</div>
+  <div class="nav-links">
+    <a href="#topics">נושאים</a>
+    <a href="#formulas">נוסחאות</a>
+    <a href="#plan">תוכנית לימודים</a>
+    <a href="#checklist">רשימת ביקורת</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">מבחן ייעודי · עתודה מדעית טכנולוגית · תשפ"ה</div>
+  <h1 class="hero-title">
+    <span class="accent">פיזיקה</span>
+    <span class="line2">כיתה ט׳ — מבחן ייעודי</span>
+  </h1>
+  <p class="hero-sub">
+    סיכום מלא של כל החומר, תוכנית לימודים לשישי-שבת,<br>
+    ודף נוסחאות — הכל במקום אחד.
+  </p>
+
+  <div class="countdown" id="countdown">
+    <div class="cd-block">
+      <span class="cd-num" id="cd-days">—</span>
+      <span class="cd-label">ימים</span>
+    </div>
+    <div class="cd-block">
+      <span class="cd-num" id="cd-hours">—</span>
+      <span class="cd-label">שעות</span>
+    </div>
+    <div class="cd-block">
+      <span class="cd-num" id="cd-mins">—</span>
+      <span class="cd-label">דקות</span>
+    </div>
+    <div class="cd-block">
+      <span class="cd-num" id="cd-secs">—</span>
+      <span class="cd-label">שניות</span>
+    </div>
+  </div>
+
+  <div class="hero-cta">
+    <a href="#topics" class="btn-primary">למידה עכשיו ←</a>
+    <a href="#plan" class="btn-secondary">תוכנית לימודים</a>
+  </div>
+
+  <div class="scroll-hint">
+    <span>גלול למטה</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TOPICS -->
+<section id="topics">
+  <div class="section-label">נושאי הלמידה</div>
+  <h2 class="section-title">6 נושאים למבחן</h2>
+  <p class="section-desc">כל הנושאים מבוססים על המבחן הייעודי 2025 ועל חומר מספר הלימוד. לחץ על כרטיס כדי לראות פרטים.</p>
+
+  <div class="topics-grid">
+
+    <div class="topic-card" data-color="teal" style="--weight:90%; animation-delay:0.05s" onclick="location.href='day1.html'" title="פתח חומר לימוד">
+      <span class="topic-num">נושא 01</span>
+      <span class="topic-icon">⚡</span>
+      <div class="topic-title">אנרגיה מכנית <span style="font-size:12px;opacity:0.6;margin-right:6px">← לימוד</span></div>
+      <div class="topic-desc">אנרגיית גובה, אנרגיית תנועה, וחוק שימור האנרגיה. הנושא המשמעותי ביותר במבחן.</div>
+      <div class="topic-formulas">
+        <span class="formula-tag">Eₕ = mgh</span>
+        <span class="formula-tag">Eₖ = ½mv²</span>
+        <span class="formula-tag">שימור אנרגיה</span>
+      </div>
+      <div class="topic-weight">
+        <span class="weight-label">משקל במבחן</span>
+        <div class="weight-bar"><div class="weight-fill" style="--weight:90%"></div></div>
+        <span class="weight-label">~29 נק׳</span>
+      </div>
+    </div>
+
+    <div class="topic-card" data-color="blue" style="--weight:65%; animation-delay:0.1s" onclick="location.href='day2.html'" title="פתח חומר לימוד">
+      <span class="topic-num">נושא 02</span>
+      <span class="topic-icon">💧</span>
+      <div class="topic-title">תחנה הידרואלקטרית <span style="font-size:12px;opacity:0.6;margin-right:6px">← לימוד</span></div>
+      <div class="topic-desc">המרות אנרגיה, נצילות, יתרונות וחסרונות של הפקת חשמל ממים.</div>
+      <div class="topic-formulas">
+        <span class="formula-tag">Eₕ → Eₖ → Eחשמלי</span>
+        <span class="formula-tag">נצילות %</span>
+      </div>
+      <div class="topic-weight">
+        <span class="weight-label">משקל במבחן</span>
+        <div class="weight-bar"><div class="weight-fill" style="--weight:65%"></div></div>
+        <span class="weight-label">~21 נק׳</span>
+      </div>
+    </div>
+
+    <div class="topic-card" data-color="amber" style="--weight:70%; animation-delay:0.15s" onclick="location.href='day3.html'" title="פתח חומר לימוד">
+      <span class="topic-num">נושא 03</span>
+      <span class="topic-icon">🔌</span>
+      <div class="topic-title">מעגלים חשמליים <span style="font-size:12px;opacity:0.6;margin-right:6px">← לימוד</span></div>
+      <div class="topic-desc">חוק אוהם, חיבור בטור ובמקביל, זיהוי סמלים, וחישוב עוצמת זרם.</div>
+      <div class="topic-formulas">
+        <span class="formula-tag">I = V/R</span>
+        <span class="formula-tag">R_כולל (טור)</span>
+        <span class="formula-tag">מקביל vs. טור</span>
+      </div>
+      <div class="topic-weight">
+        <span class="weight-label">משקל במבחן</span>
+        <div class="weight-bar"><div class="weight-fill" style="--weight:70%"></div></div>
+        <span class="weight-label">~23 נק׳</span>
+      </div>
+    </div>
+
+    <div class="topic-card" data-color="pink" style="--weight:35%; animation-delay:0.2s" onclick="location.href='day4.html'" title="פתח חומר לימוד">
+      <span class="topic-num">נושא 04</span>
+      <span class="topic-icon">⚙️</span>
+      <div class="topic-title">הספק <span style="font-size:12px;opacity:0.6;margin-right:6px">← לימוד</span></div>
+      <div class="topic-desc">הגדרת הספק, קשר בין הספק לצריכת אנרגיה, השוואת מכשירים חשמליים.</div>
+      <div class="topic-formulas">
+        <span class="formula-tag">P = E/t</span>
+        <span class="formula-tag">P = VI</span>
+        <span class="formula-tag">W, kW</span>
+      </div>
+      <div class="topic-weight">
+        <span class="weight-label">משקל במבחן</span>
+        <div class="weight-bar"><div class="weight-fill" style="--weight:35%"></div></div>
+        <span class="weight-label">~4 נק׳</span>
+      </div>
+    </div>
+
+    <div class="topic-card" data-color="purple" style="--weight:50%; animation-delay:0.25s" onclick="location.href='day4.html'" title="פתח חומר לימוד">
+      <span class="topic-num">נושא 05</span>
+      <span class="topic-icon">🌡️</span>
+      <div class="topic-title">אנרגיית חום <span style="font-size:12px;opacity:0.6;margin-right:6px">← לימוד</span></div>
+      <div class="topic-desc">חום סגולי, שינוי טמפרטורה, וחיבור בין אנרגיה חשמלית לאנרגיית חום.</div>
+      <div class="topic-formulas">
+        <span class="formula-tag">Q = mcΔT</span>
+        <span class="formula-tag">c_מים = 4200</span>
+        <span class="formula-tag">P·t = Q</span>
+      </div>
+      <div class="topic-weight">
+        <span class="weight-label">משקל במבחן</span>
+        <div class="weight-bar"><div class="weight-fill" style="--weight:50%"></div></div>
+        <span class="weight-label">~8 נק׳</span>
+      </div>
+    </div>
+
+    <div class="topic-card" data-color="green" style="--weight:80%; animation-delay:0.3s" onclick="location.href='day1.html'" title="פתח חומר לימוד">
+      <span class="topic-num">נושא 06</span>
+      <span class="topic-icon">📊</span>
+      <div class="topic-title">ניסוי מדעי וגרפים <span style="font-size:12px;opacity:0.6;margin-right:6px">← לימוד</span></div>
+      <div class="topic-desc">זיהוי משתנים, שרטוט גרפים עם כותרות ויחידות מידה, וניסוח מסקנות.</div>
+      <div class="topic-formulas">
+        <span class="formula-tag">גורם תלוי (Y)</span>
+        <span class="formula-tag">גורם בלתי-תלוי (X)</span>
+        <span class="formula-tag">קו מגמה</span>
+      </div>
+      <div class="topic-weight">
+        <span class="weight-label">משקל במבחן</span>
+        <div class="weight-bar"><div class="weight-fill" style="--weight:80%"></div></div>
+        <span class="weight-label">~24 נק׳</span>
+      </div>
+    </div>
+
+    <div class="topic-card" data-color="amber" style="--weight:100%; animation-delay:0.35s; grid-column:1/-1" onclick="location.href='exam.html'" title="פתח מבחן מלא">
+      <span class="topic-num">🏆 92/100</span>
+      <span class="topic-icon">📝</span>
+      <div class="topic-title">מבחן מלא — עתודה 26.5.2026 <span style="font-size:12px;opacity:0.6;margin-right:6px">← תרגול</span></div>
+      <div class="topic-desc">שאלות המבחן האמיתי שגולי כתבה + שאלות תרגול נוספות. רב-ברירה עם רמזים והסברים מלאים.</div>
+      <div class="topic-formulas">
+        <span class="formula-tag">7 שאלות מהמבחן</span>
+        <span class="formula-tag">6 שאלות תרגול</span>
+        <span class="formula-tag">רמזים והסברים</span>
+      </div>
+      <div class="topic-weight">
+        <span class="weight-label">ציון אמיתי</span>
+        <div class="weight-bar"><div class="weight-fill" style="--weight:92%"></div></div>
+        <span class="weight-label">92 / 100</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FORMULAS -->
+<section id="formulas" style="padding-top: 80px; padding-bottom: 80px; max-width: 1200px;">
+  <div class="section-label">עזר מהיר</div>
+  <h2 class="section-title">דף נוסחאות</h2>
+  <p class="section-desc">כל הנוסחאות, הכללים, והטריקים לפי נושא — עם מספר הנקודות בכל נושא.</p>
+
+  <div class="formulas-section">
+
+    <!-- נושא 1: אנרגיה מכנית -->
+    <div class="fs-topic">
+      <div class="fs-head">
+        <div class="fs-num" style="background:var(--teal);color:#060c1a">1</div>
+        <div class="fs-topic-name">אנרגיה מכנית — Eₕ ו-Eₖ</div>
+        <div class="fs-pts" style="background:rgba(0,229,192,0.12);color:var(--teal)">~23 נק׳</div>
+      </div>
+      <div class="fs-body">
+        <div class="fs-formulas">
+          <div class="fs-f">
+            <div class="fs-f-name">משקל</div>
+            <div class="fs-f-eq" style="color:var(--teal)">W = mg</div>
+            <div class="fs-f-unit">m = מסה (ק"ג) · g = 10 N/kg</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">אנרגיית גובה (פוטנציאלית)</div>
+            <div class="fs-f-eq" style="color:var(--teal)">Eₕ = mgh</div>
+            <div class="fs-f-unit">m=ק"ג · g=10 · h=גובה (מ׳) · יחידה: J</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">אנרגיית תנועה (קינטית)</div>
+            <div class="fs-f-eq" style="color:var(--teal)">Eₖ = ½mv²</div>
+            <div class="fs-f-unit">m=ק"ג · v=מהירות (מ/ש) · יחידה: J</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">אנרגיה מכנית כוללת</div>
+            <div class="fs-f-eq" style="color:var(--teal)">E = Eₕ + Eₖ</div>
+            <div class="fs-f-unit">סכום שני סוגי האנרגיה · יחידה: J</div>
+          </div>
+        </div>
+        <div class="fs-rules">
+          <div class="fs-rule" style="border-color:var(--teal)">⚖️ חוק שימור האנרגיה: E_מכנית = קבוע ללא חיכוך — עולה: Eₕ↑ Eₖ↓ · יורד: Eₕ↓ Eₖ↑</div>
+          <div class="fs-rule" style="border-color:var(--teal)">🔻 בתחתית (h=0): כל Eₕ הופכת ל-Eₖ ← ½mv² = mgh → v = √(2gh)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- נושא 2: תחנה הידרואלקטרית -->
+    <div class="fs-topic">
+      <div class="fs-head">
+        <div class="fs-num" style="background:var(--blue);color:#060c1a">2</div>
+        <div class="fs-topic-name">תחנה הידרואלקטרית — המרות ונצילות</div>
+        <div class="fs-pts" style="background:rgba(74,158,255,0.12);color:var(--blue)">~18 נק׳</div>
+      </div>
+      <div class="fs-body">
+        <div class="fs-formulas">
+          <div class="fs-f">
+            <div class="fs-f-name">נצילות</div>
+            <div class="fs-f-eq" style="color:var(--blue)">η = (E_מופקת / E_מושקעת) × 100%</div>
+            <div class="fs-f-unit">אחוזים (%) · E_מושקעת = 100%</div>
+          </div>
+        </div>
+        <div class="fs-rules">
+          <div class="fs-rule" style="border-color:var(--blue)">⚡ המרות בתחנה: Eₕ מים → Eₖ מים → Eₖ טורבינה → E_חשמלי (במחולל)</div>
+          <div class="fs-rule" style="border-color:var(--blue)">📉 נצילות 90% = 90% הפכה לחשמל · 10% אבדה לחום וחיכוך. E_מושקעת תמיד = 100%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- נושא 3: מעגלים חשמליים -->
+    <div class="fs-topic">
+      <div class="fs-head">
+        <div class="fs-num" style="background:var(--amber);color:#060c1a">3</div>
+        <div class="fs-topic-name">מעגלים חשמליים — חוק אוהם</div>
+        <div class="fs-pts" style="background:rgba(255,190,61,0.12);color:var(--amber)">~23 נק׳</div>
+      </div>
+      <div class="fs-body">
+        <div class="fs-formulas">
+          <div class="fs-f">
+            <div class="fs-f-name">עוצמת זרם</div>
+            <div class="fs-f-eq" style="color:var(--amber)">I = q/t</div>
+            <div class="fs-f-unit">q=מטען (קולון) · t=זמן (שנ׳) · יחידה: A</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">חוק אוהם</div>
+            <div class="fs-f-eq" style="color:var(--amber)">I = V / R</div>
+            <div class="fs-f-unit">V=מתח (וולט) · R=התנגדות (Ω) · I=זרם (A)</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">התנגדות כוללת — בטור</div>
+            <div class="fs-f-eq" style="color:var(--amber)">R_כולל = R₁ + R₂ + R₃</div>
+            <div class="fs-f-unit">סכום כל ההתנגדויות בטור</div>
+          </div>
+        </div>
+        <div class="fs-rules">
+          <div class="fs-rule" style="border-color:var(--amber)">🔗 בטור: I זהה בכל נקודה · V מתחלק בין המכשירים · R_כולל = R₁+R₂+... · תקלה — כל המעגל נפסק</div>
+          <div class="fs-rule" style="border-color:var(--amber)">⫠ במקביל: V זהה בכל מכשיר = מתח המקור · I מתחלק לענפים · R_כולל &lt; R הקטן ביותר · תקלה — שאר ממשיכים</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- נושא 4: הספק -->
+    <div class="fs-topic">
+      <div class="fs-head">
+        <div class="fs-num" style="background:var(--purple);color:#060c1a">4</div>
+        <div class="fs-topic-name">הספק וצריכת אנרגיה חשמלית</div>
+        <div class="fs-pts" style="background:rgba(167,139,250,0.12);color:var(--purple)">~4 נק׳</div>
+      </div>
+      <div class="fs-body">
+        <div class="fs-formulas">
+          <div class="fs-f">
+            <div class="fs-f-name">הספק כללי</div>
+            <div class="fs-f-eq" style="color:var(--purple)">P = E / t</div>
+            <div class="fs-f-unit">E=אנרגיה (J) · t=זמן (שנ׳) · יחידה: W</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">הספק חשמלי</div>
+            <div class="fs-f-eq" style="color:var(--purple)">P = V × I</div>
+            <div class="fs-f-unit">וולט × אמפר = וואט (W)</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">אנרגיה חשמלית</div>
+            <div class="fs-f-eq" style="color:var(--purple)">E = V × I × t</div>
+            <div class="fs-f-unit">t בשניות · יחידה: ג'ול (J)</div>
+          </div>
+        </div>
+        <div class="fs-rules">
+          <div class="fs-rule" style="border-color:var(--purple)">💡 הספק גבוה יותר = יותר אנרגיה באותו פרק זמן · 2,200W צורך יותר מ-1,200W · להמיר תמיד לאותן יחידות!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- נושא 5: אנרגיית חום -->
+    <div class="fs-topic">
+      <div class="fs-head">
+        <div class="fs-num" style="background:var(--pink);color:#060c1a">5</div>
+        <div class="fs-topic-name">אנרגיית חום — תרמית</div>
+        <div class="fs-pts" style="background:rgba(255,107,157,0.12);color:var(--pink)">~8 נק׳</div>
+      </div>
+      <div class="fs-body">
+        <div class="fs-formulas">
+          <div class="fs-f">
+            <div class="fs-f-name">אנרגיית חום</div>
+            <div class="fs-f-eq" style="color:var(--pink)">Q = m × c × ΔT</div>
+            <div class="fs-f-unit">m=ק"ג · c=חום סגולי · ΔT=T_סופי−T_ראשוני</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">חשמל → חום (נצילות 100%)</div>
+            <div class="fs-f-eq" style="color:var(--pink)">P × t = m × c × ΔT</div>
+            <div class="fs-f-unit">כאשר כל האנרגיה החשמלית הופכת לחום</div>
+          </div>
+        </div>
+        <div class="fs-rules">
+          <div class="fs-rule" style="border-color:var(--pink)">🌡️ ΔT = T_סופית − T_התחלתית · מסה חייבת להיות בק"ג (לא גרמים!) · 500g = 0.5 kg</div>
+          <div class="fs-rule" style="border-color:var(--pink)">♨️ דוגמה: P=1200W, m=0.5kg, ΔT=80°C → t = (0.5×4200×80) ÷ 1200 = 140 שנ׳</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- נושא 6: ניסוי מדעי וגרפים -->
+    <div class="fs-topic">
+      <div class="fs-head">
+        <div class="fs-num" style="background:var(--green);color:#060c1a">6</div>
+        <div class="fs-topic-name">ניסוי מדעי וגרפים</div>
+        <div class="fs-pts" style="background:rgba(52,211,153,0.12);color:var(--green)">~24 נק׳</div>
+      </div>
+      <div class="fs-body">
+        <div class="fs-formulas">
+          <div class="fs-f">
+            <div class="fs-f-name">גורם בלתי תלוי (מה ששינינו)</div>
+            <div class="fs-f-eq" style="color:var(--green)">→ ציר X</div>
+            <div class="fs-f-unit">שם + יחידות חובה על הציר</div>
+          </div>
+          <div class="fs-f">
+            <div class="fs-f-name">גורם תלוי (מה שמדדנו)</div>
+            <div class="fs-f-eq" style="color:var(--green)">→ ציר Y</div>
+            <div class="fs-f-unit">שם + יחידות חובה על הציר</div>
+          </div>
+        </div>
+        <div class="fs-rules">
+          <div class="fs-rule" style="border-color:var(--green)">📊 גרף תקין חייב לכלול: כותרת גרף · שם ציר X + יחידות · שם ציר Y + יחידות · נקודות מדויקות לפי הטבלה · קו מגמה מהראשית</div>
+          <div class="fs-rule" style="border-color:var(--green)">⚠️ שרטוט גרף = 12 נקודות — הכי שווה לתרגל! בלי כותרת / יחידות = הפחתת נקודות!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- קבועים -->
+    <div class="fs-constants">
+      <div class="fs-const-title">📌 קבועים וזיכרונות חשובים</div>
+      <div class="fs-const-list">
+        <div class="fs-const">
+          <div class="fs-const-eq" style="color:var(--teal)">g = 10 N/kg</div>
+          <div class="fs-const-desc">תאוצת הכובד</div>
+        </div>
+        <div class="fs-const">
+          <div class="fs-const-eq" style="color:var(--pink)">c_מים = 4,200 J/(kg·°C)</div>
+          <div class="fs-const-desc">חום סגולי של מים</div>
+        </div>
+        <div class="fs-const">
+          <div class="fs-const-eq" style="color:var(--purple)">1 W = 1 J/s</div>
+          <div class="fs-const-desc">וואט = ג'ול לשנייה</div>
+        </div>
+        <div class="fs-const">
+          <div class="fs-const-eq" style="color:var(--purple)">1 kW = 1,000 W</div>
+          <div class="fs-const-desc">קילוואט</div>
+        </div>
+        <div class="fs-const">
+          <div class="fs-const-eq" style="color:var(--amber)">1 A = 1 C/s</div>
+          <div class="fs-const-desc">אמפר = קולון לשנייה</div>
+        </div>
+        <div class="fs-const">
+          <div class="fs-const-eq" style="color:var(--blue)">η_תחנה ≈ 90%</div>
+          <div class="fs-const-desc">נצילות טיפוסית</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STUDY PLAN -->
+<div class="plan-section" id="plan">
+  <div class="section-label">תוכנית לימודים</div>
+  <h2 class="section-title">שישי-שבת עד המבחן</h2>
+  <p class="section-desc">יעד: להיות מוכנה עד 19 במאי — שבוע לפני המבחן ב-26 במאי.</p>
+
+  <div class="weeks-container">
+
+    <!-- שבוע 2 -->
+    <div class="week-block" id="week2">
+      <div class="week-header">
+        <span class="week-badge upcoming">שבוע 2</span>
+        <span class="week-title">אנרגיה מכנית + תחנה הידרואלקטרית</span>
+        <span class="week-dates">9–10 במאי</span>
+      </div>
+      <div class="days-grid">
+        <div class="day-card" style="--day-color: var(--teal); cursor:pointer" onclick="location.href='day1.html'">
+          <span class="day-tag">שישי · 9 במאי</span>
+          <div class="day-title">אנרגיה מכנית — בסיס</div>
+          <div class="day-subtitle">נוסחאות + ניסוי + שרטוט גרף</div>
+          <ul class="day-tasks">
+            <li><span class="task-dot"></span>ללמוד: Eₕ = mgh, Eₖ = ½mv², חוק שימור האנרגיה</li>
+            <li><span class="task-dot"></span>להבין את ניסוי המים — גורם תלוי/בלתי תלוי</li>
+            <li><span class="task-dot"></span>לתרגל שאלה 3א-ג מהמבחן (כולל גרף ידני)</li>
+            <li><span class="task-dot"></span>יעד: לשרטט גרף מלא עם כותרות ויחידות</li>
+          </ul>
+          <span class="day-duration">⏱ ~3 שעות</span>
+          <div style="margin-top:12px;font-size:13px;color:var(--teal);font-weight:600">פתח חומר לימוד ←</div>
+        </div>
+        <div class="day-card" style="--day-color: var(--blue); cursor:pointer" onclick="location.href='day2.html'">
+          <span class="day-tag">שבת · 10 במאי</span>
+          <div class="day-title">תחנה הידרואלקטרית</div>
+          <div class="day-subtitle">המרות אנרגיה + חישובים + נצילות</div>
+          <ul class="day-tasks">
+            <li><span class="task-dot"></span>לשנן רצף: Eₕ → Eₖ (מים) → Eₖ (טורבינה) → Eחשמלי</li>
+            <li><span class="task-dot"></span>לתרגל שאלה 4 מהמבחן (Eₕ + מהירות + גרפים)</li>
+            <li><span class="task-dot"></span>חזרה על שאלה 3 ללא הצצה בתשובות</li>
+            <li><span class="task-dot"></span>יעד: לפתור שאלה 4 בשלמות ולבדוק מול המחוון</li>
+          </ul>
+          <span class="day-duration">⏱ ~3 שעות</span>
+          <div style="margin-top:12px;font-size:13px;color:var(--blue);font-weight:600">פתח חומר לימוד ←</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- שבוע 3 -->
+    <div class="week-block" id="week3">
+      <div class="week-header">
+        <span class="week-badge upcoming">שבוע 3</span>
+        <span class="week-title">מעגלים חשמליים + הספק + חום</span>
+        <span class="week-dates">16–17 במאי</span>
+      </div>
+      <div class="days-grid">
+        <div class="day-card" style="--day-color: var(--amber); cursor:pointer" onclick="location.href='day3.html'">
+          <span class="day-tag">שישי · 16 במאי</span>
+          <div class="day-title">מעגלים חשמליים</div>
+          <div class="day-subtitle">חוק אוהם · בטור · במקביל</div>
+          <ul class="day-tasks">
+            <li><span class="task-dot"></span>ללמוד: חוק אוהם I=V/R, זיהוי סמלים במעגל</li>
+            <li><span class="task-dot"></span>להבין: הבדל בטור/מקביל — מה קורה בתקלה</li>
+            <li><span class="task-dot"></span>לתרגל שאלה 5 (זיהוי + הסבר) ושאלה 6א+ב (חישובים)</li>
+            <li><span class="task-dot"></span>יעד: לחשב I בשני סוגי מעגלים בדיוק</li>
+          </ul>
+          <span class="day-duration">⏱ ~3-4 שעות</span>
+          <div style="margin-top:12px;font-size:13px;color:var(--amber);font-weight:600">פתח חומר לימוד ←</div>
+        </div>
+        <div class="day-card" style="--day-color: var(--purple); cursor:pointer" onclick="location.href='day4.html'">
+          <span class="day-tag">שבת · 17 במאי</span>
+          <div class="day-title">הספק + חום + חזרה כללית</div>
+          <div class="day-subtitle">P = VI · Q = mcΔT · סיכום מלא</div>
+          <ul class="day-tasks">
+            <li><span class="task-dot"></span>ללמוד: P=E/t, P=VI, Q=mcΔT (לשים לב: מסה בק"ג!)</li>
+            <li><span class="task-dot"></span>לתרגל שאלות 7 ו-8 מהמבחן (הספק + הרתחת מים)</li>
+            <li><span class="task-dot"></span>לקרוא את המחוון המלא — להבין מה מצפים לראות</li>
+            <li><span class="task-dot"></span>יעד: לפתור שאלות 7+8 ולבדוק מול מחוון</li>
+          </ul>
+          <span class="day-duration">⏱ ~3-4 שעות</span>
+          <div style="margin-top:12px;font-size:13px;color:var(--purple);font-weight:600">פתח חומר לימוד ←</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- שבוע סופי -->
+    <div class="week-block" id="weekfinal">
+      <div class="week-header">
+        <span class="week-badge final">שבוע לפני המבחן</span>
+        <span class="week-title">חזרה סופית ומבחן ניסיון</span>
+        <span class="week-dates">19–22 במאי</span>
+      </div>
+      <div class="final-grid">
+        <div class="final-day">
+          <span class="final-date">19.5</span>
+          <span class="final-day-name">יום ב׳</span>
+          <div class="final-task">פתרון המבחן המלא בתנאי מבחן<br>90 דקות ⏱</div>
+        </div>
+        <div class="final-day">
+          <span class="final-date">20.5</span>
+          <span class="final-day-name">יום ג׳</span>
+          <div class="final-task">בדיקה מול המחוון<br>סימון שגיאות + חזרה ממוקדת</div>
+        </div>
+        <div class="final-day">
+          <span class="final-date">21.5</span>
+          <span class="final-day-name">יום ד׳</span>
+          <div class="final-task">תרגול ממוקד<br>בנושאים שטעתה בהם</div>
+        </div>
+        <div class="final-day">
+          <span class="final-date">22.5</span>
+          <span class="final-day-name">יום ה׳</span>
+          <div class="final-task">קריאת נוסחאות<br>+ מבחן 2018 (שאלות 7-10)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CHECKLIST -->
+<div class="checklist-section" id="checklist">
+  <div class="section-label">רשימת ביקורת</div>
+  <h2 class="section-title" style="margin-bottom: 16px;">לפני המבחן ✓</h2>
+  <p style="font-size: 16px; color: var(--text-dim); margin-bottom: 48px;">לחצי על כל פריט כדי לסמן שסיימת ✓</p>
+
+  <div class="checklist-grid">
+
+    <div class="checklist-card">
+      <div class="checklist-card-title"><span class="check-icon">🧮</span> נוסחאות לשינון</div>
+      <div class="checklist-items" id="cl1">
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">Eₕ = mgh</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">Eₖ = ½mv²</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">Q = mcΔT (c_מים = 4200)</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">I = V/R (חוק אוהם)</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">P = E/t ו-P = VI</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">נצילות = (Eₒᵤₜ/Eᵢₙ)×100%</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-card">
+      <div class="checklist-card-title"><span class="check-icon">🎯</span> מיומנויות</div>
+      <div class="checklist-items">
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">לשרטט גרף: כותרת + שמות צירים + יחידות</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">לזהות גורם תלוי ובלתי-תלוי</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">לכתוב טיעון: טענה + נימוק</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">לחשב v בעזרת חוק שימור האנרגיה</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">לחשב I בטור ובמקביל</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">לזהות סמלים בסכמת מעגל</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-card">
+      <div class="checklist-card-title"><span class="check-icon">⚡</span> טכניקת מבחן</div>
+      <div class="checklist-items">
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">כתבי נוסחה לפני הצבה</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">רשמי יחידות מידה בכל תוצאה</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">הצגי שלבי חישוב (ניקוד חלקי!)</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">שאלה 4 = 29 נק׳ — להתחיל ממנה</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">שרטוט גרף = 12 נק׳ — כותרות חובה!</span></div>
+        <div class="check-item" onclick="toggle(this)"><div class="check-box"></div><span class="check-text">המרת גרמים לקילוגרמים ב-Q=mcΔT</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>גולי</strong> — מבחן ייעודי פיזיקה | 26 במאי 2026 · עתודה מדעית טכנולוגית ·
+  <span style="color: var(--text-muted)">הוכן ב-2 במאי 2026</span>
+  &nbsp;🌟
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+// ── STARFIELD ──
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let W, H, stars, lines;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initStars() {
+  stars = Array.from({length: 120}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.2 + 0.3,
+    a: Math.random(),
+    speed: Math.random() * 0.3 + 0.05,
+    drift: (Math.random() - 0.5) * 0.2,
+  }));
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw connections
+  for (let i = 0; i < stars.length; i++) {
+    for (let j = i + 1; j < stars.length; j++) {
+      const dx = stars[i].x - stars[j].x;
+      const dy = stars[i].y - stars[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 130) {
+        ctx.beginPath();
+        ctx.moveTo(stars[i].x, stars[i].y);
+        ctx.lineTo(stars[j].x, stars[j].y);
+        ctx.strokeStyle = `rgba(0,229,192,${0.04 * (1 - dist/130)})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Draw stars
+  stars.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(200,220,255,${s.a * 0.6})`;
+    ctx.fill();
+  });
+}
+
+function animateStars() {
+  stars.forEach(s => {
+    s.y -= s.speed;
+    s.x += s.drift;
+    s.a += (Math.random() - 0.5) * 0.02;
+    s.a = Math.max(0.1, Math.min(1, s.a));
+    if (s.y < 0) { s.y = H; s.x = Math.random() * W; }
+    if (s.x < 0 || s.x > W) { s.x = Math.random() * W; }
+  });
+  drawStars();
+  requestAnimationFrame(animateStars);
+}
+
+window.addEventListener('resize', () => { resize(); initStars(); });
+resize();
+initStars();
+animateStars();
+
+// ── COUNTDOWN ──
+const examDate = new Date('2026-05-26T08:00:00');
+function updateCD() {
+  const now = new Date();
+  const diff = examDate - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hours').textContent = '0';
+    document.getElementById('cd-mins').textContent = '0';
+    document.getElementById('cd-secs').textContent = '0';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent = d;
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+}
+updateCD();
+setInterval(updateCD, 1000);
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      if (el.classList.contains('topic-card')) {
+        const delay = parseFloat(el.style.animationDelay || 0) * 1000;
+        setTimeout(() => el.classList.add('visible'), delay * 1000 / 1000);
+      } else {
+        el.classList.add('visible');
+      }
+      observer.unobserve(el);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.topic-card, .week-block').forEach(el => observer.observe(el));
+
+// Trigger weight bars for already-visible elements
+setTimeout(() => {
+  document.querySelectorAll('.topic-card.visible .weight-fill').forEach(el => {
+    el.style.width = el.style.getPropertyValue('--weight') || el.parentElement?.querySelector('.weight-fill')?.dataset.weight;
+  });
+}, 500);
+
+// ── CHECKLIST ──
+function toggle(el) {
+  el.classList.toggle('done');
+  // persist
+  const key = 'check_' + el.closest('.checklist-items')?.id + '_' + el.querySelector('.check-text')?.textContent;
+  localStorage.setItem(key, el.classList.contains('done') ? '1' : '0');
+}
+
+// Restore
+document.querySelectorAll('.check-item').forEach(el => {
+  const key = 'check_' + el.closest('.checklist-items')?.id + '_' + el.querySelector('.check-text')?.textContent;
+  if (localStorage.getItem(key) === '1') el.classList.add('done');
+});
+
+// ── SMOOTH NAV ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>

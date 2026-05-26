@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Tool state
+.claude/
+.planning/
+.netlify/
+
+# Source materials — not deployed (kept locally)
+files/*
+!files/lastofus.avif

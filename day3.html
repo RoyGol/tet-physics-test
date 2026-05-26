@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>יום 3 — מעגלים חשמליים | פיזיקה גולי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060c1a; --bg2: #0b1428;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --teal: #00e5c0; --teal-dim: rgba(0,229,192,0.12);
+    --amber: #ffbe3d; --amber-dim: rgba(255,190,61,0.12);
+    --pink: #ff6b9d;
+    --blue: #4a9eff; --blue-dim: rgba(74,158,255,0.12);
+    --purple: #a78bfa; --purple-dim: rgba(167,139,250,0.12);
+    --green: #34d399;
+    --text: #e8f0fe;
+    --text-dim: rgba(232,240,254,0.55);
+    --text-muted: rgba(232,240,254,0.3);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family:'Heebo',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; direction:rtl; }
+  .orb { position:fixed; border-radius:50%; filter:blur(120px); opacity:0.15; pointer-events:none; z-index:0; }
+  .orb1 { width:500px;height:500px; background:var(--amber); top:-150px;right:-100px; }
+  .orb2 { width:400px;height:400px; background:var(--teal); bottom:-100px;left:-80px; }
+  .wrap { position:relative; z-index:1; }
+
+  nav { position:fixed;top:0;right:0;left:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,12,26,0.75);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border); }
+  .nav-back { display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--amber);text-decoration:none;transition:opacity 0.2s; }
+  .nav-back:hover { opacity:0.75; }
+  .nav-title { font-size:15px;font-weight:700;color:var(--text-dim); }
+  .nav-day { font-size:13px;color:var(--text-muted);background:var(--glass);border:1px solid var(--glass-border);padding:4px 12px;border-radius:20px; }
+
+  .progress-bar { position:fixed;top:57px;right:0;left:0;z-index:99;background:rgba(6,12,26,0.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--glass-border);padding:10px 40px;display:flex;gap:8px;align-items:center; }
+  .pb-step { flex:1;height:4px;border-radius:2px;background:var(--glass-border);transition:background 0.4s; }
+  .pb-step.done { background:rgba(0,229,192,0.4); }
+  .pb-step.active { background:var(--amber);box-shadow:0 0 8px var(--amber); }
+
+  .hero { padding:140px 40px 60px;max-width:900px;margin:0 auto; }
+  .hero-badge { display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber);background:var(--amber-dim);border:1px solid rgba(255,190,61,0.25);padding:6px 16px;border-radius:20px;margin-bottom:24px; }
+  .hero h1 { font-size:clamp(32px,5vw,56px);font-weight:900;line-height:1.1;margin-bottom:16px; }
+  .hero h1 span { color:var(--amber); }
+  .hero-sub { font-size:18px;color:var(--text-dim);line-height:1.6;max-width:650px; }
+
+  .section { max-width:900px;margin:0 auto;padding:0 40px 60px; }
+  .section-title { font-size:22px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px; }
+  .section-title::before { content:'';display:block;width:4px;height:24px;background:var(--amber);border-radius:2px; }
+  .section-desc { font-size:14px;color:var(--text-dim);margin-bottom:28px; }
+
+  .tc { background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:28px 32px;margin-bottom:20px;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s; }
+  .tc:hover { transform:translateY(-2px); }
+  .tc::before { content:'';position:absolute;top:0;right:0;width:3px;height:100%;border-radius:0 16px 16px 0; }
+  .tc-amber::before { background:var(--amber); }
+  .tc-teal::before  { background:var(--teal); }
+  .tc-blue::before  { background:var(--blue); }
+  .tc-green::before { background:var(--green); }
+  .tc-purple::before{ background:var(--purple); }
+  .tc-pink::before  { background:var(--pink); }
+  .tc-title { font-size:18px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px; }
+  .tc-icon { font-size:22px; }
+  .tc p { font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:12px; }
+  .tc p:last-child { margin-bottom:0; }
+
+  .formula-box { background:var(--amber-dim);border:1px solid rgba(255,190,61,0.3);border-radius:10px;padding:16px 20px;margin:14px 0;font-size:16px;text-align:center;color:var(--amber);font-weight:700;letter-spacing:0.5px; }
+  .formula-box.blue { background:var(--blue-dim);border-color:rgba(74,158,255,0.3);color:var(--blue); }
+  .formula-box.teal { background:var(--teal-dim);border-color:rgba(0,229,192,0.3);color:var(--teal); }
+  .formula-box.green{ background:rgba(52,211,153,0.08);border-color:rgba(52,211,153,0.3);color:var(--green); }
+
+  .key-box { background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px 20px;margin:14px 0;font-size:14px;color:var(--green);line-height:1.7; }
+  .key-box strong { color:#fff; }
+
+  .warn-box { background:rgba(255,107,157,0.07);border:1px solid rgba(255,107,157,0.2);border-radius:10px;padding:14px 20px;margin:14px 0;font-size:14px;color:var(--pink);line-height:1.7; }
+  .warn-box strong { color:#fff; }
+
+  /* COMPARE TABLE */
+  .compare-table { width:100%;border-collapse:collapse;margin:14px 0;font-size:14px; }
+  .compare-table th { background:var(--amber-dim);color:var(--amber);padding:10px 14px;text-align:center;border-bottom:1px solid rgba(255,190,61,0.2);font-weight:700; }
+  .compare-table th:first-child { text-align:right; }
+  .compare-table td { padding:10px 14px;border-bottom:1px solid var(--glass-border);color:var(--text-dim);text-align:center; }
+  .compare-table td:first-child { text-align:right;font-weight:600;color:var(--text); }
+  .compare-table tr:last-child td { border-bottom:none; }
+  .td-good { color:var(--green); }
+  .td-diff { color:var(--amber); }
+
+  .ex-step { display:flex;gap:14px;margin-bottom:14px;align-items:flex-start; }
+  .ex-step-num { min-width:28px;height:28px;border-radius:50%;background:var(--amber-dim);border:1px solid rgba(255,190,61,0.3);color:var(--amber);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px; }
+  .ex-step-text { font-size:14px;color:var(--text-dim);line-height:1.75; }
+
+  .video-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px; }
+  .video-card { background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;text-decoration:none;transition:border-color 0.25s,transform 0.25s; }
+  .video-card:hover { border-color:var(--amber);transform:translateY(-3px); }
+  .video-thumb { font-size:32px;text-align:center; }
+  .video-title { font-size:14px;font-weight:700;color:var(--text); }
+  .video-sub   { font-size:12px;color:var(--text-muted); }
+  .video-tag   { font-size:11px;font-weight:600;background:var(--amber-dim);color:var(--amber);border-radius:6px;padding:3px 8px;align-self:flex-start; }
+
+  .example-card { background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;margin-bottom:24px;overflow:hidden; }
+  .example-header { padding:20px 28px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--glass-border); }
+  .diff-badge { font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase; }
+  .diff-easy   { background:rgba(52,211,153,0.15);  color:var(--green); border:1px solid rgba(52,211,153,0.3); }
+  .diff-medium { background:rgba(255,190,61,0.15);  color:var(--amber); border:1px solid rgba(255,190,61,0.3); }
+  .diff-hard   { background:rgba(255,107,157,0.15); color:var(--pink);  border:1px solid rgba(255,107,157,0.3); }
+  .example-title { font-size:16px;font-weight:700; }
+  .example-body { padding:24px 28px; }
+  .example-body p { font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:10px; }
+  .ex-answer { margin-top:16px;padding:14px 18px;border-radius:10px;background:var(--amber-dim);border:1px solid rgba(255,190,61,0.2);font-size:15px;font-weight:700;color:var(--amber); }
+
+  .exercise { background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;margin-bottom:14px;overflow:hidden; }
+  .ex-header { padding:18px 24px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;transition:background 0.2s; }
+  .ex-header:hover { background:rgba(255,255,255,0.03); }
+  .ex-num { width:32px;height:32px;border-radius:8px;background:var(--amber-dim);border:1px solid rgba(255,190,61,0.25);color:var(--amber);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .ex-question { flex:1;font-size:15px;font-weight:600; }
+  .lv-strip { font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.4px; }
+  .lv1 { background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3); }
+  .lv2 { background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3); }
+  .lv3 { background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,190,61,0.3); }
+  .lv4 { background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,190,61,0.3); }
+  .lv5 { background:rgba(255,107,157,0.15);color:var(--pink);border:1px solid rgba(255,107,157,0.3); }
+  .lv6 { background:rgba(255,107,157,0.15);color:var(--pink);border:1px solid rgba(255,107,157,0.3); }
+  .ex-chevron { color:var(--text-muted);font-size:14px;transition:transform 0.3s;margin-right:auto; }
+  .exercise.open .ex-chevron { transform:rotate(180deg); }
+  .ex-body { max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .exercise.open .ex-body { max-height:2400px; }
+  .ex-content { padding:0 24px 24px; }
+  .ex-q { font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:16px; }
+  .tab-bar { display:flex;gap:8px;margin-bottom:16px; }
+  .tab-btn { padding:7px 18px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-muted);cursor:pointer;transition:all 0.2s; }
+  .tab-btn.active { background:var(--amber-dim);border-color:rgba(255,190,61,0.3);color:var(--amber); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+  .hint-box { background:rgba(74,158,255,0.07);border:1px solid rgba(74,158,255,0.2);border-radius:10px;padding:14px 18px;font-size:14px;color:var(--blue);line-height:1.75; }
+  .sol-step { display:flex;gap:12px;margin-bottom:12px; }
+  .sol-num { min-width:26px;height:26px;border-radius:6px;background:var(--amber-dim);color:var(--amber);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px; }
+  .sol-text { font-size:14px;color:var(--text-dim);line-height:1.75; }
+  .ans-box { background:var(--amber-dim);border:1px solid rgba(255,190,61,0.25);border-radius:10px;padding:12px 18px;margin-top:12px;font-size:15px;font-weight:700;color:var(--amber); }
+
+  canvas { border-radius:12px;display:block;margin:0 auto;max-width:100%; }
+
+  /* ── MULTIPLE CHOICE ── */
+  .ckt-wrap { background: rgba(0,0,0,.3); border: 1px solid var(--glass-border); border-radius: 12px; padding: 14px; margin: 0 0 14px; text-align: center; }
+  .ckt-label { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; text-align: right; }
+  .ex-hint-wrap { padding: 0 0 12px; }
+  .hint-btn { padding: 7px 16px; border-radius: 50px; border: 1px solid rgba(255,190,61,0.3); background: rgba(255,190,61,0.06); color: var(--amber); font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Heebo', sans-serif; transition: all .2s; display: inline-flex; gap: 6px; align-items: center; }
+  .hint-btn:hover { background: rgba(255,190,61,0.14); }
+  .hint-content { display: none; margin-top: 8px; }
+  .hint-content.open { display: block; }
+  .mc-part { margin-bottom: 20px; }
+  .mc-part-q { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+  .mc-opts { display: flex; flex-direction: column; gap: 8px; }
+  .mc-opt { display: block; width: 100%; padding: 11px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; cursor: pointer; font-size: 14px; color: var(--text-dim); text-align: right; font-family: 'Heebo', sans-serif; transition: all 0.15s; }
+  .mc-opt:hover:not(:disabled) { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .mc-opt:disabled { cursor: default; }
+  .mc-opt.mc-ok  { background: rgba(52,211,153,0.15); border-color: #34d399; color: var(--text); font-weight: 700; }
+  .mc-opt.mc-bad { background: rgba(255,107,157,0.12); border-color: #ff6b9d; }
+  .mc-opt.mc-rev { background: rgba(52,211,153,0.06); border-color: rgba(52,211,153,0.35); }
+  .mc-fb { margin-top: 10px; padding: 12px 16px; border-radius: 10px; font-size: 14px; line-height: 1.7; display: none; }
+  .mc-fb.ok  { display: block; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.3); }
+  .mc-fb.bad { display: block; background: rgba(255,107,157,0.08); border: 1px solid rgba(255,107,157,0.3); }
+  .sol-toggle { display: inline-block; margin-top: 14px; padding: 8px 18px; background: transparent; border: 1px solid var(--glass-border); border-radius: 50px; font-size: 13px; color: var(--text-muted); cursor: pointer; font-family: 'Heebo', sans-serif; transition: all .2s; }
+  .sol-toggle:hover { border-color: var(--amber); color: var(--amber); }
+  .sol-body { display: none; margin-top: 14px; }
+  .sol-body.open { display: block; }
+
+  /* SYMBOL TABLE */
+  .symbol-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:14px 0; }
+  .symbol-card { background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;padding:14px;text-align:center; }
+  .symbol-card .sym { font-size:28px;margin-bottom:6px; }
+  .symbol-card .sym-name { font-size:13px;font-weight:700;color:var(--text); }
+  .symbol-card .sym-desc { font-size:11px;color:var(--text-muted);margin-top:3px; }
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <a href="index.html" class="nav-back">→ חזרה לדף הראשי</a>
+  <span class="nav-title">פיזיקה — גולי</span>
+  <span class="nav-day">שישי · 16 במאי</span>
+</nav>
+
+<div class="progress-bar">
+  <div class="pb-step done"></div>
+  <div class="pb-step done"></div>
+  <div class="pb-step active"></div>
+  <div class="pb-step"></div>
+</div>
+
+<div class="wrap">
+
+<div class="hero">
+  <div class="hero-badge">🔌 יום 3 מתוך 4 · שישי 16 במאי</div>
+  <h1>מעגלים <span>חשמליים</span></h1>
+  <p class="hero-sub">חוק אוהם, מעגל בטור ובמקביל, זיהוי רכיבים, וחישוב עוצמת זרם. נושא זה מופיע בשאלות 5 ו-6 במבחן.</p>
+</div>
+
+<!-- THEORY -->
+<div class="section">
+  <div class="section-title">תיאוריה</div>
+  <div class="section-desc">קראי כל כרטיס לפני שמתחילים בתרגילים</div>
+
+  <!-- T1: מושגי יסוד -->
+  <div class="tc tc-amber">
+    <div class="tc-title"><span class="tc-icon">⚡</span>מושגי יסוד — מה זה מעגל חשמלי?</div>
+    <p>מעגל חשמלי הוא מסלול סגור שדרכו זורם זרם חשמלי. הרכיבים הבסיסיים:</p>
+    <div class="symbol-grid">
+      <div class="symbol-card"><div class="sym">🔋</div><div class="sym-name">מקור מתח (סוללה)</div><div class="sym-desc">מספק כוח לזרם, נמדד בוולט (V)</div></div>
+      <div class="symbol-card"><div class="sym">💡</div><div class="sym-name">נורה / נגד</div><div class="sym-desc">מעכב זרם, נמדד באוהם (Ω)</div></div>
+      <div class="symbol-card"><div class="sym">🔀</div><div class="sym-name">מתג</div><div class="sym-desc">פותח/סוגר את המעגל</div></div>
+      <div class="symbol-card"><div class="sym">〰️</div><div class="sym-name">חוט מוליך</div><div class="sym-desc">מעביר זרם (התנגדות 0)</div></div>
+      <div class="symbol-card"><div class="sym">A</div><div class="sym-name">אמפרמטר</div><div class="sym-desc">מודד זרם — מחובר בטור</div></div>
+      <div class="symbol-card"><div class="sym">V</div><div class="sym-name">וולטמטר</div><div class="sym-desc">מודד מתח — מחובר במקביל</div></div>
+    </div>
+    <div class="key-box">
+      <strong>3 גדלים בסיסיים:</strong><br>
+      • <strong>מתח (V)</strong> — "לחץ" החשמל, נמדד בוולט (V)<br>
+      • <strong>עוצמת זרם (I)</strong> — כמות החשמל הזורמת, נמדדת באמפר (A)<br>
+      • <strong>התנגדות (R)</strong> — כמה קשה לזרם לעבור, נמדדת באוהם (Ω)
+    </div>
+  </div>
+
+  <!-- T2: חוק אוהם -->
+  <div class="tc tc-amber">
+    <div class="tc-title"><span class="tc-icon">📐</span>חוק אוהם — הנוסחה הכי חשובה</div>
+    <p>חוק אוהם קובע את הקשר בין מתח, זרם והתנגדות:</p>
+    <div class="formula-box">V = I × R &nbsp;&nbsp;|&nbsp;&nbsp; I = V ÷ R &nbsp;&nbsp;|&nbsp;&nbsp; R = V ÷ I</div>
+    <p><strong>אנלוגיה לצינור מים:</strong></p>
+    <div class="ex-step"><div class="ex-step-num">💧</div><div class="ex-step-text"><strong>מתח V</strong> = לחץ המים (כוח הדחיפה)</div></div>
+    <div class="ex-step"><div class="ex-step-num">🌊</div><div class="ex-step-text"><strong>זרם I</strong> = ספיקת המים (כמה מים זורמים)</div></div>
+    <div class="ex-step"><div class="ex-step-num">🪨</div><div class="ex-step-text"><strong>התנגדות R</strong> = צמצום בצינור (מה מעכב)</div></div>
+    <div class="key-box">
+      <strong>לזכור:</strong> ככל שהתנגדות גדולה — הזרם קטן. ככל שהמתח גדול — הזרם גדול.
+    </div>
+  </div>
+
+  <!-- T3: מעגל בטור -->
+  <div class="tc tc-teal">
+    <div class="tc-title"><span class="tc-icon">📏</span>מעגל בטור — נגדים אחד אחרי השני</div>
+    <p>במעגל בטור, הנגדים מחוברים כשרשרת — הזרם עובר דרך כולם ברצף.</p>
+    <div class="formula-box teal">R_כולל = R₁ + R₂ + R₃ + ...</div>
+    <p><strong>מה שקורה במעגל בטור:</strong></p>
+    <div class="ex-step"><div class="ex-step-num">✓</div><div class="ex-step-text">הזרם (I) <strong>זהה</strong> בכל נקודה במעגל — I₁ = I₂ = I₃</div></div>
+    <div class="ex-step"><div class="ex-step-num">✓</div><div class="ex-step-text">המתח (V) <strong>מתחלק</strong> בין הנגדים — V = V₁ + V₂ + V₃</div></div>
+    <div class="ex-step"><div class="ex-step-num">✓</div><div class="ex-step-text">ההתנגדות הכוללת <strong>גדולה</strong> מכל נגד בנפרד</div></div>
+    <div class="warn-box">
+      <strong>תקלה בטור:</strong> אם נגד אחד נשרף (מתנתק) — כל המעגל מפסיק לפעול! כמו קישוטי חג — נורה אחת נשרפת ← הכל כבה.
+    </div>
+  </div>
+
+  <!-- T4: מעגל במקביל -->
+  <div class="tc tc-blue">
+    <div class="tc-title"><span class="tc-icon">🔱</span>מעגל במקביל — מסלולים נפרדים</div>
+    <p>במעגל במקביל, הנגדים מחוברים בין אותן שתי נקודות — לכל נגד מסלול נפרד.</p>
+    <div class="formula-box blue">1/R_כולל = 1/R₁ + 1/R₂ + 1/R₃ ...</div>
+    <p><strong>לנגדים שווים:</strong> R_כולל = R ÷ מספר הנגדים</p>
+    <p><strong>לשני נגדים שונים:</strong> R_כולל = (R₁ × R₂) ÷ (R₁ + R₂)</p>
+    <p><strong>מה שקורה במקביל:</strong></p>
+    <div class="ex-step"><div class="ex-step-num">✓</div><div class="ex-step-text">המתח (V) <strong>זהה</strong> על כל הנגדים — V₁ = V₂ = V₃</div></div>
+    <div class="ex-step"><div class="ex-step-num">✓</div><div class="ex-step-text">הזרם (I) <strong>מתחלק</strong> בין הענפים — I = I₁ + I₂ + I₃</div></div>
+    <div class="ex-step"><div class="ex-step-num">✓</div><div class="ex-step-text">ההתנגדות הכוללת <strong>קטנה</strong> מהנגד הקטן ביותר</div></div>
+    <div class="key-box">
+      <strong>תקלה במקביל:</strong> אם נגד אחד נתנתק — שאר המעגל ממשיך לפעול! זו הסיבה שהחשמל בבית מחובר במקביל.
+    </div>
+  </div>
+
+  <!-- T5: השוואה בטור vs מקביל -->
+  <div class="tc tc-purple">
+    <div class="tc-title"><span class="tc-icon">⚖️</span>השוואה: בטור מול במקביל</div>
+    <table class="compare-table">
+      <thead><tr><th>תכונה</th><th>בטור</th><th>במקביל</th></tr></thead>
+      <tbody>
+        <tr><td>נוסחת R_כולל</td><td>R₁+R₂+...</td><td>1/R = 1/R₁+1/R₂</td></tr>
+        <tr><td>גודל R_כולל</td><td class="td-diff">גדול מכל נגד</td><td class="td-good">קטן מהנגד הקטן</td></tr>
+        <tr><td>הזרם (I)</td><td class="td-good">אחיד בכולם</td><td class="td-diff">מתחלק</td></tr>
+        <tr><td>המתח (V)</td><td class="td-diff">מתחלק</td><td class="td-good">אחיד בכולם</td></tr>
+        <tr><td>תקלה בנגד אחד</td><td class="td-diff">כל המעגל כבה</td><td class="td-good">שאר ממשיך</td></tr>
+        <tr><td>שימוש בחיים</td><td>קישוטי חנוכייה/חג</td><td>חשמל בבית</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- T6: אמפרמטר וולטמטר -->
+  <div class="tc tc-green">
+    <div class="tc-title"><span class="tc-icon">🔬</span>אמפרמטר ווולטמטר — איך מחברים</div>
+    <p><strong>אמפרמטר (A)</strong> — מודד עוצמת זרם (אמפר). חייב להיות מחובר <strong>בטור</strong> — כלומר, הזרם עובר דרכו.</p>
+    <p><strong>וולטמטר (V)</strong> — מודד מתח (וולט). חייב להיות מחובר <strong>במקביל</strong> — כלומר, מהדקיו על שני צידי הרכיב.</p>
+    <div class="key-box">
+      <strong>טריק לזכור:</strong><br>
+      • א<strong>מפר</strong>מטר = אמפר = <strong>בטור</strong> (A in series)<br>
+      • <strong>ו</strong>ולטמטר = וולט = <strong>במקביל</strong> (V in parallel)
+    </div>
+    <div class="warn-box">
+      <strong>שגיאה נפוצה:</strong> אמפרמטר מחובר בצורה שגויה — אם מחברים אמפרמטר במקביל, הוא קצר-מעגל ומתקלקל!
+    </div>
+  </div>
+
+  <!-- T7: שלבי פתרון -->
+  <div class="tc tc-amber">
+    <div class="tc-title"><span class="tc-icon">📋</span>שלבי פתרון שאלת מעגל</div>
+    <div class="ex-step"><div class="ex-step-num">1</div><div class="ex-step-text"><strong>זהה את סוג המעגל:</strong> בטור (שרשרת) או במקביל (ענפים)</div></div>
+    <div class="ex-step"><div class="ex-step-num">2</div><div class="ex-step-text"><strong>חשב R_כולל:</strong> לפי הנוסחה המתאימה</div></div>
+    <div class="ex-step"><div class="ex-step-num">3</div><div class="ex-step-text"><strong>חשב I_כולל:</strong> I = V ÷ R_כולל (חוק אוהם)</div></div>
+    <div class="ex-step"><div class="ex-step-num">4</div><div class="ex-step-text"><strong>בטור:</strong> I זהה בכל נגד, V_נגד = I × R_נגד<br><strong>במקביל:</strong> V זהה בכל נגד, I_ענף = V ÷ R_ענף</div></div>
+    <div class="ex-step"><div class="ex-step-num">5</div><div class="ex-step-text"><strong>בדק:</strong> סכום המתחים בטור = V_מקור. סכום הזרמים במקביל = I_כולל</div></div>
+  </div>
+
+  <!-- T8: מטען וזרם -->
+  <div class="tc tc-teal">
+    <div class="tc-title"><span class="tc-icon">🔋</span>מטען חשמלי וזרם — I = q ÷ t</div>
+    <p>עוצמת הזרם מוגדרת כמטען החשמלי העובר בנקודה ביחידת זמן. זו ההגדרה הפיזיקלית הרשמית של אמפר:</p>
+    <div class="formula-box teal">I = q ÷ t &nbsp;&nbsp;|&nbsp;&nbsp; q = I × t &nbsp;&nbsp;|&nbsp;&nbsp; t = q ÷ I</div>
+    <div class="ex-step"><div class="ex-step-num">I</div><div class="ex-step-text"><strong>עוצמת זרם</strong> — נמדדת באמפר (A)</div></div>
+    <div class="ex-step"><div class="ex-step-num">q</div><div class="ex-step-text"><strong>מטען חשמלי</strong> — נמדד בקולון (C). קולון = כמות "הטעינה" שעברה</div></div>
+    <div class="ex-step"><div class="ex-step-num">t</div><div class="ex-step-text"><strong>זמן</strong> — חייב להיות <strong>בשניות (s)!</strong> תמיד להמיר לפני חישוב</div></div>
+    <div class="key-box">
+      <strong>קשר לחוק אוהם:</strong> I = q/t נותן לנו את I (אמפר). משם ממשיכים לחוק אוהם: V = I × R.<br>
+      <strong>אנלוגיה:</strong> I = כמות מים בשנייה · q = סה"כ מים שעברו · t = כמה זמן
+    </div>
+    <div class="warn-box">
+      <strong>⚠ המרת יחידות זמן — שגיאה נפוצה במבחן:</strong><br>
+      • דקות → שניות: × 60 &nbsp;|&nbsp; דוגמה: 15 דקות = 15 × 60 = <strong>900 שניות</strong><br>
+      • שעות → שניות: × 3600 &nbsp;|&nbsp; דוגמה: 2 שעות = 2 × 3600 = 7200 שניות
+    </div>
+  </div>
+</div>
+
+<!-- FORMULA SHEET -->
+<div class="section">
+  <div class="section-title">דף נוסחאות</div>
+  <div class="section-desc">כל הנוסחאות בדף אחד — הדפיסי לפני המבחן</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+
+    <div class="tc tc-amber" style="margin-bottom:0">
+      <div class="tc-title" style="font-size:15px"><span class="tc-icon">📐</span>חוק אוהם</div>
+      <div class="formula-box" style="margin:8px 0 4px">V = I × R</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:2">
+        I = V ÷ R &nbsp;|&nbsp; R = V ÷ I<br>
+        V = וולט · I = אמפר · R = אוהם (Ω)
+      </div>
+    </div>
+
+    <div class="tc tc-teal" style="margin-bottom:0">
+      <div class="tc-title" style="font-size:15px"><span class="tc-icon">🔋</span>מטען וזרם</div>
+      <div class="formula-box teal" style="margin:8px 0 4px">I = q ÷ t</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:2">
+        q = I × t &nbsp;|&nbsp; t = q ÷ I<br>
+        q = קולון (C) · <strong style="color:var(--pink)">t חייב בשניות!</strong>
+      </div>
+    </div>
+
+    <div class="tc tc-teal" style="margin-bottom:0">
+      <div class="tc-title" style="font-size:15px"><span class="tc-icon">📏</span>מעגל בטור</div>
+      <div class="formula-box teal" style="margin:8px 0 4px">R_כולל = R₁ + R₂ + R₃</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:2">
+        הזרם <strong style="color:var(--text)">זהה</strong>: I₁ = I₂ = I₃<br>
+        המתח <strong style="color:var(--text)">מתחלק</strong>: V = V₁ + V₂ + V₃
+      </div>
+    </div>
+
+    <div class="tc tc-blue" style="margin-bottom:0">
+      <div class="tc-title" style="font-size:15px"><span class="tc-icon">🔱</span>מעגל במקביל</div>
+      <div class="formula-box blue" style="margin:8px 0 4px">1/R = 1/R₁ + 1/R₂</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:2">
+        המתח <strong style="color:var(--text)">זהה</strong>: V₁ = V₂<br>
+        הזרם <strong style="color:var(--text)">מתחלק</strong>: I = I₁ + I₂<br>
+        <span style="color:var(--green)">נגדים שווים:</span> R_כולל = R ÷ n
+      </div>
+    </div>
+
+    <div class="tc tc-blue" style="margin-bottom:0">
+      <div class="tc-title" style="font-size:15px"><span class="tc-icon">✂️</span>2 נגדים שונים במקביל</div>
+      <div class="formula-box blue" style="margin:8px 0 4px">R = (R₁ × R₂) ÷ (R₁ + R₂)</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:1.9">
+        "מכפלה חלקי סכום" — רק לשני נגדים!
+      </div>
+    </div>
+
+    <div class="tc tc-green" style="margin-bottom:0">
+      <div class="tc-title" style="font-size:15px"><span class="tc-icon">🔬</span>מדידה</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:2.1;margin-top:4px">
+        <strong style="color:var(--text)">אמפרמטר (A)</strong> → <strong>בטור</strong> · מודד I<br>
+        <strong style="color:var(--text)">וולטמטר (V)</strong> → <strong>במקביל</strong> · מודד V
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- DIAGRAM -->
+<div class="section">
+  <div class="section-title">דיאגרמות מעגלים</div>
+  <div class="section-desc">מעגל בטור (שמאל) מול מעגל במקביל (ימין)</div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;">
+
+    <!-- Series Circuit SVG -->
+    <div class="ckt-wrap" style="flex:1;min-width:260px;max-width:340px;">
+      <div class="ckt-label">מעגל בטור</div>
+      <svg dir="ltr" viewBox="0 0 300 160" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+        <!-- Title -->
+        <text x="150" y="14" text-anchor="middle" font-family="Heebo,sans-serif" font-size="11" font-weight="700" fill="#ffbe3d">מעגל בטור</text>
+        <!-- Wires: bottom -->
+        <line x1="30" y1="130" x2="270" y2="130" stroke="#ffbe3d" stroke-width="2.5"/>
+        <!-- Left wire: top segment (above battery) -->
+        <line x1="30" y1="30" x2="30" y2="55" stroke="#ffbe3d" stroke-width="2.5"/>
+        <!-- Left wire: bottom segment (below battery) -->
+        <line x1="30" y1="95" x2="30" y2="130" stroke="#ffbe3d" stroke-width="2.5"/>
+        <!-- Right wire -->
+        <line x1="270" y1="30" x2="270" y2="130" stroke="#ffbe3d" stroke-width="2.5"/>
+        <!-- Top wire: left segment (before R1) -->
+        <line x1="30" y1="30" x2="90" y2="30" stroke="#ffbe3d" stroke-width="2.5"/>
+        <!-- Top wire: between R1 and R2 -->
+        <line x1="150" y1="30" x2="180" y2="30" stroke="#ffbe3d" stroke-width="2.5"/>
+        <!-- Top wire: after R2 -->
+        <line x1="240" y1="30" x2="270" y2="30" stroke="#ffbe3d" stroke-width="2.5"/>
+
+        <!-- Battery box on left wire -->
+        <rect x="16" y="55" width="28" height="40" rx="4" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+        <text x="30" y="70" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#ffbe3d">+</text>
+        <text x="30" y="82" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" fill="#ffbe3d">9V</text>
+        <text x="30" y="92" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" fill="#ffbe3d">−</text>
+
+        <!-- R1 box on top wire -->
+        <rect x="90" y="21" width="60" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+        <text x="120" y="33" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#ffbe3d">R₁=3Ω</text>
+
+        <!-- R2 box on top wire -->
+        <rect x="180" y="21" width="60" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+        <text x="210" y="33" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#ffbe3d">R₂=6Ω</text>
+
+        <!-- Current arrow on bottom wire -->
+        <text x="150" y="148" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" fill="#ffbe3d">→ I אחיד = 1A</text>
+        <text x="150" y="158" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="rgba(255,190,61,0.6)">R_כולל = 9Ω</text>
+      </svg>
+    </div>
+
+    <!-- Parallel Circuit SVG -->
+    <div class="ckt-wrap" style="flex:1;min-width:260px;max-width:340px;">
+      <div class="ckt-label">מעגל במקביל</div>
+      <svg dir="ltr" viewBox="0 0 300 160" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+        <!-- Title -->
+        <text x="150" y="14" text-anchor="middle" font-family="Heebo,sans-serif" font-size="11" font-weight="700" fill="#00e5c0">מעגל במקביל</text>
+        <!-- Top bus -->
+        <line x1="40" y1="30" x2="260" y2="30" stroke="#00e5c0" stroke-width="2.5"/>
+        <!-- Bottom bus -->
+        <line x1="40" y1="130" x2="260" y2="130" stroke="#00e5c0" stroke-width="2.5"/>
+
+        <!-- Battery branch (left) -->
+        <line x1="70" y1="30" x2="70" y2="55" stroke="#00e5c0" stroke-width="2.5"/>
+        <rect x="56" y="55" width="28" height="40" rx="4" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+        <text x="70" y="70" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#00e5c0">+</text>
+        <text x="70" y="82" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" fill="#00e5c0">9V</text>
+        <text x="70" y="92" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" fill="#00e5c0">−</text>
+        <line x1="70" y1="95" x2="70" y2="130" stroke="#00e5c0" stroke-width="2.5"/>
+
+        <!-- R1 branch (middle) -->
+        <line x1="160" y1="30" x2="160" y2="55" stroke="#00e5c0" stroke-width="2.5"/>
+        <rect x="140" y="55" width="40" height="20" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+        <text x="160" y="69" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#00e5c0">R₁=6Ω</text>
+        <line x1="160" y1="75" x2="160" y2="130" stroke="#00e5c0" stroke-width="2.5"/>
+        <text x="148" y="100" font-family="Heebo,sans-serif" font-size="9" fill="#00e5c0">I₁↓</text>
+
+        <!-- R2 branch (right) -->
+        <line x1="230" y1="30" x2="230" y2="55" stroke="#00e5c0" stroke-width="2.5"/>
+        <rect x="210" y="55" width="40" height="20" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+        <text x="230" y="69" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#00e5c0">R₂=12Ω</text>
+        <line x1="230" y1="75" x2="230" y2="130" stroke="#00e5c0" stroke-width="2.5"/>
+        <text x="218" y="100" font-family="Heebo,sans-serif" font-size="9" fill="#00e5c0">I₂↓</text>
+
+        <!-- Labels -->
+        <text x="150" y="148" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" fill="#00e5c0">V שווה בכל ענף</text>
+        <text x="150" y="158" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="rgba(0,229,192,0.6)">R_כולל = 4Ω</text>
+      </svg>
+    </div>
+
+  </div>
+</div>
+
+<!-- VIDEOS -->
+<div class="section">
+  <div class="section-title">סרטוני לימוד</div>
+  <div class="section-desc">סרטון אחד לפחות לפני התרגילים</div>
+  <div class="video-grid">
+    <a href="https://www.youtube.com/results?search_query=חוק+אוהם+פיזיקה+עברית" target="_blank" class="video-card">
+      <div class="video-thumb">🎬</div>
+      <div class="video-title">חוק אוהם — עברית</div>
+      <div class="video-sub">V=IR ו-I=V/R</div>
+      <div class="video-tag">עברית</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=מעגל+בטור+ובמקביל+עברית" target="_blank" class="video-card">
+      <div class="video-thumb">🔌</div>
+      <div class="video-title">בטור ובמקביל — עברית</div>
+      <div class="video-sub">הבדלים ונוסחאות</div>
+      <div class="video-tag">עברית</div>
+    </a>
+    <a href="https://www.khanacademy.org/science/physics/circuits-topic" target="_blank" class="video-card">
+      <div class="video-thumb">📚</div>
+      <div class="video-title">Khan Academy — Circuits</div>
+      <div class="video-sub">מעגלים — בסיס</div>
+      <div class="video-tag">אנגלית</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=series+parallel+circuits+middle+school" target="_blank" class="video-card">
+      <div class="video-thumb">⚡</div>
+      <div class="video-title">Series vs Parallel Circuits</div>
+      <div class="video-sub">אנימציה</div>
+      <div class="video-tag">אנגלית</div>
+    </a>
+  </div>
+</div>
+
+<!-- WORKED EXAMPLES -->
+<div class="section">
+  <div class="section-title">דוגמאות מפורטות</div>
+  <div class="section-desc">פתרון שלב אחר שלב</div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-easy">קל</span>
+      <span class="example-title">חוק אוהם — חישוב זרם</span>
+    </div>
+    <div class="example-body">
+      <p>סוללה של 12V מחוברת לנגד של 4Ω. <strong>מה עוצמת הזרם?</strong></p>
+      <div class="ex-step"><div class="ex-step-num">1</div><div class="ex-step-text">ידוע: V=12V, R=4Ω. מבקשים: I=?</div></div>
+      <div class="ex-step"><div class="ex-step-num">2</div><div class="ex-step-text">נוסחה: I = V ÷ R = 12 ÷ 4 = 3A</div></div>
+      <div class="ex-answer">I = 3 אמפר</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-medium">בינוני</span>
+      <span class="example-title">מעגל בטור — שני נגדים</span>
+    </div>
+    <div class="example-body">
+      <p>סוללה 24V מחוברת לשני נגדים בטור: R₁=3Ω, R₂=5Ω.<br><strong>א. R_כולל? ב. I_כולל? ג. V על כל נגד?</strong></p>
+      <div class="ex-step"><div class="ex-step-num">א</div><div class="ex-step-text">R_כולל = R₁+R₂ = 3+5 = <strong>8Ω</strong></div></div>
+      <div class="ex-step"><div class="ex-step-num">ב</div><div class="ex-step-text">I = V ÷ R_כולל = 24 ÷ 8 = <strong>3A</strong> (אחיד בכל המעגל)</div></div>
+      <div class="ex-step"><div class="ex-step-num">ג</div><div class="ex-step-text">V₁ = I×R₁ = 3×3 = 9V &nbsp;|&nbsp; V₂ = I×R₂ = 3×5 = 15V<br>בדיקה: 9+15 = 24V ✓</div></div>
+      <div class="ex-answer">R=8Ω · I=3A · V₁=9V · V₂=15V</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-hard">קשה</span>
+      <span class="example-title">מעגל במקביל — שני ענפים (מסגנון שאלה 6 במבחן)</span>
+    </div>
+    <div class="example-body">
+      <p>סוללה 12V מחוברת לשני נגדים במקביל: R₁=6Ω, R₂=12Ω.<br><strong>א. R_כולל? ב. I_כולל? ג. I בכל ענף?</strong></p>
+      <div class="ex-step"><div class="ex-step-num">א</div><div class="ex-step-text">1/R_כולל = 1/6 + 1/12 = 2/12 + 1/12 = 3/12 = 1/4<br>R_כולל = 4Ω</div></div>
+      <div class="ex-step"><div class="ex-step-num">ב</div><div class="ex-step-text">I_כולל = V ÷ R_כולל = 12 ÷ 4 = <strong>3A</strong></div></div>
+      <div class="ex-step"><div class="ex-step-num">ג</div><div class="ex-step-text">V זהה בכל ענף = 12V<br>I₁ = 12÷6 = 2A &nbsp;|&nbsp; I₂ = 12÷12 = 1A<br>בדיקה: I₁+I₂ = 2+1 = 3A = I_כולל ✓</div></div>
+      <div class="ex-answer">R_כולל=4Ω · I_כולל=3A · I₁=2A · I₂=1A</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCISES -->
+<div class="section">
+  <div class="section-title">תרגילים</div>
+  <div class="section-desc">מקל לקשה — מבחן אמיתי = 6 שאלות בסגנון זה</div>
+
+  <!-- EX1 -->
+  <div class="exercise" id="ex1">
+    <div class="ex-header" onclick="toggleEx('ex1')">
+      <div class="ex-num">1</div>
+      <div class="ex-question">חוק אוהם — בסיס</div>
+      <span class="lv-strip lv1">רמה 1</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">השתמשי בשלושת צורות חוק אוהם: I=V/R · V=IR · R=V/I</div></div>
+      </div>
+      <div class="mc-part" data-ok="I = V/R = 6/2 = 3A" data-err="I = V ÷ R = 6 ÷ 2 = 3A">
+        <div class="mc-part-q">א. V=6V, R=2Ω → מה I?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">1A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">2A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">3A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="V = I×R = 4×3 = 12V" data-err="V = I × R = 4 × 3 = 12V">
+        <div class="mc-part-q">ב. I=4A, R=3Ω → מה V?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">7V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">9V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">12V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">16V</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="R = V/I = 20/5 = 4Ω" data-err="R = V ÷ I = 20 ÷ 5 = 4Ω">
+        <div class="mc-part-q">ג. V=20V, I=5A → מה R?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">2Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">4Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">10Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">25Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">I = V/R = 6/2 = 3A</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">V = IR = 4×3 = 12V</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">R = V/I = 20/5 = 4Ω</div></div>
+        <div class="ans-box">א) 3A · ב) 12V · ג) 4Ω</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX2 -->
+  <div class="exercise" id="ex2">
+    <div class="ex-header" onclick="toggleEx('ex2')">
+      <div class="ex-num">2</div>
+      <div class="ex-question">מעגל בטור — 3 נגדים</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">מעגל בטור: 30V, R₁=2Ω, R₂=4Ω, R₃=4Ω</div>
+        <svg dir="ltr" viewBox="0 0 320 130" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="110" x2="290" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="30" y1="25" x2="30" y2="48" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="30" y1="88" x2="30" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="16" y="48" width="28" height="40" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="30" y="63" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">+</text>
+          <text x="30" y="74" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">30V</text>
+          <text x="30" y="84" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">−</text>
+          <line x1="30" y1="25" x2="70" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="70" y="16" width="50" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="95" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₁=2Ω</text>
+          <line x1="120" y1="25" x2="150" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="150" y="16" width="50" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="175" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₂=4Ω</text>
+          <line x1="200" y1="25" x2="230" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="230" y="16" width="50" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="255" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₃=4Ω</text>
+          <line x1="280" y1="25" x2="290" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="290" y1="25" x2="290" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <text x="160" y="124" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">→ I אחיד בכל המעגל</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">בטור: R_כולל = R₁+R₂+R₃. אחר כך I=V/R_כולל. הזרם אחיד בכולם.</div></div>
+      </div>
+      <div class="mc-part" data-ok="R_כולל = 2+4+4 = 10Ω" data-err="בטור מחברים: R_כולל = 2+4+4 = 10Ω">
+        <div class="mc-part-q">א. R_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">8Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">10Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">20Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="I = V/R = 30/10 = 3A" data-err="I = V ÷ R_כולל = 30 ÷ 10 = 3A">
+        <div class="mc-part-q">ב. I_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">1A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">2A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">3A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">5A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="V₂ = I×R₂ = 3×4 = 12V" data-err="V₂ = I × R₂ = 3 × 4 = 12V">
+        <div class="mc-part-q">ג. המתח על R₂=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">8V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">12V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">16V</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">R_כולל = 2+4+4 = 10Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">I = V/R = 30/10 = 3A</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">V₂ = I×R₂ = 3×4 = 12V</div></div>
+        <div class="ans-box">א) 10Ω · ב) 3A · ג) 12V</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX3 -->
+  <div class="exercise" id="ex3">
+    <div class="ex-header" onclick="toggleEx('ex3')">
+      <div class="ex-num">3</div>
+      <div class="ex-question">מעגל במקביל — נגדים שווים</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">מעגל במקביל: V=18V, R₁=R₂=R₃=9Ω</div>
+        <svg dir="ltr" viewBox="0 0 320 140" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="20" x2="290" y2="20" stroke="#00e5c0" stroke-width="2.5"/>
+          <line x1="30" y1="115" x2="290" y2="115" stroke="#00e5c0" stroke-width="2.5"/>
+          <!-- Battery branch -->
+          <line x1="60" y1="20" x2="60" y2="42" stroke="#00e5c0" stroke-width="2.5"/>
+          <rect x="46" y="42" width="28" height="36" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+          <text x="60" y="55" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#00e5c0">+</text>
+          <text x="60" y="65" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">18V</text>
+          <text x="60" y="74" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">−</text>
+          <line x1="60" y1="78" x2="60" y2="115" stroke="#00e5c0" stroke-width="2.5"/>
+          <!-- R1 branch -->
+          <line x1="140" y1="20" x2="140" y2="42" stroke="#00e5c0" stroke-width="2.5"/>
+          <rect x="120" y="42" width="40" height="18" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+          <text x="140" y="54" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#00e5c0">R₁=9Ω</text>
+          <line x1="140" y1="60" x2="140" y2="115" stroke="#00e5c0" stroke-width="2.5"/>
+          <!-- R2 branch -->
+          <line x1="200" y1="20" x2="200" y2="42" stroke="#00e5c0" stroke-width="2.5"/>
+          <rect x="180" y="42" width="40" height="18" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+          <text x="200" y="54" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#00e5c0">R₂=9Ω</text>
+          <line x1="200" y1="60" x2="200" y2="115" stroke="#00e5c0" stroke-width="2.5"/>
+          <!-- R3 branch -->
+          <line x1="260" y1="20" x2="260" y2="42" stroke="#00e5c0" stroke-width="2.5"/>
+          <rect x="240" y="42" width="40" height="18" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+          <text x="260" y="54" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#00e5c0">R₃=9Ω</text>
+          <line x1="260" y1="60" x2="260" y2="115" stroke="#00e5c0" stroke-width="2.5"/>
+          <text x="160" y="130" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">V=18V שווה בכל ענף</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">נגדים שווים במקביל: R_כולל = R/n. מתח זהה בכל ענף.</div></div>
+      </div>
+      <div class="mc-part" data-ok="R_כולל = 9÷3 = 3Ω (נגדים שווים במקביל: R/n)" data-err="נגדים שווים במקביל: R_כולל = R÷n = 9÷3 = 3Ω">
+        <div class="mc-part-q">א. R_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">3Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">9Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">27Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="I_כולל = V/R = 18/3 = 6A" data-err="I = V ÷ R_כולל = 18 ÷ 3 = 6A">
+        <div class="mc-part-q">ב. I_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">2A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">6A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">9A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="I_ענף = V/R = 18/9 = 2A (בדיקה: 2×3=6A ✓)" data-err="I_ענף = V ÷ R = 18 ÷ 9 = 2A">
+        <div class="mc-part-q">ג. I בכל ענף=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">1A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">2A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">R_כולל = 9/3 = 3Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">I_כולל = V/R = 18/3 = 6A</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">כל ענף: I = 18/9 = 2A (בדיקה: 2×3=6A ✓)</div></div>
+        <div class="ans-box">א) 3Ω · ב) 6A · ג) 2A בכל ענף</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX4 -->
+  <div class="exercise" id="ex4">
+    <div class="ex-header" onclick="toggleEx('ex4')">
+      <div class="ex-num">4</div>
+      <div class="ex-question">תקלה במעגל — מה יקרה?</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;">
+        <div class="ckt-wrap" style="flex:1;min-width:200px;">
+          <div class="ckt-label">בטור — נורה אחת נשרפת (×)</div>
+          <svg dir="ltr" viewBox="0 0 200 120" style="width:100%;max-width:220px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="100" x2="180" y2="100" stroke="#ffbe3d" stroke-width="2.5"/>
+            <line x1="20" y1="25" x2="20" y2="48" stroke="#ffbe3d" stroke-width="2.5"/>
+            <line x1="20" y1="80" x2="20" y2="100" stroke="#ffbe3d" stroke-width="2.5"/>
+            <rect x="8" y="48" width="24" height="32" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+            <text x="20" y="68" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">🔋</text>
+            <line x1="20" y1="25" x2="60" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+            <circle cx="80" cy="25" r="14" fill="rgba(255,190,61,0.08)" stroke="#ffbe3d" stroke-width="2"/>
+            <text x="80" y="29" text-anchor="middle" font-family="Heebo,sans-serif" font-size="10" fill="#ffbe3d">💡</text>
+            <line x1="94" y1="25" x2="116" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+            <circle cx="136" cy="25" r="14" fill="rgba(255,107,157,0.1)" stroke="#ff6b9d" stroke-width="2"/>
+            <line x1="126" y1="15" x2="146" y2="35" stroke="#ff6b9d" stroke-width="2"/>
+            <line x1="146" y1="15" x2="126" y2="35" stroke="#ff6b9d" stroke-width="2"/>
+            <line x1="150" y1="25" x2="180" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+            <line x1="180" y1="25" x2="180" y2="100" stroke="#ffbe3d" stroke-width="2.5"/>
+            <text x="100" y="114" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ff6b9d">× נשרפה → מסלול נשבר</text>
+          </svg>
+        </div>
+        <div class="ckt-wrap" style="flex:1;min-width:200px;">
+          <div class="ckt-label">במקביל — נורה אחת נשרפת (×)</div>
+          <svg dir="ltr" viewBox="0 0 200 120" style="width:100%;max-width:220px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="20" x2="180" y2="20" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="20" y1="100" x2="180" y2="100" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="20" y1="20" x2="20" y2="42" stroke="#00e5c0" stroke-width="2.5"/>
+            <rect x="8" y="42" width="24" height="32" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+            <text x="20" y="62" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">🔋</text>
+            <line x1="20" y1="74" x2="20" y2="100" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="90" y1="20" x2="90" y2="46" stroke="#00e5c0" stroke-width="2.5"/>
+            <circle cx="90" cy="60" r="14" fill="rgba(0,229,192,0.08)" stroke="#00e5c0" stroke-width="2"/>
+            <text x="90" y="64" text-anchor="middle" font-family="Heebo,sans-serif" font-size="10" fill="#00e5c0">💡</text>
+            <line x1="90" y1="74" x2="90" y2="100" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="150" y1="20" x2="150" y2="46" stroke="#00e5c0" stroke-width="2.5"/>
+            <circle cx="150" cy="60" r="14" fill="rgba(255,107,157,0.1)" stroke="#ff6b9d" stroke-width="2"/>
+            <line x1="140" y1="50" x2="160" y2="70" stroke="#ff6b9d" stroke-width="2"/>
+            <line x1="160" y1="50" x2="140" y2="70" stroke="#ff6b9d" stroke-width="2"/>
+            <line x1="150" y1="74" x2="150" y2="100" stroke="#00e5c0" stroke-width="2.5"/>
+            <text x="100" y="114" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">מסלול נפרד — השנייה דולקת</text>
+          </svg>
+        </div>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">בטור — יש מסלול אחד. במקביל — יש מסלולים נפרדים.</div></div>
+      </div>
+      <div class="mc-part" data-ok="בטור יש מסלול אחד — אם הוא נשבר, הזרם לא יכול לזרום כלל." data-err="בטור: המסלול נשבר → הזרם עוצר → גם השנייה כבה.">
+        <div class="mc-part-q">א. בטור, נורה נשרפת → השנייה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">גם השנייה תכבה</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">תאיר יותר חזק</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">לא תשתנה</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">תאיר פחות</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="במקביל לכל נורה מסלול נפרד — תקלה בענף אחד לא משפיעה על השאר." data-err="במקביל: לכל נורה מסלול משלה → השנייה ממשיכה לדלוק.">
+        <div class="mc-part-q">ב. במקביל, נורה נשרפת → השנייה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">ממשיכה לדלוק</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">גם תכבה</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">תאיר פחות</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">לא ניתן לדעת</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text"><strong>בטור:</strong> המסלול נשבר — הזרם לא יכול לזרום כלל. הנורה השנייה <strong>גם תכבה</strong>.</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text"><strong>במקביל:</strong> לנורה שנשרפה יש מסלול נפרד. הנורה השנייה <strong>ממשיכה לדלוק</strong>.</div></div>
+        <div class="ans-box">א) בטור — גם השנייה כבה · ב) במקביל — השנייה נשארת דלוקה</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX5 -->
+  <div class="exercise" id="ex5">
+    <div class="ex-header" onclick="toggleEx('ex5')">
+      <div class="ex-num">5</div>
+      <div class="ex-question">מציאת ערך נגד לא ידוע</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">מעגל בטור: V=36V, R₁=4Ω, R₂=?, I=3A</div>
+        <svg dir="ltr" viewBox="0 0 300 130" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="110" x2="270" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="30" y1="25" x2="30" y2="48" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="30" y1="88" x2="30" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="16" y="48" width="28" height="40" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="30" y="63" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">+</text>
+          <text x="30" y="74" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">36V</text>
+          <text x="30" y="84" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">−</text>
+          <line x1="30" y1="25" x2="80" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="80" y="16" width="60" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="110" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₁=4Ω</text>
+          <line x1="140" y1="25" x2="175" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="175" y="16" width="60" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2" stroke-dasharray="4,2"/>
+          <text x="205" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₂=?</text>
+          <line x1="235" y1="25" x2="270" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="270" y1="25" x2="270" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <text x="150" y="98" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">→ I = 3A</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">I=V/R_כולל → R_כולל = V/I. אחר כך: R₂ = R_כולל − R₁.</div></div>
+      </div>
+      <div class="mc-part" data-ok="R_כולל = V/I = 36/3 = 12Ω → R₂ = 12−4 = 8Ω" data-err="שלב 1: R_כולל = V/I = 36/3 = 12Ω. שלב 2: R₂ = 12−4 = 8Ω">
+        <div class="mc-part-q">R₂=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">8Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">12Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">R_כולל = V/I = 36/3 = 12Ω</div></div>
+        <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">R₂ = R_כולל − R₁ = 12 − 4 = 8Ω</div></div>
+        <div class="ans-box">R₂ = 8Ω</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX6 -->
+  <div class="exercise" id="ex6">
+    <div class="ex-header" onclick="toggleEx('ex6')">
+      <div class="ex-num">6</div>
+      <div class="ex-question">מעגל מעורב — טור ומקביל יחד</div>
+      <span class="lv-strip lv4">רמה 4</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">מעגל מעורב: 24V, R₁=2Ω בטור, R₂=6Ω ∥ R₃=6Ω</div>
+        <svg dir="ltr" viewBox="0 0 320 150" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <!-- bottom wire -->
+          <line x1="25" y1="130" x2="290" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- battery left -->
+          <line x1="25" y1="25" x2="25" y2="48" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="11" y="48" width="28" height="36" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="25" y="61" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">+</text>
+          <text x="25" y="72" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#4a9eff">24V</text>
+          <text x="25" y="82" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#4a9eff">−</text>
+          <line x1="25" y1="84" x2="25" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- top wire left to R1 -->
+          <line x1="25" y1="25" x2="65" y2="25" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R1 in series -->
+          <rect x="65" y="16" width="50" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="90" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₁=2Ω</text>
+          <!-- wire from R1 to split node -->
+          <line x1="115" y1="25" x2="160" y2="25" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- top bus of parallel block -->
+          <line x1="160" y1="25" x2="290" y2="25" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- bottom bus of parallel block -->
+          <line x1="160" y1="130" x2="290" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R2 branch -->
+          <line x1="205" y1="25" x2="205" y2="50" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="185" y="50" width="40" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="205" y="62" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₂=6Ω</text>
+          <line x1="205" y1="68" x2="205" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R3 branch -->
+          <line x1="260" y1="25" x2="260" y2="50" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="240" y="50" width="40" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="260" y="62" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₃=6Ω</text>
+          <line x1="260" y1="68" x2="260" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <text x="160" y="144" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#4a9eff">R₁ בטור + R₂∥R₃ במקביל</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">שלב 1: R_מקביל לנגדים שווים = R/2. שלב 2: R_כולל = R₁ + R_מקביל. שלב 3: I=V/R_כולל. שלב 4: V_ענף = I×R_מקביל → I_ענף = V_ענף/R.</div></div>
+      </div>
+      <div class="mc-part" data-ok="R₂=R₃=6Ω שווים במקביל → R_מקביל = 6/2 = 3Ω" data-err="נגדים שווים במקביל: R_מקביל = R/2 = 6/2 = 3Ω">
+        <div class="mc-part-q">א. R_מקביל (R₂∥R₃)=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">2Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">3Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="R_כולל = R₁ + R_מקביל = 2 + 3 = 5Ω" data-err="R_כולל = R₁ + R_מקביל = 2 + 3 = 5Ω">
+        <div class="mc-part-q">ב. R_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">5Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">8Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="I_כולל = V/R = 24/5 = 4.8A" data-err="I = V ÷ R_כולל = 24 ÷ 5 = 4.8A">
+        <div class="mc-part-q">ג. I_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">4.8A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="V_ענף = 4.8×3 = 14.4V → I_ענף = 14.4/6 = 2.4A כל ענף" data-err="V_ענף = I×R_מקביל = 4.8×3 = 14.4V → I_ענף = 14.4/6 = 2.4A">
+        <div class="mc-part-q">ד. I בכל ענף מקביל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">1.2A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">2.4A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4.8A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">R₂=R₃=6Ω, נגדים שווים במקביל: R_מקביל = 6/2 = 3Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">R_כולל = R₁ + R_מקביל = 2 + 3 = 5Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">I_כולל = V/R_כולל = 24/5 = 4.8A</div></div>
+        <div class="sol-step"><div class="sol-num">ד</div><div class="sol-text">V_ענפים = I_כולל × R_מקביל = 4.8 × 3 = 14.4V<br>I₂ = I₃ = 14.4/6 = 2.4A כל אחד (בדיקה: 2.4+2.4=4.8A ✓)</div></div>
+        <div class="ans-box">א) 3Ω · ב) 5Ω · ג) 4.8A · ד) 2.4A בכל ענף</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX7 -->
+  <div class="exercise" id="ex7">
+    <div class="ex-header" onclick="toggleEx('ex7')">
+      <div class="ex-num">7</div>
+      <div class="ex-question">קריאת מעגל מציאותי — סגנון שאלה 5 במבחן</div>
+      <span class="lv-strip lv4">רמה 4</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">מעגל בטור: 9V, R₁=10Ω, R₂=?, אמפרמטר מראה I=0.5A</div>
+        <svg dir="ltr" viewBox="0 0 340 130" style="width:100%;max-width:340px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <line x1="25" y1="110" x2="310" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="25" y1="25" x2="25" y2="48" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="25" y1="88" x2="25" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="11" y="48" width="28" height="40" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="25" y="63" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">+</text>
+          <text x="25" y="74" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">9V</text>
+          <text x="25" y="84" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">−</text>
+          <!-- top wire -->
+          <line x1="25" y1="25" x2="70" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <!-- R1 -->
+          <rect x="70" y="16" width="55" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="97" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₁=10Ω</text>
+          <line x1="125" y1="25" x2="160" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <!-- R2 unknown -->
+          <rect x="160" y="16" width="55" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2" stroke-dasharray="4,2"/>
+          <text x="187" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₂=?</text>
+          <line x1="215" y1="25" x2="250" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <!-- Ammeter circle -->
+          <circle cx="270" cy="25" r="14" fill="rgba(255,190,61,0.08)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="270" y="29" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#ffbe3d">A</text>
+          <line x1="284" y1="25" x2="310" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="310" y1="25" x2="310" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <text x="270" y="48" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" fill="rgba(255,190,61,0.7)">0.5A</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">א: R=V/I. ב: R₂=R_כולל−R₁. ג: אמפרמטר = בטור תמיד. ד: V=I×R₁.</div></div>
+      </div>
+      <div class="mc-part" data-ok="R_כולל = V/I = 9/0.5 = 18Ω" data-err="R_כולל = V ÷ I = 9 ÷ 0.5 = 18Ω">
+        <div class="mc-part-q">א. R_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">12Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">15Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">18Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">22Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="R₂ = R_כולל − R₁ = 18 − 10 = 8Ω" data-err="R₂ = R_כולל − R₁ = 18 − 10 = 8Ω">
+        <div class="mc-part-q">ב. R₂=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">8Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">10Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="אמפרמטר חייב להיות בטור — הזרם עובר דרכו ישירות." data-err="אמפרמטר תמיד בטור — אם מחברים במקביל הוא קצר-מעגל ומתקלקל!">
+        <div class="mc-part-q">ג. היכן מחברים אמפרמטר?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">בטור — בענף הראשי</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">במקביל עם R₁</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">במקביל עם הסוללה</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">לא משנה איפה</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="V₁ = I × R₁ = 0.5 × 10 = 5V" data-err="V₁ = I × R₁ = 0.5 × 10 = 5V">
+        <div class="mc-part-q">ד. קריאת וולטמטר על R₁=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">5V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">9V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">12V</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">R_כולל = V/I = 9/0.5 = 18Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">R₂ = 18 − 10 = 8Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">אמפרמטר מחובר <strong>בטור</strong> — בתוך הענף הראשי, כך שהזרם עובר דרכו</div></div>
+        <div class="sol-step"><div class="sol-num">ד</div><div class="sol-text">V₁ = I × R₁ = 0.5 × 10 = 5V</div></div>
+        <div class="ans-box">א) 18Ω · ב) 8Ω · ג) בטור · ד) 5V</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX8 -->
+  <div class="exercise" id="ex8">
+    <div class="ex-header" onclick="toggleEx('ex8')">
+      <div class="ex-num">8</div>
+      <div class="ex-question">השוואת זרמים בשני מעגלים</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;">
+        <div class="ckt-wrap" style="flex:1;min-width:220px;">
+          <div class="ckt-label">מעגל א׳ — בטור (12V, 3×6Ω)</div>
+          <svg dir="ltr" viewBox="0 0 260 130" style="width:100%;max-width:280px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="110" x2="240" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+            <line x1="20" y1="25" x2="20" y2="48" stroke="#ffbe3d" stroke-width="2.5"/>
+            <line x1="20" y1="84" x2="20" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+            <rect x="8" y="48" width="24" height="36" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+            <text x="20" y="61" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" font-weight="700" fill="#ffbe3d">+</text>
+            <text x="20" y="72" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" fill="#ffbe3d">12V</text>
+            <text x="20" y="82" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" fill="#ffbe3d">−</text>
+            <line x1="20" y1="25" x2="50" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+            <rect x="50" y="16" width="44" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+            <text x="72" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">6Ω</text>
+            <line x1="94" y1="25" x2="108" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+            <rect x="108" y="16" width="44" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+            <text x="130" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">6Ω</text>
+            <line x1="152" y1="25" x2="166" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+            <rect x="166" y="16" width="44" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+            <text x="188" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">6Ω</text>
+            <line x1="210" y1="25" x2="240" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+            <line x1="240" y1="25" x2="240" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+            <text x="130" y="124" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">R_כולל = 18Ω</text>
+          </svg>
+        </div>
+        <div class="ckt-wrap" style="flex:1;min-width:220px;">
+          <div class="ckt-label">מעגל ב׳ — במקביל (12V, 3×6Ω)</div>
+          <svg dir="ltr" viewBox="0 0 260 130" style="width:100%;max-width:280px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="20" x2="240" y2="20" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="20" y1="110" x2="240" y2="110" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="20" y1="20" x2="20" y2="42" stroke="#00e5c0" stroke-width="2.5"/>
+            <rect x="8" y="42" width="24" height="36" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+            <text x="20" y="55" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" font-weight="700" fill="#00e5c0">+</text>
+            <text x="20" y="65" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" fill="#00e5c0">12V</text>
+            <text x="20" y="75" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" fill="#00e5c0">−</text>
+            <line x1="20" y1="78" x2="20" y2="110" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="100" y1="20" x2="100" y2="44" stroke="#00e5c0" stroke-width="2.5"/>
+            <rect x="80" y="44" width="40" height="18" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+            <text x="100" y="56" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">6Ω</text>
+            <line x1="100" y1="62" x2="100" y2="110" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="160" y1="20" x2="160" y2="44" stroke="#00e5c0" stroke-width="2.5"/>
+            <rect x="140" y="44" width="40" height="18" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+            <text x="160" y="56" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">6Ω</text>
+            <line x1="160" y1="62" x2="160" y2="110" stroke="#00e5c0" stroke-width="2.5"/>
+            <line x1="220" y1="20" x2="220" y2="44" stroke="#00e5c0" stroke-width="2.5"/>
+            <rect x="200" y="44" width="40" height="18" rx="3" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="2"/>
+            <text x="220" y="56" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">6Ω</text>
+            <line x1="220" y1="62" x2="220" y2="110" stroke="#00e5c0" stroke-width="2.5"/>
+            <text x="130" y="124" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">R_כולל = 2Ω</text>
+          </svg>
+        </div>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">בטור: R=6+6+6. במקביל: R=6/3. אחר כך I=V/R לכל אחד.</div></div>
+      </div>
+      <div class="mc-part" data-ok="בטור: 6+6+6=18Ω. במקביל: 6/3=2Ω" data-err="בטור: R=6+6+6=18Ω. במקביל (שווים): R=6/3=2Ω">
+        <div class="mc-part-q">א. R_כולל בטור=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">12Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">18Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">24Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="נגדים שווים במקביל: R=6/3=2Ω" data-err="נגדים שווים במקביל: R=R/n = 6/3 = 2Ω">
+        <div class="mc-part-q">ב. R_כולל במקביל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">2Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">18Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="בטור I=12/18≈0.67A, במקביל I=12/2=6A. יחס: 6/0.67=9 פעמים!" data-err="I_מקביל/I_טור = R_טור/R_מקביל = 18/2 = 9 פעמים יותר זרם במקביל">
+        <div class="mc-part-q">ג. כמה פעמים יותר זרם במקביל לעומת בטור?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3×</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">6×</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">9×</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">18×</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">בטור: R = 6+6+6 = 18Ω · במקביל: R = 6/3 = 2Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">בטור: I = 12/18 ≈ 0.67A · במקביל: I = 12/2 = 6A</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">יחס זרמים = יחס התנגדויות הפוך: 18/2 = 9 פעמים יותר זרם במקביל</div></div>
+        <div class="ans-box">א) 18Ω / 2Ω · ב) 0.67A / 6A · ג) מקביל = 9× יותר זרם</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX9 -->
+  <div class="exercise" id="ex9">
+    <div class="ex-header" onclick="toggleEx('ex9')">
+      <div class="ex-num">9</div>
+      <div class="ex-question">שאלה 6 מהמבחן 2025 — חישוב מלא</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">15V, (R₁=5Ω ∥ R₂=15Ω) + R₃=3Ω בטור</div>
+        <svg dir="ltr" viewBox="0 0 340 150" style="width:100%;max-width:340px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <!-- bottom wire -->
+          <line x1="25" y1="130" x2="310" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- battery -->
+          <line x1="25" y1="25" x2="25" y2="48" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="11" y="48" width="28" height="36" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="25" y="61" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">+</text>
+          <text x="25" y="72" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#4a9eff">15V</text>
+          <text x="25" y="82" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#4a9eff">−</text>
+          <line x1="25" y1="84" x2="25" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- top wire to parallel block -->
+          <line x1="25" y1="25" x2="80" y2="25" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- parallel block top bus -->
+          <line x1="80" y1="25" x2="200" y2="25" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- parallel block bottom bus -->
+          <line x1="80" y1="130" x2="200" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R1 branch -->
+          <line x1="110" y1="25" x2="110" y2="50" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="88" y="50" width="44" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="110" y="62" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₁=5Ω</text>
+          <line x1="110" y1="68" x2="110" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R2 branch -->
+          <line x1="168" y1="25" x2="168" y2="50" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="146" y="50" width="44" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="168" y="62" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₂=15Ω</text>
+          <line x1="168" y1="68" x2="168" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- wire from parallel block to R3 -->
+          <line x1="200" y1="25" x2="240" y2="25" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R3 in series -->
+          <rect x="240" y="16" width="50" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="265" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₃=3Ω</text>
+          <line x1="290" y1="25" x2="310" y2="25" stroke="#4a9eff" stroke-width="2.5"/>
+          <line x1="310" y1="25" x2="310" y2="130" stroke="#4a9eff" stroke-width="2.5"/>
+          <text x="170" y="144" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#4a9eff">(R₁∥R₂) בטור עם R₃</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">א: R_מקביל = (R₁×R₂)/(R₁+R₂). ב: R_כולל = R_מקביל + R₃. ג: I=V/R_כולל. ד: V_ענפים = I×R_מקביל → I_ענף = V/R_ענף.</div></div>
+      </div>
+      <div class="mc-part" data-ok="R_מקביל = (5×15)/(5+15) = 75/20 = 3.75Ω" data-err="R_מקביל = (R₁×R₂)/(R₁+R₂) = (5×15)/(5+15) = 75/20 = 3.75Ω">
+        <div class="mc-part-q">א. R_מקביל(R₁,R₂)=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">2.5Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">3.75Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">5Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">7.5Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="R_כולל = R_מקביל + R₃ = 3.75 + 3 = 6.75Ω" data-err="R_כולל = R_מקביל + R₃ = 3.75 + 3 = 6.75Ω">
+        <div class="mc-part-q">ב. R_כולל=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4.75Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">5.75Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">6.75Ω</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">9.75Ω</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="I = V/R_כולל = 15/6.75 ≈ 2.22A" data-err="I = V ÷ R_כולל = 15 ÷ 6.75 ≈ 2.22A">
+        <div class="mc-part-q">ג. I_כולל≈?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">1.5A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">≈2.22A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">3A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">5A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="R₁=5Ω קטן מ-R₂=15Ω — נגד קטן מאפשר יותר זרם לעבור דרכו." data-err="I₁>I₂ כי R₁&lt;R₂ — ככל שהתנגדות קטנה, הזרם גדול יותר.">
+        <div class="mc-part-q">ד. מדוע I₁ &gt; I₂?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">R₁&lt;R₂ — נגד קטן → זרם גדול</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">R₁&gt;R₂</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">V₁&gt;V₂ (המתח שונה)</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">הם מחוברים בטור</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">R_מקביל = (5×15)/(5+15) = 75/20 = 3.75Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">R_כולל = 3.75 + 3 = 6.75Ω</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">I = 15/6.75 ≈ 2.22A</div></div>
+        <div class="sol-step"><div class="sol-num">ד</div><div class="sol-text">V_ענפים = 2.22×3.75 = 8.33V · I₁=8.33/5=1.67A · I₂=8.33/15=0.55A</div></div>
+        <div class="sol-step"><div class="sol-num">ה</div><div class="sol-text">I₁>I₂ כי R₁&lt;R₂ — ענף עם התנגדות קטנה יותר מאפשר יותר זרם לעבור.</div></div>
+        <div class="ans-box">א) 3.75Ω · ב) 6.75Ω · ג) ≈2.22A · ד) I₁≈1.67A, I₂≈0.55A</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX10 -->
+  <div class="exercise" id="ex10">
+    <div class="ex-header" onclick="toggleEx('ex10')">
+      <div class="ex-num">10</div>
+      <div class="ex-question">בונוס — מציאת מתח הסוללה</div>
+      <span class="lv-strip lv6">בונוס</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">בטור: R₁=8Ω, R₂=12Ω, I=2A, V=?</div>
+        <svg dir="ltr" viewBox="0 0 300 130" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="110" x2="270" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="30" y1="25" x2="30" y2="48" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="30" y1="88" x2="30" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="16" y="48" width="28" height="40" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2" stroke-dasharray="4,2"/>
+          <text x="30" y="63" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">+</text>
+          <text x="30" y="74" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">V=?</text>
+          <text x="30" y="84" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">−</text>
+          <line x1="30" y1="25" x2="85" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="85" y="16" width="55" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="112" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₁=8Ω</text>
+          <line x1="140" y1="25" x2="170" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <rect x="170" y="16" width="60" height="18" rx="3" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="2"/>
+          <text x="200" y="28" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#ffbe3d">R₂=12Ω</text>
+          <line x1="230" y1="25" x2="270" y2="25" stroke="#ffbe3d" stroke-width="2.5"/>
+          <line x1="270" y1="25" x2="270" y2="110" stroke="#ffbe3d" stroke-width="2.5"/>
+          <text x="150" y="98" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">→ I = 2A</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">בטור — I אחיד. חשבי R_כולל ואחר כך V = I × R_כולל.</div></div>
+      </div>
+      <div class="mc-part" data-ok="R_כולל=8+12=20Ω → V = I×R = 2×20 = 40V" data-err="R_כולל = 8+12 = 20Ω, אחר כך V = I × R = 2 × 20 = 40V">
+        <div class="mc-part-q">V_סוללה=?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">20V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">30V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">40V</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">50V</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">R_כולל = 8+12 = 20Ω</div></div>
+        <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">V = I × R_כולל = 2 × 20 = 40V</div></div>
+        <div class="ans-box">V_סוללה = 40V</div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<!-- NEW CONTENT FROM LATEST EXAM -->
+<div class="section">
+  <div class="section-title" style="--accent:var(--teal)">מהמבחן העדכני — נושאים נוספים</div>
+  <div class="section-desc">נושאים אלה הופיעו במבחן העדכני ומצריכים ידע נוסף</div>
+
+  <!-- I = q/t -->
+  <div class="tc tc-teal">
+    <div class="tc-title"><span class="tc-icon">⚡</span>עוצמת זרם כמטען לאורך זמן — I = q/t (שאלה 6 במבחן!)</div>
+    <p>עד עכשיו דיברנו על זרם כ"כמות החשמל הזורמת". יש לזרם הגדרה מדויקת יותר:</p>
+    <div class="formula-box">I = q ÷ t</div>
+    <p>כאשר:</p>
+    <div class="ex-step"><div class="ex-step-num">I</div><div class="ex-step-text">עוצמת הזרם — נמדדת באמפר (A)</div></div>
+    <div class="ex-step"><div class="ex-step-num">q</div><div class="ex-step-text">מטען חשמלי — נמדד בקולון (C). קולון הוא היחידה של "כמות החשמל"</div></div>
+    <div class="ex-step"><div class="ex-step-num">t</div><div class="ex-step-text">זמן — נמדד בשניות (s)</div></div>
+    <div class="key-box">
+      <strong>דוגמה (מהמבחן העדכני):</strong> מטען של 720 קולון עבר דרך מוליך ב-15 דקות. מה עוצמת הזרם?<br>
+      t = 15 × 60 = 900 שניות<br>
+      I = q/t = 720 ÷ 900 = <strong>0.8A</strong>
+    </div>
+    <div class="warn-box">
+      <strong>שגיאה נפוצה:</strong> הזמן חייב להיות <strong>בשניות</strong>! תמיד להמיר דקות לשניות (× 60) לפני החישוב.
+    </div>
+  </div>
+
+  <!-- I-V graph -->
+  <div class="tc tc-amber">
+    <div class="tc-title"><span class="tc-icon">📊</span>גרף I-V — חוק אוהם בצורה גרפית (שאלה 7 במבחן!)</div>
+    <p>גרף I-V מציג את הקשר בין מתח (V, ציר X) לזרם (I, ציר Y) עבור נגד.</p>
+    <p>לפי חוק אוהם I = V/R — הגרף הוא <strong>קו ישר מהראשית</strong>. שיפוע הישר = 1/R.</p>
+    <div class="key-box">
+      <strong>חוק אוהם בגרף:</strong><br>
+      • ישר תלול יותר = R <strong>קטן</strong> (זרם גבוה על כל מתח)<br>
+      • ישר שטוח יותר = R <strong>גדול</strong> (זרם נמוך על כל מתח)<br>
+      • בגרף עם שני נגדים: הנגד עם הישר התלול יותר הוא הקטן יותר
+    </div>
+    <p><strong>איך לקרוא את R מגרף:</strong> בוחרים נקודה על הגרף → R = V/I באותה נקודה.</p>
+    <div class="warn-box">
+      <strong>שאלה 7 במבחן העדכני:</strong> נתון מעגל עם שני נגדים, גרף I-V עם שני ישרים. שאלו: "כיצד ישפיע שינוי מתח הסוללה על הזרם?" — התשובה: הנקודה תזוז <strong>על אותו ישר</strong> (ל-R קבוע, הישר הוא קבוע — רק הנקודה זזה).
+    </div>
+  </div>
+
+  <!-- New exercises from latest exam -->
+  <div style="background:var(--teal-dim);border:1px solid rgba(0,229,192,0.2);border-radius:10px;padding:10px 18px;margin:16px 0;font-size:13px;font-weight:700;color:var(--teal)">תרגילים חדשים — מהמבחן העדכני</div>
+
+  <!-- EX11 -->
+  <div class="exercise" id="ex11">
+    <div class="ex-header" onclick="toggleEx('ex11')">
+      <div class="ex-num">11</div>
+      <div class="ex-question">חישוב זרם ממטען — I = q ÷ t (שאלה 6 במבחן)</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">
+        <strong>שאלה:</strong> מטען חשמלי של <strong>720 קולון</strong> עבר דרך מוליך בפרק זמן של <strong>15 דקות</strong>.<br>
+        מה <strong>עוצמת הזרם</strong> שזרם דרך המוליך?<br><br>
+        <strong>נתונים:</strong> q = 720 C &nbsp;|&nbsp; t = 15 דקות<br>
+        <strong>מבקשים:</strong> I = ?<br>
+        <strong>נוסחה:</strong> I = q ÷ t
+      </div>
+      <div class="warn-box" style="margin-bottom:14px"><strong>⚠ שים לב:</strong> הזמן נתון ב<strong>דקות</strong> — חובה להמיר לשניות לפני החישוב!</div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">שלב 1: המר דקות לשניות — t = 15 × 60 = 900 שניות<br>שלב 2: הכנס לנוסחה — I = q ÷ t = 720 ÷ 900</div></div>
+      </div>
+      <div class="mc-part" data-ok="t=15×60=900s → I = q÷t = 720÷900 = 0.8A" data-err="חובה להמיר דקות לשניות: t=900s → I=720÷900=0.8A. טעות שכיחה: לחלק ב-15 (ולא ב-900) → מקבלים 48, שזו שגיאת יחידות!">
+        <div class="mc-part-q">מה עוצמת הזרם? (I = ?)</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">0.6A — (720 ÷ 1200, שגיאה)</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">0.8A — (720 ÷ 900) ✓</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">48A — (720 ÷ 15, שגיאת יחידות!)</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">1440A — (720 × 2, שגיאה)</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">נתונים</div><div class="sol-text">q = 720 קולון &nbsp;|&nbsp; t = 15 דקות &nbsp;|&nbsp; מבקשים: I = ?</div></div>
+        <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>המרת זמן לשניות:</strong> t = 15 × 60 = <strong>900 שניות</strong></div></div>
+        <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>חישוב זרם:</strong> I = q ÷ t = 720 ÷ 900 = <strong>0.8A</strong></div></div>
+        <div class="sol-step"><div class="sol-num">בדיקה</div><div class="sol-text">q = I × t = 0.8 × 900 = 720 קולון ✓</div></div>
+        <div class="ans-box">I = 0.8 אמפר ✓</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX12 -->
+  <div class="exercise" id="ex12">
+    <div class="ex-header" onclick="toggleEx('ex12')">
+      <div class="ex-num">12</div>
+      <div class="ex-question">קריאת מעגל מתרשים — שאלה 5 מהמבחן העדכני</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ckt-wrap">
+        <div class="ckt-label">R₁ בטור, אחריו R₂ ∥ (R₃+R₄)</div>
+        <svg dir="ltr" viewBox="0 0 320 150" style="width:100%;max-width:320px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+          <!-- main line -->
+          <line x1="20" y1="75" x2="70" y2="75" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R1 -->
+          <rect x="70" y="66" width="50" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="95" y="78" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#4a9eff">R₁</text>
+          <line x1="120" y1="75" x2="160" y2="75" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- split node -->
+          <!-- top bus -->
+          <line x1="160" y1="75" x2="160" y2="35" stroke="#4a9eff" stroke-width="2.5"/>
+          <line x1="160" y1="35" x2="290" y2="35" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- bottom bus -->
+          <line x1="160" y1="75" x2="160" y2="115" stroke="#4a9eff" stroke-width="2.5"/>
+          <line x1="160" y1="115" x2="290" y2="115" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- join right -->
+          <line x1="290" y1="35" x2="290" y2="115" stroke="#4a9eff" stroke-width="2.5"/>
+          <line x1="290" y1="75" x2="310" y2="75" stroke="#4a9eff" stroke-width="2.5"/>
+          <!-- R2 upper branch -->
+          <line x1="200" y1="35" x2="200" y2="22" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="185" y="11" width="40" height="18" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="205" y="23" text-anchor="middle" font-family="Heebo,sans-serif" font-size="9" font-weight="700" fill="#4a9eff">R₂</text>
+          <!-- R3+R4 lower branch -->
+          <line x1="195" y1="115" x2="195" y2="128" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="178" y="128" width="34" height="16" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="195" y="139" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₃</text>
+          <line x1="212" y1="136" x2="228" y2="136" stroke="#4a9eff" stroke-width="2.5"/>
+          <rect x="228" y="128" width="34" height="16" rx="3" fill="rgba(74,158,255,0.1)" stroke="#4a9eff" stroke-width="2"/>
+          <text x="245" y="139" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" font-weight="700" fill="#4a9eff">R₄</text>
+          <text x="165" y="90" font-family="Heebo,sans-serif" font-size="7" fill="rgba(74,158,255,0.6)">ענף עליון</text>
+          <text x="165" y="105" font-family="Heebo,sans-serif" font-size="7" fill="rgba(74,158,255,0.6)">ענף תחתון</text>
+        </svg>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">R₁ בטור עם הכל. אחריו — שני ענפים מקבילים: R₂ לבד, ו-R₃+R₄ יחד. מי מחובר במקביל למי?</div></div>
+      </div>
+      <div class="mc-part" data-ok="R₁ בטור עם כולם, אחריו R₂ ∥ (R₃+R₄) — תיאור מלא ומדויק." data-err="התשובה הנכונה: R₂ ∥ (R₃+R₄) כולם בטור עם R₁">
+        <div class="mc-part-q">כיצד מחוברים הנגדים?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">(א) R₁,R₂ בטור ∥ R₃,R₄</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">(ב) R₁,R₃,R₄ בטור ∥ R₂</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">(ג) R₁,R₂ בטור ∥ R₃</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">(ד) R₂ ∥ (R₃+R₄) כולם בטור עם R₁</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">R₁ בטור עם יתר המעגל — זרם עובר דרכו תמיד</div></div>
+        <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">לאחר R₁: R₂ ו-(R₃+R₄) הם שני ענפים מקבילים</div></div>
+        <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">תיאור מלא: R₁ בטור + [R₂ במקביל ל-(R₃,R₄ בטור)]</div></div>
+        <div class="ans-box">תשובה: (ד) ✓</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- EX13 -->
+  <div class="exercise" id="ex13">
+    <div class="ex-header" onclick="toggleEx('ex13')">
+      <div class="ex-num">13</div>
+      <div class="ex-question">זרמים בצמתים וגרף I-V — שאלה 7 מהמבחן העדכני</div>
+      <span class="lv-strip lv4">רמה 4</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;">
+        <div class="ckt-wrap" style="flex:1;min-width:180px;">
+          <div class="ckt-label">מצב 1 — I=2A (R קטן)</div>
+          <svg dir="ltr" viewBox="0 0 180 110" style="width:100%;max-width:200px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+            <line x1="15" y1="90" x2="165" y2="90" stroke="#ffbe3d" stroke-width="2"/>
+            <line x1="15" y1="20" x2="15" y2="40" stroke="#ffbe3d" stroke-width="2"/>
+            <rect x="5" y="40" width="20" height="28" rx="2" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="1.5"/>
+            <text x="15" y="59" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" fill="#ffbe3d">🔋</text>
+            <line x1="15" y1="68" x2="15" y2="90" stroke="#ffbe3d" stroke-width="2"/>
+            <line x1="15" y1="20" x2="60" y2="20" stroke="#ffbe3d" stroke-width="2"/>
+            <rect x="60" y="12" width="60" height="16" rx="2" fill="rgba(255,190,61,0.12)" stroke="#ffbe3d" stroke-width="1.5"/>
+            <text x="90" y="23" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" font-weight="700" fill="#ffbe3d">R_קטן</text>
+            <line x1="120" y1="20" x2="165" y2="20" stroke="#ffbe3d" stroke-width="2"/>
+            <line x1="165" y1="20" x2="165" y2="90" stroke="#ffbe3d" stroke-width="2"/>
+            <text x="90" y="104" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#ffbe3d">I = 2A</text>
+          </svg>
+        </div>
+        <div class="ckt-wrap" style="flex:1;min-width:180px;">
+          <div class="ckt-label">מצב 2 — I=0.5A (R גדול)</div>
+          <svg dir="ltr" viewBox="0 0 180 110" style="width:100%;max-width:200px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+            <line x1="15" y1="90" x2="165" y2="90" stroke="#00e5c0" stroke-width="2"/>
+            <line x1="15" y1="20" x2="15" y2="40" stroke="#00e5c0" stroke-width="2"/>
+            <rect x="5" y="40" width="20" height="28" rx="2" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="1.5"/>
+            <text x="15" y="59" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" fill="#00e5c0">🔋</text>
+            <line x1="15" y1="68" x2="15" y2="90" stroke="#00e5c0" stroke-width="2"/>
+            <line x1="15" y1="20" x2="60" y2="20" stroke="#00e5c0" stroke-width="2"/>
+            <rect x="60" y="12" width="60" height="16" rx="2" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="1.5"/>
+            <text x="90" y="23" text-anchor="middle" font-family="Heebo,sans-serif" font-size="7" font-weight="700" fill="#00e5c0">R_גדול</text>
+            <line x1="120" y1="20" x2="165" y2="20" stroke="#00e5c0" stroke-width="2"/>
+            <line x1="165" y1="20" x2="165" y2="90" stroke="#00e5c0" stroke-width="2"/>
+            <text x="90" y="104" text-anchor="middle" font-family="Heebo,sans-serif" font-size="8" fill="#00e5c0">I = 0.5A</text>
+          </svg>
+        </div>
+      </div>
+      <div class="ex-hint-wrap">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+        <div class="hint-content"><div class="hint-box">א: שימור מטען — מה שנכנס לצומת = מה שיוצא. ב: R קבוע → ישר ב-I-V. מצב 1 (2A) = ישר תלול יותר.</div></div>
+      </div>
+      <div class="mc-part" data-ok="בטור — הזרם אחיד. שימור מטען: I_כניסה = I_יציאה בכל צומת → 2A בכל מקום." data-err="בטור הזרם אחיד לכל אורך הענף — 2A בכל רכיב (שימור מטען).">
+        <div class="mc-part-q">א. עוצמת הזרם בכל רכיב במצב 1?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">2A — אחיד בכל הענף</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">1A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">0.5A</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">4A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="מצב 1 (R קטן) → ישר תלול יותר. מצב 2 (R גדול) → ישר שטוח יותר." data-err="ישר תלול = R קטן = זרם גבוה לכל מתח. מצב 1 (2A) תלול יותר ממצב 2 (0.5A).">
+        <div class="mc-part-q">ב. בגרף I-V, מצב 1 לעומת מצב 2?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" onclick="answerMC(this)" data-c="1">מצב 1 = ישר תלול יותר (R קטן)</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">מצב 1 = ישר שטוח יותר</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">שניהם אותו ישר</button>
+          <button class="mc-opt" onclick="answerMC(this)" data-c="0">הגרף הוא עקומה, לא ישר</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">כאשר האמפרמטר מראה 2A — זה הזרם הכולל. עקב שימור המטען, הזרם בכל רכיב בטור = 2A אחיד.</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">מצב 1 (I=2A): R קטן → ישר תלול יותר בגרף I-V<br>מצב 2 (I=0.5A): R גדול → ישר שטוח יותר<br>שניהם ישרים מהראשית (חוק אוהם).</div></div>
+        <div class="ans-box">א) 2A אחיד · ב) מצב 1 = ישר תלול, מצב 2 = ישר שטוח</div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<!-- NAV BUTTONS -->
+<div class="section" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:80px">
+  <a href="day2.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text-dim);text-decoration:none;font-weight:600;font-size:14px;transition:all 0.2s">→ יום קודם: תחנה הידרואלקטרית</a>
+  <a href="day4.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:var(--amber-dim);border:1px solid rgba(255,190,61,0.3);color:var(--amber);text-decoration:none;font-weight:700;font-size:14px;transition:all 0.2s">← יום הבא: הספק + אנרגיית חום</a>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggleEx(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function answerMC(btn) {
+  const part = btn.closest('.mc-part');
+  if (part.dataset.done) return;
+  part.dataset.done = '1';
+  const isOk = btn.dataset.c === '1';
+  part.querySelectorAll('.mc-opt').forEach(o => {
+    o.disabled = true;
+    if (o === btn) o.classList.add(isOk ? 'mc-ok' : 'mc-bad');
+    else if (!isOk && o.dataset.c === '1') o.classList.add('mc-rev');
+  });
+  const fb = part.querySelector('.mc-fb');
+  fb.className = 'mc-fb ' + (isOk ? 'ok' : 'bad');
+  fb.innerHTML = isOk
+    ? '✓ נכון! ' + (part.dataset.ok || '')
+    : '✗ לא נכון. ' + (part.dataset.err || '');
+}
+
+function toggleSol(btn) {
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open') ? '▲ הסתרת פתרון מלא' : '▼ הצגת פתרון מלא';
+}
+
+function toggleHint(btn) {
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+  btn.querySelector('.hint-arr').textContent = content.classList.contains('open') ? '▲' : '▼';
+}
+</script>
+</body>
+</html>

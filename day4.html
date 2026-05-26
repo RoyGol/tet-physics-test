@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>יום 4 — הספק ואנרגיית חום | פיזיקה גולי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060c1a; --bg2: #0b1428;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --teal: #00e5c0; --teal-dim: rgba(0,229,192,0.12);
+    --amber: #ffbe3d; --amber-dim: rgba(255,190,61,0.12);
+    --pink: #ff6b9d; --pink-dim: rgba(255,107,157,0.12);
+    --blue: #4a9eff; --blue-dim: rgba(74,158,255,0.12);
+    --purple: #a78bfa; --purple-dim: rgba(167,139,250,0.12);
+    --green: #34d399;
+    --text: #e8f0fe;
+    --text-dim: rgba(232,240,254,0.55);
+    --text-muted: rgba(232,240,254,0.3);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family:'Heebo',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; direction:rtl; }
+  .orb { position:fixed; border-radius:50%; filter:blur(120px); opacity:0.15; pointer-events:none; z-index:0; }
+  .orb1 { width:500px;height:500px; background:var(--pink); top:-150px;right:-100px; }
+  .orb2 { width:400px;height:400px; background:var(--amber); bottom:-100px;left:-80px; }
+  .wrap { position:relative; z-index:1; }
+
+  nav { position:fixed;top:0;right:0;left:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,12,26,0.75);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border); }
+  .nav-back { display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--purple);text-decoration:none;transition:opacity 0.2s; }
+  .nav-back:hover { opacity:0.75; }
+  .nav-title { font-size:15px;font-weight:700;color:var(--text-dim); }
+  .nav-day { font-size:13px;color:var(--text-muted);background:var(--glass);border:1px solid var(--glass-border);padding:4px 12px;border-radius:20px; }
+
+  .progress-bar { position:fixed;top:57px;right:0;left:0;z-index:99;background:rgba(6,12,26,0.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--glass-border);padding:10px 40px;display:flex;gap:8px;align-items:center; }
+  .pb-step { flex:1;height:4px;border-radius:2px;background:var(--glass-border);transition:background 0.4s; }
+  .pb-step.done { background:rgba(0,229,192,0.4); }
+  .pb-step.active { background:var(--purple);box-shadow:0 0 8px var(--purple); }
+
+  .hero { padding:140px 40px 60px;max-width:900px;margin:0 auto; }
+  .hero-badge { display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--purple);background:var(--purple-dim);border:1px solid rgba(167,139,250,0.25);padding:6px 16px;border-radius:20px;margin-bottom:24px; }
+  .hero h1 { font-size:clamp(32px,5vw,56px);font-weight:900;line-height:1.1;margin-bottom:16px; }
+  .hero h1 span { color:var(--purple); }
+  .hero-sub { font-size:18px;color:var(--text-dim);line-height:1.6;max-width:650px; }
+
+  .section { max-width:900px;margin:0 auto;padding:0 40px 60px; }
+  .section-title { font-size:22px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px; }
+  .section-title::before { content:'';display:block;width:4px;height:24px;background:var(--purple);border-radius:2px; }
+  .section-desc { font-size:14px;color:var(--text-dim);margin-bottom:28px; }
+
+  .tc { background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:28px 32px;margin-bottom:20px;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s; }
+  .tc:hover { transform:translateY(-2px); }
+  .tc::before { content:'';position:absolute;top:0;right:0;width:3px;height:100%;border-radius:0 16px 16px 0; }
+  .tc-purple::before{ background:var(--purple); }
+  .tc-pink::before  { background:var(--pink); }
+  .tc-amber::before { background:var(--amber); }
+  .tc-teal::before  { background:var(--teal); }
+  .tc-blue::before  { background:var(--blue); }
+  .tc-green::before { background:var(--green); }
+  .tc-title { font-size:18px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px; }
+  .tc-icon { font-size:22px; }
+  .tc p { font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:12px; }
+  .tc p:last-child { margin-bottom:0; }
+
+  .formula-box { border-radius:10px;padding:16px 20px;margin:14px 0;font-size:16px;text-align:center;font-weight:700;letter-spacing:0.5px; }
+  .fb-purple { background:var(--purple-dim);border:1px solid rgba(167,139,250,0.3);color:var(--purple); }
+  .fb-pink   { background:var(--pink-dim);  border:1px solid rgba(255,107,157,0.3); color:var(--pink); }
+  .fb-amber  { background:var(--amber-dim); border:1px solid rgba(255,190,61,0.3);  color:var(--amber); }
+  .fb-teal   { background:var(--teal-dim);  border:1px solid rgba(0,229,192,0.3);   color:var(--teal); }
+  .fb-blue   { background:var(--blue-dim);  border:1px solid rgba(74,158,255,0.3);  color:var(--blue); }
+
+  .key-box { background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px 20px;margin:14px 0;font-size:14px;color:var(--green);line-height:1.7; }
+  .key-box strong { color:#fff; }
+  .warn-box { background:var(--pink-dim);border:1px solid rgba(255,107,157,0.2);border-radius:10px;padding:14px 20px;margin:14px 0;font-size:14px;color:var(--pink);line-height:1.7; }
+  .warn-box strong { color:#fff; }
+
+  .ex-step { display:flex;gap:14px;margin-bottom:14px;align-items:flex-start; }
+  .ex-step-num { min-width:28px;height:28px;border-radius:50%;background:var(--purple-dim);border:1px solid rgba(167,139,250,0.3);color:var(--purple);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px; }
+  .ex-step-text { font-size:14px;color:var(--text-dim);line-height:1.75; }
+
+  /* FORMULA CARDS GRID */
+  .formula-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:14px 0; }
+  .formula-card { border-radius:12px;padding:18px;text-align:center; }
+  .fc-purple { background:var(--purple-dim);border:1px solid rgba(167,139,250,0.2); }
+  .fc-pink   { background:var(--pink-dim);  border:1px solid rgba(255,107,157,0.2); }
+  .fc-amber  { background:var(--amber-dim); border:1px solid rgba(255,190,61,0.2); }
+  .formula-card .fc-formula { font-size:20px;font-weight:800;margin-bottom:6px; }
+  .formula-card .fc-name    { font-size:12px;color:var(--text-dim);margin-bottom:4px; }
+  .formula-card .fc-units   { font-size:11px;color:var(--text-muted); }
+  .fc-purple .fc-formula { color:var(--purple); }
+  .fc-pink   .fc-formula { color:var(--pink); }
+  .fc-amber  .fc-formula { color:var(--amber); }
+
+  /* UNITS TABLE */
+  .units-table { width:100%;border-collapse:collapse;margin:14px 0;font-size:14px; }
+  .units-table th { background:var(--purple-dim);color:var(--purple);padding:10px 14px;text-align:right;border-bottom:1px solid rgba(167,139,250,0.2);font-weight:700; }
+  .units-table td { padding:9px 14px;border-bottom:1px solid var(--glass-border);color:var(--text-dim); }
+  .units-table tr:last-child td { border-bottom:none; }
+
+  .video-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px; }
+  .video-card { background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;text-decoration:none;transition:border-color 0.25s,transform 0.25s; }
+  .video-card:hover { border-color:var(--purple);transform:translateY(-3px); }
+  .video-thumb { font-size:32px;text-align:center; }
+  .video-title { font-size:14px;font-weight:700;color:var(--text); }
+  .video-sub   { font-size:12px;color:var(--text-muted); }
+  .video-tag   { font-size:11px;font-weight:600;background:var(--purple-dim);color:var(--purple);border-radius:6px;padding:3px 8px;align-self:flex-start; }
+
+  .example-card { background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;margin-bottom:24px;overflow:hidden; }
+  .example-header { padding:20px 28px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--glass-border); }
+  .diff-badge { font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase; }
+  .diff-easy   { background:rgba(52,211,153,0.15);  color:var(--green); border:1px solid rgba(52,211,153,0.3); }
+  .diff-medium { background:var(--amber-dim);        color:var(--amber); border:1px solid rgba(255,190,61,0.3); }
+  .diff-hard   { background:var(--pink-dim);          color:var(--pink);  border:1px solid rgba(255,107,157,0.3); }
+  .example-title { font-size:16px;font-weight:700; }
+  .example-body { padding:24px 28px; }
+  .example-body p { font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:10px; }
+  .ex-answer { margin-top:16px;padding:14px 18px;border-radius:10px;background:var(--purple-dim);border:1px solid rgba(167,139,250,0.2);font-size:15px;font-weight:700;color:var(--purple); }
+
+  .exercise { background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;margin-bottom:14px;overflow:hidden; }
+  .ex-header { padding:18px 24px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;transition:background 0.2s; }
+  .ex-header:hover { background:rgba(255,255,255,0.03); }
+  .ex-num { width:32px;height:32px;border-radius:8px;background:var(--purple-dim);border:1px solid rgba(167,139,250,0.25);color:var(--purple);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .ex-question { flex:1;font-size:15px;font-weight:600; }
+  .lv-strip { font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.4px; }
+  .lv1 { background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3); }
+  .lv2 { background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3); }
+  .lv3 { background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,190,61,0.3); }
+  .lv4 { background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,190,61,0.3); }
+  .lv5 { background:var(--pink-dim);color:var(--pink);border:1px solid rgba(255,107,157,0.3); }
+  .lv6 { background:var(--pink-dim);color:var(--pink);border:1px solid rgba(255,107,157,0.3); }
+  .ex-chevron { color:var(--text-muted);font-size:14px;transition:transform 0.3s;margin-right:auto; }
+  .exercise.open .ex-chevron { transform:rotate(180deg); }
+  .ex-body { max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .exercise.open .ex-body { max-height:2400px; }
+  .ex-content { padding:0 24px 24px; }
+  .ex-q { font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:16px; }
+  /* MC EXERCISES */
+  .mc-part { margin-bottom:20px; }
+  .mc-sub-q { font-size:14px;color:var(--text-dim);margin-bottom:10px;font-weight:600; }
+  .hint-btn { display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:var(--amber-dim);border:1px solid rgba(255,190,61,0.25);color:var(--amber);margin-bottom:10px;user-select:none;transition:all 0.2s; }
+  .hint-btn:hover { background:rgba(255,190,61,0.2); }
+  .hint-body { display:none;background:var(--amber-dim);border:1px solid rgba(255,190,61,0.2);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--amber);line-height:1.7;margin-bottom:12px; }
+  .hint-body.open { display:block; }
+  .mc-opts { display:flex;flex-direction:column;gap:8px;margin-bottom:10px; }
+  .mc-opt { padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;border:1px solid var(--glass-border);background:var(--glass);color:var(--text);cursor:pointer;text-align:right;transition:all 0.2s;font-family:'Heebo',sans-serif; }
+  .mc-opt:hover:not(:disabled) { background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.2); }
+  .mc-opt:disabled { cursor:default; }
+  .mc-opt.mc-ok  { background:rgba(52,211,153,0.15);border-color:rgba(52,211,153,0.4);color:#34d399; }
+  .mc-opt.mc-bad { background:var(--pink-dim);border-color:rgba(255,107,157,0.4);color:var(--pink); }
+  .mc-opt.mc-rev { background:rgba(52,211,153,0.08);border-color:rgba(52,211,153,0.25);color:rgba(52,211,153,0.7); }
+  .mc-fb { font-size:13px;line-height:1.6;padding:10px 14px;border-radius:8px;margin-top:4px; }
+  .mc-fb.ok  { background:rgba(52,211,153,0.1);color:#34d399;border:1px solid rgba(52,211,153,0.2); }
+  .mc-fb.bad { background:var(--pink-dim);color:var(--pink);border:1px solid rgba(255,107,157,0.2); }
+  .mc-divider { border:none;border-top:1px solid var(--glass-border);margin:16px 0; }
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <a href="index.html" class="nav-back">→ חזרה לדף הראשי</a>
+  <span class="nav-title">פיזיקה — גולי</span>
+  <span class="nav-day">שבת · 17 במאי</span>
+</nav>
+
+<div class="progress-bar">
+  <div class="pb-step done"></div>
+  <div class="pb-step done"></div>
+  <div class="pb-step done"></div>
+  <div class="pb-step active"></div>
+</div>
+
+<div class="wrap">
+
+<div class="hero">
+  <div class="hero-badge">🔥 יום 4 מתוך 4 · שבת 17 במאי</div>
+  <h1>הספק ו<span>אנרגיית חום</span></h1>
+  <p class="hero-sub">הספק חשמלי (P=VI), אנרגיית חום (Q=mcΔT), חישוב זמן הרתחה ונצילות. נושאים אלה מופיעים בשאלות 7 ו-8 במבחן.</p>
+</div>
+
+<!-- THEORY -->
+<div class="section">
+  <div class="section-title">תיאוריה</div>
+  <div class="section-desc">שני נושאים בפרק זה — הספק ואנרגיית חום. שניהם חייבים לדעת!</div>
+
+  <!-- T1: מהו הספק -->
+  <div class="tc tc-purple">
+    <div class="tc-title"><span class="tc-icon">⚡</span>הספק — Power</div>
+    <p>הספק הוא <strong>כמה אנרגיה מועברת בכל שנייה</strong>. ניתן לחשוב עליו כ"מהירות" העברת האנרגיה.</p>
+    <p>נמדד ב-<strong>וואט (W)</strong> — על שם המדען ג'יימס ואט.</p>
+    <div class="formula-grid">
+      <div class="formula-card fc-purple">
+        <div class="fc-formula">P = E ÷ t</div>
+        <div class="fc-name">הספק = אנרגיה ÷ זמן</div>
+        <div class="fc-units">W = J ÷ s</div>
+      </div>
+      <div class="formula-card fc-pink">
+        <div class="fc-formula">P = V × I</div>
+        <div class="fc-name">הספק = מתח × זרם</div>
+        <div class="fc-units">W = V × A</div>
+      </div>
+      <div class="formula-card fc-amber">
+        <div class="fc-formula">E = P × t</div>
+        <div class="fc-name">אנרגיה = הספק × זמן</div>
+        <div class="fc-units">J = W × s</div>
+      </div>
+    </div>
+    <div class="key-box">
+      <strong>דוגמה:</strong> מכשיר חשמלי של 100W פועל 10 שניות → E = 100 × 10 = 1000 ג'ול.<br>
+      <strong>לזכור:</strong> נורה 100W צורכת יותר אנרגיה בשנייה מנורה 60W.
+    </div>
+  </div>
+
+  <!-- T2: יחידות -->
+  <div class="tc tc-pink">
+    <div class="tc-title"><span class="tc-icon">📏</span>יחידות — חייבים לדעת בעל פה</div>
+    <table class="units-table">
+      <thead><tr><th>גודל</th><th>סמל</th><th>יחידה</th><th>סמל יחידה</th></tr></thead>
+      <tbody>
+        <tr><td>הספק</td><td>P</td><td>וואט</td><td>W</td></tr>
+        <tr><td>אנרגיה</td><td>E</td><td>ג'ול</td><td>J</td></tr>
+        <tr><td>זמן</td><td>t</td><td>שנייה</td><td>s</td></tr>
+        <tr><td>מתח</td><td>V</td><td>וולט</td><td>V</td></tr>
+        <tr><td>זרם</td><td>I</td><td>אמפר</td><td>A</td></tr>
+        <tr><td>אנרגיית חום</td><td>Q</td><td>ג'ול</td><td>J</td></tr>
+        <tr><td>קיבול חום סגולי</td><td>c</td><td>ג'ול לק"ג-מעלה</td><td>J/(kg·°C)</td></tr>
+        <tr><td>מסה</td><td>m</td><td>ק"ג</td><td>kg</td></tr>
+        <tr><td>שינוי טמפרטורה</td><td>ΔT</td><td>מעלות צלסיוס</td><td>°C</td></tr>
+      </tbody>
+    </table>
+    <div class="warn-box">
+      <strong>שגיאות נפוצות בבחינות:</strong><br>
+      • מסה — תמיד ב<strong>ק"ג</strong>, לא גרמים! 1000g = 1 kg<br>
+      • זמן — תמיד ב<strong>שניות</strong>! דקה = 60 שניות, שעה = 3600 שניות<br>
+      • ΔT = T_סוף − T_התחלה
+    </div>
+  </div>
+
+  <!-- T3: אנרגיית חום -->
+  <div class="tc tc-amber">
+    <div class="tc-title"><span class="tc-icon">🌡️</span>אנרגיית חום — Q = mcΔT</div>
+    <p>כשגוף מתחמם, הוא סופג אנרגיה. כמות האנרגיה הזו נקראת <strong>אנרגיית חום</strong> (Q).</p>
+    <div class="formula-box fb-amber">Q = m × c × ΔT</div>
+    <p>כאשר:</p>
+    <div class="ex-step"><div class="ex-step-num">Q</div><div class="ex-step-text">אנרגיית חום הנספגת (ג'ול)</div></div>
+    <div class="ex-step"><div class="ex-step-num">m</div><div class="ex-step-text">מסת החומר (<strong>בק"ג!</strong>)</div></div>
+    <div class="ex-step"><div class="ex-step-num">c</div><div class="ex-step-text">קיבול חום סגולי — תכונה של החומר (J/kg·°C)<br>של מים: c = 4200 J/(kg·°C). בשאלה בדרך כלל ינתן.</div></div>
+    <div class="ex-step"><div class="ex-step-num">ΔT</div><div class="ex-step-text">שינוי טמפרטורה = T_סוף − T_התחלה (°C)</div></div>
+    <div class="key-box">
+      <strong>דוגמה:</strong> להרתיח 2 ק"ג מים מ-20°C ל-100°C: ΔT=80°C.<br>
+      Q = 2 × 4200 × 80 = 672,000 J
+    </div>
+  </div>
+
+  <!-- T4: קיבול חום סגולי -->
+  <div class="tc tc-teal">
+    <div class="tc-title"><span class="tc-icon">🧪</span>קיבול חום סגולי — מה זה c?</div>
+    <p>קיבול חום סגולי (c) מבטא <strong>כמה אנרגיה צריך לתת לק"ג אחד של חומר כדי לחמם אותו ב-1°C</strong>.</p>
+    <p>כל חומר יש לו c שונה:</p>
+    <div class="formula-box fb-teal">מים: c = 4200 J/(kg·°C) — הכי גבוה מבין חומרים נפוצים</div>
+    <p>ערך גבוה = קשה לחמם ולקרר. לכן המים יעילים לקירור מנועים ולהסקה.</p>
+    <div class="key-box">
+      <strong>בשאלות המבחן:</strong> ערך c יינתן בשאלה. לא צריך לשנן ערכים ספציפיים — רק לדעת להכניס לנוסחה!
+    </div>
+  </div>
+
+  <!-- T5: הרתחה + זמן -->
+  <div class="tc tc-blue">
+    <div class="tc-title"><span class="tc-icon">⏱️</span>חישוב זמן הרתחה — שאלה 8 במבחן</div>
+    <p>כשמחממים מים עם קומקום (הספק P ידוע), ואנחנו יודעים את Q — נוכל לחשב כמה זמן זה ייקח:</p>
+    <div class="formula-box fb-blue">t = Q ÷ P</div>
+    <p><strong>שלבי פתרון:</strong></p>
+    <div class="ex-step"><div class="ex-step-num">1</div><div class="ex-step-text">חשבי Q = mcΔT (ΔT = 100 − T_התחלה)</div></div>
+    <div class="ex-step"><div class="ex-step-num">2</div><div class="ex-step-text">הספק הקומקום P ניתן בשאלה (למשל 2000W)</div></div>
+    <div class="ex-step"><div class="ex-step-num">3</div><div class="ex-step-text">t = Q ÷ P (בשניות)</div></div>
+    <div class="ex-step"><div class="ex-step-num">4</div><div class="ex-step-text">המר לדקות אם צריך: דקות = שניות ÷ 60</div></div>
+    <div class="warn-box">
+      <strong>שים לב לנצילות!</strong> אם הקומקום בנצילות לא מלאה: Q_נדרש = Q_כולל ÷ נצילות. כלומר צריך יותר זמן.
+    </div>
+  </div>
+
+  <!-- T6: P = VI קישור למעגלים -->
+  <div class="tc tc-purple">
+    <div class="tc-title"><span class="tc-icon">🔗</span>קישור: הספק ומעגלים חשמליים</div>
+    <p>מנוסחת P = V × I, אפשר לגזור נוסחאות נוספות באמצעות חוק אוהם (V=IR):</p>
+    <div class="formula-box fb-purple">P = V × I = I² × R = V² ÷ R</div>
+    <p>שלושה צורות — כולן שוות! השתמשי בזו שבה יש לך את המידע.</p>
+    <div class="key-box">
+      <strong>דוגמה:</strong> נגד 10Ω ועוצמת זרם 2A:<br>
+      P = I² × R = 4 × 10 = 40W<br>
+      V = IR = 2×10 = 20V → P = VI = 20×2 = 40W ✓
+    </div>
+  </div>
+
+  <!-- T7: סיכום כל הנוסחאות -->
+  <div class="tc tc-green">
+    <div class="tc-title"><span class="tc-icon">📋</span>סיכום כל הנוסחאות — לשינון!</div>
+    <p>כל הנוסחאות שנדרשות למבחן:</p>
+    <div class="formula-grid">
+      <div class="formula-card fc-purple"><div class="fc-formula">P = E/t</div><div class="fc-name">הספק</div></div>
+      <div class="formula-card fc-pink"><div class="fc-formula">P = V × I</div><div class="fc-name">הספק חשמלי</div></div>
+      <div class="formula-card fc-amber"><div class="fc-formula">Q = mcΔT</div><div class="fc-name">אנרגיית חום</div></div>
+    </div>
+    <div class="formula-grid">
+      <div class="formula-card fc-purple"><div class="fc-formula">E = P × t</div><div class="fc-name">אנרגיה</div></div>
+      <div class="formula-card fc-pink"><div class="fc-formula">t = Q ÷ P</div><div class="fc-name">זמן הרתחה</div></div>
+      <div class="formula-card fc-amber"><div class="fc-formula">ΔT = T₂ − T₁</div><div class="fc-name">שינוי טמפ׳</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEOS -->
+<div class="section">
+  <div class="section-title">סרטוני לימוד</div>
+  <div class="section-desc">צפי בסרטון אחד לפחות — הספק ו/או אנרגיית חום</div>
+  <div class="video-grid">
+    <a href="https://www.youtube.com/results?search_query=הספק+חשמלי+פיזיקה+עברית" target="_blank" class="video-card">
+      <div class="video-thumb">⚡</div>
+      <div class="video-title">הספק חשמלי — עברית</div>
+      <div class="video-sub">P=VI וחישובים</div>
+      <div class="video-tag">עברית</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=אנרגיית+חום+קיבול+חום+סגולי+עברית" target="_blank" class="video-card">
+      <div class="video-thumb">🌡️</div>
+      <div class="video-title">Q=mcΔT — אנרגיית חום</div>
+      <div class="video-sub">נוסחה + דוגמאות</div>
+      <div class="video-tag">עברית</div>
+    </a>
+    <a href="https://www.khanacademy.org/science/physics/thermodynamics" target="_blank" class="video-card">
+      <div class="video-thumb">🔥</div>
+      <div class="video-title">Khan Academy — Thermodynamics</div>
+      <div class="video-sub">חום ואנרגיה</div>
+      <div class="video-tag">אנגלית</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=electrical+power+physics+P=VI" target="_blank" class="video-card">
+      <div class="video-thumb">🔌</div>
+      <div class="video-title">Electric Power P=VI</div>
+      <div class="video-sub">הסבר + תרגול</div>
+      <div class="video-tag">אנגלית</div>
+    </a>
+  </div>
+</div>
+
+<!-- WORKED EXAMPLES -->
+<div class="section">
+  <div class="section-title">דוגמאות מפורטות</div>
+  <div class="section-desc">לפי השאלות האמיתיות מהמבחן</div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-easy">קל</span>
+      <span class="example-title">חישוב הספק בסיסי</span>
+    </div>
+    <div class="example-body">
+      <p>מכשיר חשמלי פועל על מתח 230V ועוצמת זרם 2A. <strong>מה הספקו?</strong></p>
+      <div class="ex-step"><div class="ex-step-num">1</div><div class="ex-step-text">ידוע: V=230V, I=2A</div></div>
+      <div class="ex-step"><div class="ex-step-num">2</div><div class="ex-step-text">P = V × I = 230 × 2 = 460W</div></div>
+      <div class="ex-answer">P = 460 וואט</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-medium">בינוני</span>
+      <span class="example-title">חישוב אנרגיית חום ושינוי טמפרטורה</span>
+    </div>
+    <div class="example-body">
+      <p>קומקום מחמם 1.5 ק"ג מים מ-20°C ל-100°C. c_מים = 4200 J/(kg·°C).<br><strong>א. מה ΔT? ב. מה Q?</strong></p>
+      <div class="ex-step"><div class="ex-step-num">א</div><div class="ex-step-text">ΔT = 100 − 20 = 80°C</div></div>
+      <div class="ex-step"><div class="ex-step-num">ב</div><div class="ex-step-text">Q = m × c × ΔT = 1.5 × 4200 × 80 = 504,000 J</div></div>
+      <div class="ex-answer">ΔT = 80°C · Q = 504,000 ג'ול</div>
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-hard">קשה</span>
+      <span class="example-title">שאלה 8 מהמבחן — קומקום + זמן הרתחה</span>
+    </div>
+    <div class="example-body">
+      <p>קומקום בהספק 2000W (נצילות 100%) מחמם 2 ק"ג מים מ-25°C ל-100°C. c=4200 J/(kg·°C).<br>
+      <strong>א. כמה אנרגיה נדרשת?</strong><br>
+      <strong>ב. כמה זמן זה ייקח?</strong><br>
+      <strong>ג. אם נצילות הקומקום 80%, כמה זמן ייקח?</strong></p>
+      <div class="ex-step"><div class="ex-step-num">א</div><div class="ex-step-text">ΔT = 100−25 = 75°C<br>Q = 2 × 4200 × 75 = 630,000 J</div></div>
+      <div class="ex-step"><div class="ex-step-num">ב</div><div class="ex-step-text">t = Q ÷ P = 630,000 ÷ 2000 = <strong>315 שניות</strong> (≈5.25 דקות)</div></div>
+      <div class="ex-step"><div class="ex-step-num">ג</div><div class="ex-step-text">נצילות 80% → Q_כולל_נדרש = 630,000 ÷ 0.8 = 787,500 J<br>t = 787,500 ÷ 2000 = <strong>393.75 שניות</strong> (≈6.6 דקות)</div></div>
+      <div class="ex-answer">א) 630,000 J · ב) 315 שניות · ג) ≈394 שניות</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCISES -->
+<div class="section">
+  <div class="section-title">תרגילים</div>
+  <div class="section-desc">חלק א׳: הספק · חלק ב׳: אנרגיית חום · חלק ג׳: שאלות מסוג מבחן</div>
+
+  <!-- חלק א: הספק -->
+  <div style="background:var(--purple-dim);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:10px 18px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--purple)">חלק א׳ — הספק חשמלי</div>
+
+  <div class="exercise" id="ex1">
+    <div class="ex-header" onclick="toggleEx('ex1')">
+      <div class="ex-num">1</div>
+      <div class="ex-question">חישוב הספק ואנרגיה</div>
+      <span class="lv-strip lv1">רמה 1</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">מכשיר חשמלי: V=220V, I=0.5A, פועל 300 שניות.</div>
+
+      <div class="mc-part" data-ok="P = V×I = 220×0.5 = 110W" data-err="השתמש בנוסחה P=VI">
+        <div class="mc-sub-q">א. מה הספק המכשיר?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">השתמש בנוסחה P = V × I</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">55 W</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">110 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">220 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">440 W</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="E = P×t = 110×300 = 33,000 J" data-err="השתמש ב-E = P×t (זמן בשניות)">
+        <div class="mc-sub-q">ב. כמה אנרגיה צרך המכשיר ב-300 שניות?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">11,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">22,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">33,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">66,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex2">
+    <div class="ex-header" onclick="toggleEx('ex2')">
+      <div class="ex-num">2</div>
+      <div class="ex-question">מציאת זרם מהספק</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">מכשיר בהספק 1800W מחובר לרשת 230V. מה עוצמת הזרם שהוא מושך?</div>
+      <div class="mc-part" data-ok="I = P÷V = 1800÷230 ≈ 7.83A" data-err="הפוך את הנוסחה: I = P ÷ V">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">מ-P=VI מקבלים I = P ÷ V</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 5.22 A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 6.50 A</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">≈ 7.83 A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 9.00 A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex3">
+    <div class="ex-header" onclick="toggleEx('ex3')">
+      <div class="ex-num">3</div>
+      <div class="ex-question">השוואת הספק שני מכשירים</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">מכשיר א׳: V=12V, I=3A. מכשיר ב׳: V=24V, I=1A.</div>
+
+      <div class="mc-part" data-ok="Pא = 12×3 = 36W · Pב = 24×1 = 24W" data-err="חשב P=VI לכל מכשיר בנפרד">
+        <div class="mc-sub-q">א. מה הספק כל מכשיר?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">P = V × I לכל מכשיר בנפרד</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">Pא=24W · Pב=36W</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">Pא=36W · Pב=24W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">Pא=48W · Pב=24W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">Pא=36W · Pב=48W</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="מכשיר א׳ צורך יותר — 36W > 24W" data-err="השווה את ערכי ה-P שחישבת">
+        <div class="mc-sub-q">ב. מי צורך יותר אנרגיה לשנייה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">מכשיר ב׳ צורך יותר</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">מכשיר א׳ צורך יותר</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">שניהם שווים</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- חלק ב: אנרגיית חום -->
+  <div style="background:var(--pink-dim);border:1px solid rgba(255,107,157,0.2);border-radius:10px;padding:10px 18px;margin:16px 0;font-size:13px;font-weight:700;color:var(--pink)">חלק ב׳ — אנרגיית חום</div>
+
+  <div class="exercise" id="ex4">
+    <div class="ex-header" onclick="toggleEx('ex4')">
+      <div class="ex-num">4</div>
+      <div class="ex-question">Q = mcΔT בסיסי</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">0.5 ק"ג מים מתחממים מ-20°C ל-80°C. c_מים = 4200 J/(kg·°C).<br>מה כמות האנרגיה שספגו?</div>
+      <div class="mc-part" data-ok="ΔT=60°C · Q = 0.5×4200×60 = 126,000 J" data-err="חשב ΔT=T_סוף−T_התחלה, אחר כך Q=mcΔT">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">ΔT = T_סוף − T_התחלה. אחר כך Q = m × c × ΔT</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">63,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">84,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">126,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">252,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex5">
+    <div class="ex-header" onclick="toggleEx('ex5')">
+      <div class="ex-num">5</div>
+      <div class="ex-question">מציאת טמפרטורה סופית</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">1 ק"ג מים ב-15°C סופגים 168,000 ג'ול. c=4200. מה הטמפרטורה הסופית?</div>
+      <div class="mc-part" data-ok="ΔT = 168,000÷(1×4200) = 40°C · T_סוף = 15+40 = 55°C" data-err="הפוך את הנוסחה: ΔT = Q÷(m×c), אחר כך T_סוף = T_התחלה + ΔT">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">ΔT = Q ÷ (m×c), אחר כך T_סוף = T_התחלה + ΔT</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">45°C</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">55°C</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">65°C</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">75°C</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex6">
+    <div class="ex-header" onclick="toggleEx('ex6')">
+      <div class="ex-num">6</div>
+      <div class="ex-question">מציאת המסה</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">כמה מים ניתן לחמם ב-50°C עם 630,000 ג'ול? c=4200.</div>
+      <div class="mc-part" data-ok="m = Q÷(c×ΔT) = 630,000÷210,000 = 3 ק&quot;ג" data-err="הפוך את הנוסחה: m = Q ÷ (c × ΔT)">
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">מ-Q=mcΔT מקבלים m = Q ÷ (c × ΔT)</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">1.5 ק"ג</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2 ק"ג</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">3 ק"ג</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">4.5 ק"ג</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- חלק ג: שאלות מסוג מבחן -->
+  <div style="background:var(--amber-dim);border:1px solid rgba(255,190,61,0.2);border-radius:10px;padding:10px 18px;margin:16px 0;font-size:13px;font-weight:700;color:var(--amber)">חלק ג׳ — שאלות מסוג מבחן (שילוב P ו-Q)</div>
+
+  <div class="exercise" id="ex7">
+    <div class="ex-header" onclick="toggleEx('ex7')">
+      <div class="ex-num">7</div>
+      <div class="ex-question">קומקום — זמן הרתחה</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">קומקום בהספק 1500W מחמם 1 ק"ג מים מ-20°C ל-100°C. c=4200, נצילות 100%.</div>
+
+      <div class="mc-part" data-ok="Q = 1×4200×80 = 336,000 J" data-err="חשב ΔT=80°C, אחר כך Q=mcΔT">
+        <div class="mc-sub-q">א. כמה אנרגיה דרושה?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">ΔT = 100−20 = 80°C, אחר כך Q = m × c × ΔT</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">168,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">252,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">336,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">420,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="t = Q÷P = 336,000÷1500 = 224 שניות" data-err="t = Q ÷ P (אנרגיה ÷ הספק)">
+        <div class="mc-sub-q">ב. כמה זמן ייקח?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">168 שניות</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">224 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">280 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">336 שניות</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex8">
+    <div class="ex-header" onclick="toggleEx('ex8')">
+      <div class="ex-num">8</div>
+      <div class="ex-question">קומקום עם נצילות</div>
+      <span class="lv-strip lv4">רמה 4</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">קומקום 2000W מחמם 1.5 ק"ג מים מ-10°C ל-100°C. c=4200, נצילות 75%.</div>
+
+      <div class="mc-part" data-ok="ΔT=90°C · Q_שימושי = 1.5×4200×90 = 567,000 J" data-err="Q_שימושי = mcΔT (ΔT = 100−10 = 90°C)">
+        <div class="mc-sub-q">א. כמה אנרגיה שימושית דרושה?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">Q_שימושי = mcΔT. Q_כולל = Q_שימושי ÷ נצילות. t = Q_כולל ÷ P</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">378,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">567,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">756,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">630,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="Q_כולל = 567,000 ÷ 0.75 = 756,000 J" data-err="Q_כולל = Q_שימושי ÷ נצילות = 567,000 ÷ 0.75">
+        <div class="mc-sub-q">ב. כמה אנרגיה כוללת (כולל בזבוז)?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">425,250 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">630,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">756,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">1,008,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="t = 756,000 ÷ 2000 = 378 שניות ≈ 6.3 דקות" data-err="t = Q_כולל ÷ P">
+        <div class="mc-sub-q">ג. כמה זמן ייקח?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">283 שניות</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">378 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">504 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">315 שניות</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex9">
+    <div class="ex-header" onclick="toggleEx('ex9')">
+      <div class="ex-num">9</div>
+      <div class="ex-question">שאלה 7+8 סגנון מבחן 2025 — מלאה</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q"><strong>סגנון שאלות 7-8 מהמבחן האמיתי 2025.</strong><br><br>גנרטור: V=230V, I=8A. מחמם 2 ק"ג מים. c=4200, T_התחלה=25°C.</div>
+
+      <div class="mc-part" data-ok="P = V×I = 230×8 = 1,840W" data-err="P = V × I">
+        <div class="mc-sub-q">א. מה הספק הגנרטור?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">א: P=VI. ב: E=P×t (זמן בשניות). ג: ΔT=Q÷(mc). ד: Q_נוסף÷P.</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">920 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">1,380 W</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">1,840 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2,300 W</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="3 דקות = 180 שניות · E = 1840×180 = 331,200 J" data-err="המר דקות לשניות (×60), אחר כך E = P×t">
+        <div class="mc-sub-q">ב. הקומקום פועל 3 דקות. כמה אנרגיה קיבל?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">165,600 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">276,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">331,200 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">552,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="ΔT = 331,200÷(2×4200) ≈ 39.4°C · T_סוף ≈ 64.4°C" data-err="ΔT = E÷(mc), אחר כך T_סוף = T_התחלה + ΔT">
+        <div class="mc-sub-q">ג. מה טמפרטורת המים אחרי 3 דקות?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 54.4°C</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">≈ 64.4°C</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 74.4°C</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 84.4°C</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="לא הגיעו לרתיחה · Q_נוסף ≈ 299,040J · t_נוסף ≈ 163 שניות" data-err="64.4°C < 100°C → חשב Q_נוסף = mc×(100−64.4) ואז t = Q÷P">
+        <div class="mc-sub-q">ד. האם הגיעו לרתיחה? אם לא — עוד כמה זמן נדרש?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">כן, הגיעו לרתיחה</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">לא — עוד ≈ 90 שניות</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">לא — עוד ≈ 163 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">לא — עוד ≈ 240 שניות</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex10">
+    <div class="ex-header" onclick="toggleEx('ex10')">
+      <div class="ex-num">10</div>
+      <div class="ex-question">בונוס — חישוב הספק נגד מחום</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">נגד מחום (R=25Ω) מחובר למתח V=100V.</div>
+
+      <div class="mc-part" data-ok="I = V/R = 100/25 = 4A" data-err="I = V ÷ R (חוק אוהם)">
+        <div class="mc-sub-q">א. עוצמת הזרם?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">א: I=V/R. ב: P=VI. ג: E=P×t (זמן בשניות). ד: m=E÷(cΔT)</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2.5 A</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">4 A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">5 A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">25 A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="P = V×I = 100×4 = 400W" data-err="P = V × I">
+        <div class="mc-sub-q">ב. הספק הנגד?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">250 W</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">400 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2,500 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">1,000 W</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="5 דקות = 300 שניות · E = 400×300 = 120,000 J" data-err="המר דקות לשניות, אחר כך E = P×t">
+        <div class="mc-sub-q">ג. כמה חום נוצר ב-5 דקות?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">60,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">120,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">240,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="m = 120,000÷(4200×40) ≈ 0.71 ק&quot;ג" data-err="m = E ÷ (c × ΔT)">
+        <div class="mc-sub-q">ד. כמה ק"ג מים ניתן לחמם ב-40°C עם האנרגיה הזו? (c=4200)</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 0.36 ק"ג</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">≈ 0.71 ק"ג</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 1.43 ק"ג</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 2.00 ק"ג</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="exercise" id="ex11">
+    <div class="ex-header" onclick="toggleEx('ex11')">
+      <div class="ex-num">11</div>
+      <div class="ex-question">בונוס — שאלה משולבת מלאה (P + Q + מעגל)</div>
+      <span class="lv-strip lv6">בונוס</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">מעגל בטור: סוללה 24V, R₁=4Ω (נגד), R₂=8Ω (נגד-מחום מחובר למים).</div>
+
+      <div class="mc-part" data-ok="R_כולל = 4+8 = 12Ω · I = 24/12 = 2A" data-err="בטור: R_כולל = R₁+R₂, אחר כך I = V/R">
+        <div class="mc-sub-q">א. R_כולל וזרם I?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">א: בטור R_כולל=R₁+R₂, I=V/R. ב: P₂=I²×R₂. ג: Q=mcΔT, t=Q/P₂</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">R=4Ω, I=6A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">R=8Ω, I=3A</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">R=12Ω, I=2A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">R=32Ω, I=0.75A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="P₂ = I²×R₂ = 4×8 = 32W" data-err="P₂ = I² × R₂ (הזרם = 2A, אז I²=4)">
+        <div class="mc-sub-q">ב. הספק הנגד-מחום R₂?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">16 W</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">32 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">48 W</div>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">64 W</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="Q = 0.5×4200×60 = 126,000J · t = 126,000÷32 ≈ 3938 שניות" data-err="Q=mcΔT (ΔT=60°C), אחר כך t=Q÷P₂">
+        <div class="mc-sub-q">ג. כמה זמן לחמם 0.5 ק"ג מים מ-30°C ל-90°C? (c=4200)</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 1,969 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 2,625 שניות</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">≈ 3,938 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">≈ 5,250 שניות</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<!-- COMPLETION BANNER -->
+<div class="section">
+  <div style="background:linear-gradient(135deg,rgba(167,139,250,0.15),rgba(0,229,192,0.1));border:1px solid rgba(167,139,250,0.3);border-radius:20px;padding:36px;text-align:center">
+    <div style="font-size:48px;margin-bottom:16px">🎉</div>
+    <div style="font-size:24px;font-weight:900;margin-bottom:10px;background:linear-gradient(135deg,var(--purple),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent">סיימת את כל 4 ימי הלימוד!</div>
+    <p style="color:var(--text-dim);font-size:16px;margin-bottom:24px">כיסת את כל החומר: אנרגיה מכנית, תחנה הידרואלקטרית, מעגלים חשמליים, הספק ואנרגיית חום.</p>
+    <p style="color:var(--text-dim);font-size:14px">השבוע הבא (19-22 במאי) = חזרה וסיכום. <strong style="color:var(--teal)">המבחן: 26 במאי</strong></p>
+    <a href="index.html" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;text-decoration:none;font-weight:700;font-size:15px">→ חזרה לדף הראשי</a>
+  </div>
+</div>
+
+<!-- NEW FROM LATEST EXAM -->
+<div class="section">
+  <div class="section-title">מהמבחן העדכני — E_חשמלי = VIt ושאלת התקע</div>
+  <div class="section-desc">נוסחה נוספת מדף הנוסחאות ושאלות מהמבחן שנכתב לאחרונה</div>
+
+  <!-- E = VIt theory -->
+  <div class="tc tc-purple">
+    <div class="tc-title"><span class="tc-icon">🔋</span>אנרגיה חשמלית — E = VIt</div>
+    <p>מדף הנוסחאות: E_חשמלי = V × I × t (או E = V²t/R)</p>
+    <div class="formula-box fb-purple">E_חשמלי = V × I × t</div>
+    <p>הנוסחה הזו קשורה ישירות ל-P=VI: מכיוון ש-P=VI, וגם E=P×t — מכפלה פשוטה נותנת E=VIt.</p>
+    <div class="key-box">
+      <strong>שלוש דרכים לחשב אנרגיה חשמלית:</strong><br>
+      • E = P × t (הספק × זמן) — הכי פשוטה<br>
+      • E = V × I × t (מתח × זרם × זמן)<br>
+      • E = V² × t ÷ R (מתח² × זמן ÷ התנגדות)
+    </div>
+  </div>
+
+  <div style="background:var(--purple-dim);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:10px 18px;margin:16px 0;font-size:13px;font-weight:700;color:var(--purple)">תרגילים חדשים — מהמבחן העדכני</div>
+
+  <!-- Ex 12: Q4 from latest exam (plug) -->
+  <div class="exercise" id="ex12">
+    <div class="ex-header" onclick="toggleEx('ex12')">
+      <div class="ex-num">12</div>
+      <div class="ex-question">שאלת התקע — שאלה 4 מהמבחן העדכני (18 נקודות)</div>
+      <span class="lv-strip lv4">רמה 4</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">על תקע כתוב: <strong>240V, 6A</strong>. תנור חימום 1,800W פועל שעה וחצי.</div>
+
+      <div class="mc-part" data-ok="240V = מתח חשמלי (וולט) · 6A = עוצמת זרם מרבית (אמפר)" data-err="V = מתח, A = אמפר (עוצמת זרם)">
+        <div class="mc-sub-q">א. מה המשמעות הפיזיקלית של 240V ו-6A?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">V = מתח (וולט), A = עוצמת זרם (אמפר)</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">240V = זרם · 6A = מתח</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">240V = מתח · 6A = זרם מרבי</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">240V = הספק · 6A = זמן</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">240V = אנרגיה · 6A = עוצמה</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="P = 240×6 = 1,440W — תשובה (3)" data-err="P = V × I = 240 × 6">
+        <div class="mc-sub-q">ב. ההספק המרבי של המכשיר?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">(1) 40 וואט</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">(2) 240 וואט</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">(3) 1,440 וואט</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">(4) 3,000 וואט</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="t=5,400s · E = 1800×5400 = 9,720,000 J (גם E=VIt נותן אותה תשובה)" data-err="המר שעות לשניות (1.5×3600=5,400), אחר כך E=P×t">
+        <div class="mc-sub-q">ג. כמה אנרגיה המיר התנור ב-1.5 שעות?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2,700 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">9,720 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">97,200 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">9,720,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 13: q/t and I combined -->
+  <div class="exercise" id="ex13">
+    <div class="ex-header" onclick="toggleEx('ex13')">
+      <div class="ex-num">13</div>
+      <div class="ex-question">שאלה משולבת — E=VIt וחוק אוהם</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">נגד 20Ω מחובר למתח 100V ופועל 5 דקות.</div>
+
+      <div class="mc-part" data-ok="I = V/R = 100/20 = 5A" data-err="I = V ÷ R (חוק אוהם)">
+        <div class="mc-sub-q">א. עוצמת הזרם?</div>
+        <button class="hint-btn" onclick="toggleHint(this)">💡 רמז</button>
+        <div class="hint-body">א: I=V/R. ב: P=VI. ג: E=P×t (זמן בשניות). ד: q=I×t</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2 A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">4 A</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">5 A</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">20 A</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="P = V×I = 100×5 = 500W" data-err="P = V × I">
+        <div class="mc-sub-q">ב. הספק הנגד?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">100 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">250 W</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">500 W</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2,000 W</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="t=300s · E = 500×300 = 150,000 J" data-err="המר דקות לשניות, אחר כך E = P×t">
+        <div class="mc-sub-q">ג. כמה אנרגיה ב-5 דקות?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2,500 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">30,000 J</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">150,000 J</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">300,000 J</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+
+      <hr class="mc-divider">
+
+      <div class="mc-part" data-ok="q = I×t = 5×300 = 1,500 קולון" data-err="מ-I=q/t מקבלים q = I × t (זמן בשניות)">
+        <div class="mc-sub-q">ד. כמה מטען (קולון) עבר ב-5 דקות? (I = q/t)</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">25 קולון</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">300 קולון</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">1,500 קולון</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">6,000 קולון</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<!-- NAV BUTTONS -->
+<div class="section" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:80px">
+  <a href="day3.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text-dim);text-decoration:none;font-weight:600;font-size:14px">→ יום קודם: מעגלים חשמליים</a>
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:var(--purple-dim);border:1px solid rgba(167,139,250,0.3);color:var(--purple);text-decoration:none;font-weight:700;font-size:14px">← דף ראשי</a>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggleEx(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+function answerMC(btn) {
+  const part = btn.closest('.mc-part');
+  if (part.dataset.done) return;
+  part.dataset.done = '1';
+  const isOk = btn.dataset.c === '1';
+  part.querySelectorAll('.mc-opt').forEach(o => {
+    o.disabled = true;
+    if (o === btn) o.classList.add(isOk ? 'mc-ok' : 'mc-bad');
+    else if (!isOk && o.dataset.c === '1') o.classList.add('mc-rev');
+  });
+  const fb = part.querySelector('.mc-fb');
+  fb.className = 'mc-fb ' + (isOk ? 'ok' : 'bad');
+  fb.innerHTML = isOk ? '✓ נכון! ' + (part.dataset.ok || '') : '✗ לא נכון. ' + (part.dataset.err || '');
+}
+function toggleHint(btn) {
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open') ? '💡 הסתר רמז' : '💡 רמז';
+}
+</script>
+</body>
+</html>

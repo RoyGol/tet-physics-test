@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>יום 1 — אנרגיה מכנית | פיזיקה גולי</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060c1a; --bg2: #0b1428; --bg3: #0f1e35;
+  --glass: rgba(255,255,255,0.04); --glass-b: rgba(255,255,255,0.08);
+  --teal: #00e5c0; --teal-d: rgba(0,229,192,0.12);
+  --amber: #ffbe3d; --amber-d: rgba(255,190,61,0.12);
+  --pink: #ff6b9d; --pink-d: rgba(255,107,157,0.12);
+  --blue: #4a9eff; --blue-d: rgba(74,158,255,0.12);
+  --purple: #a78bfa; --purple-d: rgba(167,139,250,0.12);
+  --green: #34d399;
+  --text: #e8f0fe; --text-d: rgba(232,240,254,0.6); --text-m: rgba(232,240,254,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Heebo',sans-serif; background:var(--bg); color:var(--text); direction:rtl; overflow-x:hidden; }
+
+/* orbs */
+.orb { position:fixed; border-radius:50%; filter:blur(130px); opacity:0.14; pointer-events:none; z-index:0; }
+.orb1 { width:500px; height:500px; background:var(--teal); top:-150px; right:-100px; }
+.orb2 { width:400px; height:400px; background:var(--amber); bottom:-100px; left:-80px; }
+
+/* nav */
+nav {
+  position:fixed; top:0; right:0; left:0; z-index:100;
+  padding:14px 40px; display:flex; align-items:center; gap:20px;
+  background:rgba(6,12,26,0.8); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--glass-b);
+}
+.nav-back { color:var(--text-d); text-decoration:none; font-size:14px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+.nav-back:hover { color:var(--teal); }
+.nav-title { font-weight:800; font-size:16px; }
+.nav-badge { margin-right:auto; padding:4px 14px; background:var(--teal-d); border:1px solid rgba(0,229,192,.25); border-radius:50px; font-size:12px; color:var(--teal); font-weight:700; }
+
+/* hero */
+.hero { min-height:55vh; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; padding:120px 60px 60px; position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+.hero-day { font-size:12px; letter-spacing:4px; color:var(--teal); font-weight:700; text-transform:uppercase; margin-bottom:16px; }
+.hero-title { font-size:clamp(44px,6vw,80px); font-weight:900; letter-spacing:-2px; line-height:1; margin-bottom:16px; }
+.hero-title .dim { font-weight:300; color:var(--text-d); }
+.hero-desc { font-size:17px; color:var(--text-d); max-width:560px; line-height:1.8; margin-bottom:40px; }
+.hero-pills { display:flex; flex-wrap:wrap; gap:10px; }
+.pill { padding:8px 18px; border-radius:50px; font-size:13px; font-weight:600; border:1px solid; }
+.pill-teal  { background:var(--teal-d);  border-color:rgba(0,229,192,.3);  color:var(--teal); }
+.pill-amber { background:var(--amber-d); border-color:rgba(255,190,61,.3); color:var(--amber); }
+.pill-blue  { background:var(--blue-d);  border-color:rgba(74,158,255,.3); color:var(--blue); }
+
+/* progress bar */
+.progress-bar-wrap { background:var(--bg2); border-top:1px solid var(--glass-b); border-bottom:1px solid var(--glass-b); padding:16px 60px; position:relative; z-index:1; }
+.pb-label { font-size:12px; color:var(--text-m); margin-bottom:8px; }
+.pb-track { display:flex; gap:8px; }
+.pb-step { flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,.08); }
+.pb-step.done { background:var(--teal); }
+.pb-step.active { background:linear-gradient(90deg,var(--teal),var(--blue)); }
+
+/* wrap */
+.content { max-width:900px; margin:0 auto; padding:0 40px; position:relative; z-index:1; }
+
+/* section headers */
+.sec-label { font-size:11px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--teal); margin-bottom:10px; margin-top:80px; }
+.sec-title { font-size:clamp(26px,4vw,40px); font-weight:900; letter-spacing:-1px; margin-bottom:8px; }
+.sec-desc { font-size:15px; color:var(--text-d); line-height:1.8; margin-bottom:40px; max-width:680px; }
+
+/* theory card */
+.theory-card {
+  background:var(--glass); border:1px solid var(--glass-b); border-radius:20px;
+  padding:36px; margin-bottom:24px; position:relative; overflow:hidden;
+  transition:border-color .3s;
+}
+.theory-card:hover { border-color:var(--card-c); }
+.theory-card::before { content:''; position:absolute; top:0; right:0; width:200px; height:200px; background:radial-gradient(circle,var(--card-glow),transparent 70%); pointer-events:none; }
+.tc-teal   { --card-c:var(--teal);   --card-glow:rgba(0,229,192,.06); }
+.tc-amber  { --card-c:var(--amber);  --card-glow:rgba(255,190,61,.06); }
+.tc-blue   { --card-c:var(--blue);   --card-glow:rgba(74,158,255,.06); }
+.tc-purple { --card-c:var(--purple); --card-glow:rgba(167,139,250,.06); }
+.tc-pink   { --card-c:var(--pink);   --card-glow:rgba(255,107,157,.06); }
+.tc-green  { --card-c:var(--green);  --card-glow:rgba(52,211,153,.06); }
+
+.tc-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+.tc-icon { font-size:32px; line-height:1; filter:drop-shadow(0 0 8px var(--card-c)); }
+.tc-num  { font-size:11px; color:var(--card-c); font-weight:700; letter-spacing:2px; display:block; margin-bottom:2px; }
+.tc-name { font-size:22px; font-weight:900; }
+
+.tc-body { font-size:15px; color:var(--text-d); line-height:1.9; }
+.tc-body p { margin-bottom:12px; }
+.tc-body strong { color:var(--text); font-weight:700; }
+.tc-body .highlight { color:var(--card-c); font-weight:700; }
+
+/* formula box */
+.formula-box {
+  background:rgba(0,0,0,.3); border:1px solid var(--card-c); border-radius:14px;
+  padding:20px 24px; margin:20px 0; display:inline-flex; flex-direction:column; gap:8px; min-width:280px;
+}
+.formula-big { font-size:28px; font-family:'Courier New',monospace; color:var(--card-c); font-weight:700; text-align:center; }
+.formula-parts { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+.fpart { text-align:center; }
+.fpart .sym { font-size:16px; font-family:'Courier New',monospace; color:var(--card-c); display:block; font-weight:700; }
+.fpart .def { font-size:11px; color:var(--text-m); }
+
+/* key points */
+.key-points { list-style:none; display:flex; flex-direction:column; gap:10px; margin:16px 0; }
+.key-points li { display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--text-d); line-height:1.6; }
+.kp-dot { width:6px; height:6px; border-radius:50%; background:var(--card-c); margin-top:7px; flex-shrink:0; }
+
+/* analogy box */
+.analogy { background:rgba(0,0,0,.25); border-right:3px solid var(--card-c); border-radius:0 12px 12px 0; padding:16px 20px; margin:16px 0; font-size:14px; color:var(--text-d); line-height:1.7; }
+.analogy .emoji { font-size:20px; margin-bottom:6px; display:block; }
+
+/* comparison table */
+.comp-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
+.comp-table th { background:rgba(0,0,0,.3); color:var(--teal); font-size:12px; letter-spacing:1px; padding:12px 16px; text-align:right; border-bottom:1px solid var(--glass-b); }
+.comp-table td { padding:12px 16px; border-bottom:1px solid rgba(255,255,255,.04); color:var(--text-d); }
+.comp-table tr:hover td { background:rgba(255,255,255,.02); }
+
+/* energy canvas */
+.canvas-wrap { background:rgba(0,0,0,.3); border:1px solid var(--glass-b); border-radius:16px; padding:24px; margin:24px 0; }
+.canvas-title { font-size:13px; color:var(--text-m); margin-bottom:12px; text-align:center; }
+
+/* example card */
+.example-card { background:var(--bg3); border:1px solid var(--glass-b); border-radius:20px; padding:32px; margin-bottom:24px; }
+.ex-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.ex-badge { padding:6px 16px; border-radius:50px; font-size:12px; font-weight:700; letter-spacing:1px; }
+.ex-badge.easy   { background:rgba(52,211,153,.15); color:var(--green); border:1px solid rgba(52,211,153,.3); }
+.ex-badge.medium { background:var(--amber-d); color:var(--amber); border:1px solid rgba(255,190,61,.3); }
+.ex-badge.hard   { background:var(--pink-d); color:var(--pink); border:1px solid rgba(255,107,157,.3); }
+.ex-title { font-size:18px; font-weight:800; }
+.ex-question { font-size:15px; color:var(--text-d); line-height:1.8; margin-bottom:20px; background:rgba(0,0,0,.2); border-radius:12px; padding:16px 20px; border-right:3px solid var(--teal); }
+.ex-steps { display:flex; flex-direction:column; gap:12px; }
+.ex-step { display:flex; gap:14px; font-size:14px; }
+.step-num { width:26px; height:26px; border-radius:50%; background:var(--teal-d); border:1px solid rgba(0,229,192,.3); color:var(--teal); font-size:12px; font-weight:800; flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:2px; }
+.step-body { color:var(--text-d); line-height:1.7; flex:1; }
+.step-body .eq { font-family:'Courier New',monospace; color:var(--teal); font-size:15px; font-weight:700; display:block; margin:6px 0; }
+.step-body .ans { font-size:16px; font-weight:800; color:var(--amber); }
+
+/* video section */
+.videos-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+.video-card { background:var(--glass); border:1px solid var(--glass-b); border-radius:16px; padding:20px; display:flex; gap:14px; align-items:flex-start; text-decoration:none; transition:all .3s; }
+.video-card:hover { border-color:var(--teal); transform:translateY(-2px); }
+.vc-icon { font-size:28px; flex-shrink:0; }
+.vc-label { font-size:10px; color:var(--teal); font-weight:700; letter-spacing:2px; display:block; margin-bottom:4px; text-transform:uppercase; }
+.vc-title { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.vc-sub { font-size:12px; color:var(--text-m); }
+
+/* exercises */
+.ex-list { display:flex; flex-direction:column; gap:16px; margin-top:8px; }
+.exercise { background:var(--glass); border:1px solid var(--glass-b); border-radius:18px; overflow:hidden; transition:border-color .3s; }
+.exercise:hover { border-color:rgba(255,255,255,.12); }
+.ex-top { padding:24px 28px; cursor:pointer; display:flex; align-items:flex-start; gap:16px; }
+.ex-level { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; flex-shrink:0; }
+.lv1 { background:rgba(52,211,153,.15); color:var(--green); }
+.lv2 { background:rgba(52,211,153,.12); color:var(--green); }
+.lv3 { background:var(--amber-d); color:var(--amber); }
+.lv4 { background:var(--amber-d); color:var(--amber); }
+.lv5 { background:var(--pink-d); color:var(--pink); }
+.lv6 { background:var(--pink-d); color:var(--pink); }
+.ex-q-title { font-size:16px; font-weight:800; margin-bottom:4px; }
+.ex-q-text { font-size:14px; color:var(--text-d); line-height:1.7; }
+.ex-chevron { margin-right:auto; flex-shrink:0; color:var(--text-m); font-size:18px; transition:transform .3s; padding-top:2px; }
+.exercise.open .ex-chevron { transform:rotate(180deg); }
+.ex-reveal { display:none; border-top:1px solid var(--glass-b); }
+.exercise.open .ex-reveal { display:block; }
+.reveal-tabs { display:flex; border-bottom:1px solid var(--glass-b); }
+.rtab { padding:12px 24px; font-size:13px; font-weight:700; cursor:pointer; color:var(--text-m); border-bottom:2px solid transparent; transition:all .2s; }
+.rtab.active { color:var(--teal); border-bottom-color:var(--teal); }
+.tab-content { display:none; padding:24px 28px; }
+.tab-content.active { display:block; }
+.hint-body { font-size:14px; color:var(--text-d); line-height:1.8; background:rgba(255,190,61,.06); border:1px solid rgba(255,190,61,.15); border-radius:12px; padding:16px 20px; }
+.hint-body .hint-icon { font-size:20px; margin-bottom:8px; display:block; }
+.sol-steps { display:flex; flex-direction:column; gap:14px; }
+.sol-step { display:flex; gap:12px; font-size:14px; }
+.ss-num { width:24px; height:24px; border-radius:50%; background:var(--teal-d); border:1px solid rgba(0,229,192,.3); color:var(--teal); font-size:11px; font-weight:900; flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:2px; }
+.ss-body { color:var(--text-d); line-height:1.7; flex:1; }
+.ss-body .eq { font-family:'Courier New',monospace; color:var(--teal); font-size:15px; font-weight:700; display:block; margin:6px 0 2px; direction:ltr; text-align:left; }
+.ss-body .eq-ans { font-family:'Courier New',monospace; color:var(--amber); font-size:17px; font-weight:900; display:block; margin:8px 0 2px; direction:ltr; text-align:left; }
+.final-ans { margin-top:16px; padding:14px 20px; background:rgba(0,229,192,.08); border:1px solid rgba(0,229,192,.25); border-radius:12px; font-size:15px; font-weight:700; color:var(--teal); }
+.difficulty-strip { display:flex; align-items:center; gap:10px; padding:12px 28px; background:rgba(0,0,0,.15); border-bottom:1px solid var(--glass-b); font-size:12px; color:var(--text-m); }
+.diff-dots { display:flex; gap:4px; }
+.diff-dot { width:8px; height:8px; border-radius:50%; }
+.diff-dot.filled { background:var(--lv-c); }
+.diff-dot.empty { background:rgba(255,255,255,.1); }
+
+/* summary card */
+.summary { background:var(--bg2); border:1px solid var(--glass-b); border-radius:24px; padding:40px; margin:80px 0; }
+.sum-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:28px; }
+.sum-item { background:rgba(0,0,0,.2); border:1px solid var(--glass-b); border-radius:14px; padding:18px; }
+.sum-eq { font-family:'Courier New',monospace; font-size:17px; color:var(--teal); font-weight:700; margin-bottom:6px; }
+.sum-name { font-size:12px; color:var(--text-m); }
+
+/* divider */
+.div { height:1px; background:linear-gradient(90deg,transparent,var(--glass-b),transparent); margin:0 0 0; }
+
+/* footer */
+footer { text-align:center; padding:40px; color:var(--text-m); font-size:13px; border-top:1px solid var(--glass-b); }
+footer a { color:var(--teal); text-decoration:none; }
+
+/* ── MULTIPLE CHOICE ── */
+.ex-hint-wrap { padding: 16px 28px 0; }
+.hint-btn {
+  padding: 7px 16px; border-radius: 50px;
+  border: 1px solid rgba(255,190,61,0.3); background: rgba(255,190,61,0.06);
+  color: var(--amber); font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: 'Heebo', sans-serif; transition: all .2s;
+  display: inline-flex; gap: 6px; align-items: center;
+}
+.hint-btn:hover { background: rgba(255,190,61,0.14); }
+.hint-content { display: none; margin-top: 10px; }
+.hint-content.open { display: block; }
+.ex-mc-section { padding: 16px 28px 24px; }
+.mc-part { margin-bottom: 24px; }
+.mc-part:last-of-type { margin-bottom: 0; }
+.mc-part-q { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.mc-opts { display: flex; flex-direction: column; gap: 8px; }
+.mc-opt {
+  display: block; width: 100%; padding: 12px 18px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 12px; cursor: pointer; font-size: 14px; color: var(--text-d);
+  text-align: right; font-family: 'Heebo', sans-serif; transition: all 0.15s;
+}
+.mc-opt:hover:not(:disabled) { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: var(--text); }
+.mc-opt:disabled { cursor: default; }
+.mc-opt.mc-ok   { background: rgba(52,211,153,0.15); border-color: #34d399; color: var(--text); font-weight: 700; }
+.mc-opt.mc-bad  { background: rgba(255,107,157,0.12); border-color: #ff6b9d; }
+.mc-opt.mc-rev  { background: rgba(52,211,153,0.06); border-color: rgba(52,211,153,0.35); }
+.mc-fb { margin-top: 10px; padding: 12px 16px; border-radius: 10px; font-size: 14px; line-height: 1.7; display: none; }
+.mc-fb.ok  { display: block; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.3); }
+.mc-fb.bad { display: block; background: rgba(255,107,157,0.08); border: 1px solid rgba(255,107,157,0.3); }
+.sol-toggle {
+  display: inline-block; margin-top: 16px;
+  padding: 8px 20px; background: transparent;
+  border: 1px solid var(--glass-b); border-radius: 50px;
+  font-size: 13px; color: var(--text-m); cursor: pointer;
+  font-family: 'Heebo', sans-serif; transition: all .2s;
+}
+.sol-toggle:hover { border-color: var(--teal); color: var(--teal); }
+.sol-body { display: none; margin-top: 16px; }
+.sol-body.open { display: block; }
+.fact-card {
+  margin-top: 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,190,61,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,190,61,0.1);
+  position: relative;
+}
+.fact-img {
+  width: 100%; height: 260px;
+  object-fit: cover; object-position: center 20%;
+  display: block;
+  filter: brightness(0.55) saturate(0.8);
+}
+.fact-body {
+  padding: 14px 18px 16px;
+  background: linear-gradient(135deg, rgba(30,15,5,0.97), rgba(20,10,5,0.95));
+  position: relative;
+}
+.fact-body::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--amber), rgba(255,190,61,0.2));
+}
+.fact-label {
+  font-size: 10px; font-weight: 800; color: var(--amber);
+  letter-spacing: 3px; text-transform: uppercase; display: flex;
+  align-items: center; gap: 6px; margin-bottom: 8px;
+}
+.fact-label::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255,190,61,0.2);
+}
+.fact-text {
+  font-size: 13.5px; line-height: 1.8; color: rgba(232,240,254,0.85);
+}
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.hero > * { animation:fadeUp .7s both; }
+.hero > *:nth-child(2){animation-delay:.1s}
+.hero > *:nth-child(3){animation-delay:.2s}
+.hero > *:nth-child(4){animation-delay:.3s}
+.hero > *:nth-child(5){animation-delay:.4s}
+
+@media(max-width:700px){
+  .content{padding:0 20px} .hero{padding:110px 20px 40px}
+  .videos-grid{grid-template-columns:1fr} .sum-grid{grid-template-columns:1fr}
+  nav{padding:12px 16px}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-back">← חזרה לדף הראשי</a>
+  <span class="nav-title">⚡ אנרגיה מכנית</span>
+  <span class="nav-badge">יום לימוד 1 מתוך 4</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-day">שישי · 9 במאי · יום לימוד 1</div>
+  <h1 class="hero-title">אנרגיה מכנית<br><span class="dim">הבסיס</span></h1>
+  <p class="hero-desc">אנרגיית גובה, אנרגיית תנועה, חוק שימור האנרגיה, מישורי ייחוס, גרפי אנרגיה — כל מה שצריך לדעת כדי לפתור שאלות 3 ו-4 במבחן.</p>
+  <div class="hero-pills">
+    <span class="pill pill-teal">⏱ ~3 שעות לימוד</span>
+    <span class="pill pill-amber">📋 12 תרגילים</span>
+    <span class="pill pill-blue">🎯 שאלות 3 + 4 במבחן = 53 נקודות</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar-wrap">
+  <div class="pb-label">התקדמות בתוכנית הלימודים</div>
+  <div class="pb-track">
+    <div class="pb-step active" title="יום 1: אנרגיה מכנית"></div>
+    <div class="pb-step" title="יום 2: תחנה הידרואלקטרית"></div>
+    <div class="pb-step" title="יום 3: מעגלים חשמליים"></div>
+    <div class="pb-step" title="יום 4: הספק + חום"></div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════ THEORY ═══════════════ -->
+<div class="sec-label">תיאוריה</div>
+<h2 class="sec-title">מה צריך להבין?</h2>
+<p class="sec-desc">כל נושא מוסבר בשפה פשוטה, עם דוגמאות מהחיים ונוסחאות ברורות.</p>
+
+<!-- T1: WEIGHT -->
+<div class="theory-card tc-teal">
+  <div class="tc-header">
+    <span class="tc-icon">🌍</span>
+    <div>
+      <span class="tc-num">נושא 1 מתוך 7</span>
+      <div class="tc-name">משקל — כוח הכבידה</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p>כדור הארץ מושך אלינו הכל כלפי מטה. הכוח הזה נקרא <strong>כוח הכבידה</strong>, ואנחנו מרגישים אותו כ<strong>משקל</strong>.</p>
+    <p>ככל שהחפץ <span class="highlight">כבד יותר</span> (מסה גדולה יותר) — הכבידה שואבת אותו חזק יותר.</p>
+    <div class="formula-box" style="--card-c:var(--teal)">
+      <div class="formula-big">W = m · g</div>
+      <div class="formula-parts">
+        <div class="fpart"><span class="sym">W</span><span class="def">משקל (ניוטון, N)</span></div>
+        <div class="fpart"><span class="sym">m</span><span class="def">מסה (ק"ג)</span></div>
+        <div class="fpart"><span class="sym">g = 10</span><span class="def">תאוצת כבידה (N/kg)</span></div>
+      </div>
+    </div>
+    <ul class="key-points">
+      <li><span class="kp-dot"></span><strong>מסה</strong> (ק"ג) היא כמות החומר — לא משתנה בשום מקום ביקום.</li>
+      <li><span class="kp-dot"></span><strong>משקל</strong> (N) הוא הכוח שכדור הארץ מפעיל — על הירח הוא שונה!</li>
+      <li><span class="kp-dot"></span>על כדור הארץ: g = 10 N/kg. תמיד!</li>
+    </ul>
+    <div class="analogy"><span class="emoji">🏋️</span>ילד שמסתו 50 ק"ג: W = 50 × 10 = <strong>500 ניוטון</strong>. זה המשקל שמכסא צריך לשאת.</div>
+  </div>
+</div>
+
+<!-- T2: Eh -->
+<div class="theory-card tc-blue">
+  <div class="tc-header">
+    <span class="tc-icon">🏔️</span>
+    <div>
+      <span class="tc-num">נושא 2 מתוך 7</span>
+      <div class="tc-name">אנרגיית גובה (פוטנציאלית)</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p>כאשר חפץ נמצא בגובה — יש לו <strong>אנרגיה מאוחסנת</strong>. אם נשחרר אותו הוא ינוע — ז"א שהיה לו פוטנציאל לאנרגיית תנועה. לכן קוראים לה גם "פוטנציאלית".</p>
+    <p>ככל שהחפץ <span class="highlight">גבוה יותר</span> ו<span class="highlight">כבד יותר</span> — יש לו יותר אנרגיית גובה.</p>
+    <div class="formula-box" style="--card-c:var(--blue)">
+      <div class="formula-big">Eₕ = m · g · h</div>
+      <div class="formula-parts">
+        <div class="fpart"><span class="sym">Eₕ</span><span class="def">אנרגיית גובה (ג'ול)</span></div>
+        <div class="fpart"><span class="sym">m</span><span class="def">מסה (ק"ג)</span></div>
+        <div class="fpart"><span class="sym">g = 10</span><span class="def">N/kg</span></div>
+        <div class="fpart"><span class="sym">h</span><span class="def">גובה (מטרים)</span></div>
+      </div>
+    </div>
+    <ul class="key-points">
+      <li><span class="kp-dot"></span>ג'ול (J) הוא יחידת האנרגיה. תמיד לרשום J בתשובה!</li>
+      <li><span class="kp-dot"></span>אם h = 0, אז Eₕ = 0 (לא משנה כמה כבד הוא).</li>
+      <li><span class="kp-dot"></span>הגובה h נמדד <strong>ביחס למישור ייחוס</strong> — ראה נושא 5.</li>
+    </ul>
+    <div class="analogy"><span class="emoji">💡</span>ספר (1 ק"ג) על מדף בגובה 2 מ': Eₕ = 1×10×2 = <strong>20 ג'ול</strong>. אם יפול — האנרגיה הזו תהפוך לתנועה ורעש.</div>
+  </div>
+</div>
+
+<!-- T3: Ek -->
+<div class="theory-card tc-amber">
+  <div class="tc-header">
+    <span class="tc-icon">🚀</span>
+    <div>
+      <span class="tc-num">נושא 3 מתוך 7</span>
+      <div class="tc-name">אנרגיית תנועה (קינטית)</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p>כל דבר שנע — יש לו אנרגיה. ככל שהוא <span class="highlight">מהיר יותר</span> ו<span class="highlight">כבד יותר</span> — יש לו יותר אנרגיית תנועה.</p>
+    <p>שים לב: המהירות עולה בריבוע! מהירות כפולה = <strong>ארבעה</strong> פעמים יותר אנרגיה!</p>
+    <div class="formula-box" style="--card-c:var(--amber)">
+      <div class="formula-big">Eₖ = ½ · m · v²</div>
+      <div class="formula-parts">
+        <div class="fpart"><span class="sym" style="color:var(--amber)">Eₖ</span><span class="def">אנרגיית תנועה (ג'ול)</span></div>
+        <div class="fpart"><span class="sym" style="color:var(--amber)">m</span><span class="def">מסה (ק"ג)</span></div>
+        <div class="fpart"><span class="sym" style="color:var(--amber)">v</span><span class="def">מהירות (מ/ש)</span></div>
+      </div>
+    </div>
+    <ul class="key-points">
+      <li><span class="kp-dot" style="background:var(--amber)"></span>v² = v × v. קודם מעלים בריבוע, <strong>אחר כך</strong> כופלים ב-½ ובמסה!</li>
+      <li><span class="kp-dot" style="background:var(--amber)"></span>אם החפץ עומד (v=0), אז Eₖ = 0.</li>
+      <li><span class="kp-dot" style="background:var(--amber)"></span>כדור 2 ק"ג ב-6 מ/ש: Eₖ = ½×2×36 = <strong>36 ג'ול</strong>.</li>
+    </ul>
+    <table class="comp-table">
+      <tr><th>מהירות (מ/ש)</th><th>v²</th><th>Eₖ (m=1 ק"ג)</th><th>פי כמה?</th></tr>
+      <tr><td>2</td><td>4</td><td>2 J</td><td>—</td></tr>
+      <tr><td>4</td><td>16</td><td>8 J</td><td>×4</td></tr>
+      <tr><td>6</td><td>36</td><td>18 J</td><td>×9</td></tr>
+      <tr><td>10</td><td>100</td><td>50 J</td><td>×25</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- T4: Conservation -->
+<div class="theory-card tc-purple">
+  <div class="tc-header">
+    <span class="tc-icon">⚖️</span>
+    <div>
+      <span class="tc-num">נושא 4 מתוך 7</span>
+      <div class="tc-name">אנרגיה מכנית כוללת + חוק שימור האנרגיה</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p><strong>אנרגיה מכנית כוללת</strong> = סך הכל אנרגיית הגובה + אנרגיית התנועה יחד:</p>
+    <div class="formula-box" style="--card-c:var(--purple)">
+      <div class="formula-big" style="color:var(--purple)">E_מכנית = Eₕ + Eₖ</div>
+    </div>
+    <p><strong>חוק שימור האנרגיה:</strong> כאשר אין חיכוך — האנרגיה המכנית הכוללת <span class="highlight" style="color:var(--purple)">נשארת קבועה לחלוטין</span>. היא לא נעלמת — רק מתמרת בין גובה לתנועה.</p>
+    <div class="analogy" style="border-color:var(--purple)">
+      <span class="emoji">🎢</span>
+      <strong>דוגמה — גלשן:</strong><br>
+      • בראש: h=20מ', v=0. כל האנרגיה בגובה: Eₕ=mgh, Eₖ=0<br>
+      • באמצע: h=10מ', מהיר. Eₕ קטנה, Eₖ גדלה. הסכום — <strong>זהה!</strong><br>
+      • בתחתית: h=0, v מקסימלי. כל האנרגיה הפכה לתנועה: Eₕ=0, Eₖ=מקסימום
+    </div>
+    <p style="margin-top:12px">כיוון ש-E_מכנית קבועה: <span class="highlight" style="color:var(--purple)">mgh_ראש = ½mv²_תחתית</span></p>
+    <p style="font-size:13px; color:var(--text-m); margin-top:8px">💡 שים לב: המסה (m) מבוטלת! המהירות בתחתית לא תלויה במסה — ילד ומבוגר יגיעו לאותה מהירות מאותו גובה.</p>
+  </div>
+</div>
+
+<!-- T5: Reference Plane -->
+<div class="theory-card tc-pink">
+  <div class="tc-header">
+    <span class="tc-icon">📏</span>
+    <div>
+      <span class="tc-num">נושא 5 מתוך 7</span>
+      <div class="tc-name">מישור ייחוס — "אפס הגובה"</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p>גובה הוא <strong>יחסי</strong>. הוא תמיד נמדד ביחס לנקודה שבחרנו כ"אפס". הנקודה הזו נקראת <strong>מישור הייחוס</strong>.</p>
+    <p>ניתן לבחור כל נקודה כמישור ייחוס! הרצפה, השולחן, התקרה — כולן תקינות. <span class="highlight" style="color:var(--pink)">חשוב להיות עקביים</span> — לבחור מישור אחד ולהישאר איתו לאורך כל הבעיה.</p>
+    <div class="analogy" style="border-color:var(--pink)">
+      <span class="emoji">💡</span>
+      <strong>מנורה תקרה (0.3 ק"ג) בחדר גובה 3 מ', שולחן בגובה 0.9 מ':</strong><br>
+      • ביחס לרצפה: h = 3מ' → Eₕ = 0.3×10×3 = <strong>9 ג'ול</strong><br>
+      • ביחס לשולחן: h = 3−0.9 = 2.1מ' → Eₕ = 0.3×10×2.1 = <strong>6.3 ג'ול</strong><br>
+      • ביחס לתקרה: h = 0מ' → Eₕ = <strong>0 ג'ול</strong><br>
+      <br>
+      שלוש תשובות שונות — כולן נכונות! תלוי במישור הייחוס שנבחר.
+    </div>
+    <ul class="key-points">
+      <li><span class="kp-dot" style="background:var(--pink)"></span>כשלא נאמר אחרת — בוחרים את <strong>נקודת ההתחלה</strong> או <strong>הרצפה</strong> כמישור ייחוס.</li>
+      <li><span class="kp-dot" style="background:var(--pink)"></span>חפץ <strong>מעל</strong> מישור הייחוס → h חיובי → Eₕ חיובית.</li>
+      <li><span class="kp-dot" style="background:var(--pink)"></span>חפץ <strong>מתחת</strong> למישור הייחוס → h שלילי → Eₕ שלילית.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- T6: Energy Graphs -->
+<div class="theory-card tc-green">
+  <div class="tc-header">
+    <span class="tc-icon">📈</span>
+    <div>
+      <span class="tc-num">נושא 6 מתוך 7</span>
+      <div class="tc-name">גרפי אנרגיה כתלות בגובה</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p>כאשר חפץ נופל מגובה h לגובה 0, שלוש האנרגיות משתנות בצורה מאוד מסוימת:</p>
+    <div class="canvas-wrap">
+      <div class="canvas-title">גרף האנרגיות כתלות בגובה (ציר X = גובה, ציר Y = אנרגיה)</div>
+      <canvas id="energyGraph" width="700" height="260" style="width:100%;height:auto;display:block;"></canvas>
+      <div style="display:flex;gap:20px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:#00e5c0">▲ אנרגיית גובה (Eₕ) — עולה עם הגובה</span>
+        <span style="font-size:12px;color:#ffbe3d">▼ אנרגיית תנועה (Eₖ) — יורדת עם הגובה</span>
+        <span style="font-size:12px;color:#a78bfa">— אנרגיה מכנית כוללת (E_total) — קבועה</span>
+      </div>
+    </div>
+    <ul class="key-points">
+      <li><span class="kp-dot" style="background:var(--green)"></span><strong>Eₕ</strong>: גרף <strong>עולה לינארי</strong> — ככל שגובה עולה, Eₕ עולה (קו ישר מהראשית).</li>
+      <li><span class="kp-dot" style="background:var(--green)"></span><strong>Eₖ</strong>: גרף <strong>יורד לינארי</strong> — ככל שגובה עולה, התנועה מואטת.</li>
+      <li><span class="kp-dot" style="background:var(--green)"></span><strong>E_total</strong>: גרף <strong>קו אופקי קבוע</strong> — לא משתנה בכלל!</li>
+      <li><span class="kp-dot" style="background:var(--green)"></span>בנקודת המפגש של Eₕ ו-Eₖ: שני סוגי האנרגיה <strong>שווים</strong> (מחצית-מחצית).</li>
+    </ul>
+    <p style="font-size:13px;color:var(--text-m);margin-top:8px">⚠️ שאלה 4א במבחן 2025: נותנים 3 גרפים ושואלים לזהות איזה Eₕ, Eₖ ו-E_total. עכשיו את יודעת!</p>
+  </div>
+</div>
+
+<!-- T7: Experiment variables -->
+<div class="theory-card tc-teal" style="--card-c:var(--teal)">
+  <div class="tc-header">
+    <span class="tc-icon">🔬</span>
+    <div>
+      <span class="tc-num">נושא 7 מתוך 7</span>
+      <div class="tc-name">ניסוי מדעי — משתנים, גרף ומסקנה (שאלה 3 במבחן — 24 נקודות!)</div>
+    </div>
+  </div>
+  <div class="tc-body">
+
+    <p><strong>מה עשו בניסוי?</strong></p>
+    <p>תלמידים בנו מודל של תחנת חשמל קטנה: מים נשפכים ממיכל, נופלים ומסובבים טורבינה שמחוברת לגנרטור. הגנרטור מייצר חשמל שנמדד בעזרת מד מיוחד.</p>
+    <p>הם חזרו על הניסוי 5 פעמים — בכל פעם שינו <strong>רק את גובה הנפילה</strong> ומדדו כמה חשמל נוצר.</p>
+
+    <div style="background:rgba(0,229,192,0.07);border:1px solid rgba(0,229,192,0.25);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px;line-height:1.75">
+      <strong style="color:var(--teal)">🔌 מה זה "עוצמת זרם"? — הסבר בסיסי למי שעוד לא למד חשמל</strong><br><br>
+      זרם חשמלי הוא כמות החשמל הזורמת בחוט — בדיוק כמו שיש "ספיקה" של מים בצינור. <strong>ככל שהזרם חזק יותר, יש יותר חשמל</strong>.<br><br>
+      בניסוי הזה, הזרם משמש כ<strong>מד לכמה אנרגיה חשמלית הגנרטור ייצר</strong>. לא צריך לדעת איך הוא עובד — רק שזרם גדול = יותר חשמל יוצא.<br><br>
+      הסימן: <strong>I</strong>, היחידה: <strong>אמפר (A)</strong>. מעגלים חשמליים נלמד ביום 3 — שם יסוקר הכל לעומק.
+    </div>
+
+    <div class="analogy" style="margin:14px 0">
+      <span class="emoji">🎯</span>
+      <strong>שלושת סוגי המשתנים — חייבים לזכור!</strong><br><br>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px;text-align:center">
+        <div style="background:rgba(0,229,192,0.1);border:1px solid rgba(0,229,192,0.3);border-radius:8px;padding:12px">
+          <div style="color:var(--teal);font-weight:800;font-size:15px;margin-bottom:6px">גורם בלתי תלוי</div>
+          <div style="font-size:12px;color:var(--text-d);margin-bottom:6px">(גורם משפיע)</div>
+          <div style="font-size:13px;color:var(--text)"><strong>מה ששינינו</strong><br>= גובה הנפילה<br>→ עולה על <strong>ציר X</strong></div>
+        </div>
+        <div style="background:rgba(255,190,61,0.1);border:1px solid rgba(255,190,61,0.3);border-radius:8px;padding:12px">
+          <div style="color:var(--amber);font-weight:800;font-size:15px;margin-bottom:6px">גורם תלוי</div>
+          <div style="font-size:12px;color:var(--text-d);margin-bottom:6px">(גורם מושפע)</div>
+          <div style="font-size:13px;color:var(--text)"><strong>מה שמדדנו</strong><br>= עוצמת הזרם<br>→ עולה על <strong>ציר Y</strong></div>
+        </div>
+        <div style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);border-radius:8px;padding:12px">
+          <div style="color:var(--purple);font-weight:800;font-size:15px;margin-bottom:6px">גורם נשלט</div>
+          <div style="font-size:12px;color:var(--text-d);margin-bottom:6px">(קבוע)</div>
+          <div style="font-size:13px;color:var(--text)"><strong>מה שלא שינינו</strong><br>= כמות מים,<br>גודל הטורבינה...</div>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>נתוני הניסוי:</strong></p>
+    <table class="comp-table">
+      <tr><th>גובה נפילה h (cm)</th><th>10</th><th>30</th><th>50</th><th>60</th><th>70</th></tr>
+      <tr><td>עוצמת זרם I (A)</td><td>0.011</td><td>0.030</td><td>0.049</td><td>0.060</td><td>0.070</td></tr>
+    </table>
+
+    <p style="margin-top:14px"><strong>כיצד לשרטט גרף נכון — 6 צעדים:</strong></p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin:10px 0">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,229,192,0.2);border:1px solid rgba(0,229,192,0.4);color:var(--teal);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+        <div style="font-size:14px;color:var(--text-d);line-height:1.7"><strong>כותרת לגרף:</strong> "תלות עוצמת הזרם הממוצעת בגובה נפילת המים" — משפט שמסביר מה הגרף מראה</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,229,192,0.2);border:1px solid rgba(0,229,192,0.4);color:var(--teal);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+        <div style="font-size:14px;color:var(--text-d);line-height:1.7"><strong>ציר X (אופקי):</strong> "גובה נפילת המים (h) [cm]" — הגורם הבלתי תלוי, עם יחידות בסוגריים מרובעים</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,229,192,0.2);border:1px solid rgba(0,229,192,0.4);color:var(--teal);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+        <div style="font-size:14px;color:var(--text-d);line-height:1.7"><strong>ציר Y (אנכי):</strong> "עוצמת הזרם הממוצעת (I) [A]" — הגורם התלוי, עם יחידות</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,229,192,0.2);border:1px solid rgba(0,229,192,0.4);color:var(--teal);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+        <div style="font-size:14px;color:var(--text-d);line-height:1.7"><strong>קנה מידה:</strong> חלקי כל ציר לחלקים שווים. ציר X: 0, 10, 20, ..., 70. ציר Y: 0, 0.01, 0.02, ..., 0.07</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,229,192,0.2);border:1px solid rgba(0,229,192,0.4);color:var(--teal);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</div>
+        <div style="font-size:14px;color:var(--text-d);line-height:1.7"><strong>נקודות:</strong> סמני X בדיוק לפי הטבלה — לכל שורה נקודה אחת. 5 נקודות בסה"כ.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,229,192,0.2);border:1px solid rgba(0,229,192,0.4);color:var(--teal);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0">6</div>
+        <div style="font-size:14px;color:var(--text-d);line-height:1.7"><strong>קו מגמה:</strong> קו ישר שיוצא מ-(0,0) ועובר <em>בקרבת</em> כל הנקודות (לא חייב לגעת בכולן — לא לחבר נקודה-נקודה!)</div>
+      </div>
+    </div>
+
+    <div class="analogy" style="margin-top:14px">
+      <span class="emoji">✅</span>
+      <strong>מסקנת הניסוי (כך כותבים במבחן):</strong><br>
+      "ככל שגובה נפילת המים גדול יותר, עוצמת הזרם החשמלי גדולה יותר. קיים קשר ישר בין גובה נפילת המים לבין עוצמת הזרם."<br><br>
+      <strong>ההסבר הפיזיקלי:</strong> גובה גדול יותר = Eₕ גדולה יותר → Eₖ גדולה יותר (מהירות גבוהה יותר) → הטורבינה מסתובבת מהר יותר → זרם חזק יותר.
+    </div>
+  </div>
+</div>
+
+<!-- T8: Efficiency / נצילות -->
+<div class="theory-card tc-amber" style="--card-c:var(--amber)">
+  <div class="tc-header">
+    <div class="tc-icon">⚙️</div>
+    <div>
+      <div class="tc-tag">נוסחה</div>
+      <div class="tc-name">נצילות — כמה אנרגיה לא הולכת לאיבוד?</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p>במציאות, <strong>אף מכונה לא מושלמת</strong>. כשאנרגיה מומרת (למשל, מגובה לחשמל), חלק ממנה הולך לאיבוד כ<strong>חום וחיכוך</strong>.</p>
+    <p style="margin-top:10px"><strong>נצילות</strong> (סימן: η, יחידה: אחוז %) מודדת כמה מהאנרגיה הכניסה <em>אכן</em> הפכה לאנרגיה שימושית:</p>
+
+    <div style="background:var(--amber-d);border:1px solid rgba(255,190,61,.3);border-radius:12px;padding:18px 24px;margin:16px 0;text-align:center">
+      <div style="font-size:22px;font-weight:900;letter-spacing:1px;color:var(--amber)">נצילות = (E_שימושית ÷ E_כניסה) × 100%</div>
+      <div style="margin-top:8px;font-size:13px;color:var(--text-d)">כאשר E_שימושית = האנרגיה שהמכונה <em>ייצרה בפועל</em>, E_כניסה = האנרגיה שהוכנסה לתהליך</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0">
+      <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:var(--green);margin-bottom:8px">✅ נצילות 100% (בלתי אפשרית)</div>
+        <div style="font-size:13px;color:var(--text-d)">כל האנרגיה הומרה שימושית — אין הפסדים. לא קיים במציאות.</div>
+      </div>
+      <div style="background:rgba(255,107,157,0.08);border:1px solid rgba(255,107,157,0.2);border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:var(--pink);margin-bottom:8px">🔥 נצילות &lt;100% (המציאות)</div>
+        <div style="font-size:13px;color:var(--text-d)">חלק מהאנרגיה הולך לחום, קול, חיכוך — ולא ניתן לשחזרה.</div>
+      </div>
+    </div>
+
+    <p><strong>דוגמה — תחנה הידרואלקטרית בנצילות 90%:</strong></p>
+    <div style="background:var(--bg3);border-radius:10px;padding:14px 18px;margin:10px 0;font-size:14px;line-height:2">
+      E_כניסה = Eₕ של המים = 1,300,000 J<br>
+      נצילות 90% → E_חשמלית = 0.90 × 1,300,000 = <strong>1,170,000 J</strong><br>
+      הפסד לחום = 10% × 1,300,000 = <strong>130,000 J</strong>
+    </div>
+
+    <div style="background:rgba(0,229,192,0.07);border:1px solid rgba(0,229,192,0.2);border-radius:10px;padding:12px 16px;margin-top:14px;font-size:13px">
+      <strong style="color:var(--teal)">💡 בשאלת המבחן — שימי לב!</strong><br>
+      כשנתון "נצילות X%" — זה אומר שרק X% מהאנרגיה הכניסה הפכה לאנרגיה שימושית. הכפילי: <strong>E_יוצאת = (X/100) × E_כניסה</strong>
+    </div>
+  </div>
+</div>
+
+<!-- T9: Free fall -->
+<div class="theory-card tc-blue" style="--card-c:var(--blue)">
+  <div class="tc-header">
+    <div class="tc-icon">🪂</div>
+    <div>
+      <div class="tc-tag">נוסחה</div>
+      <div class="tc-name">נפילה חופשית — h = ½gt²</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p><strong>נפילה חופשית</strong> = גוף נופל <em>ללא מהירות התחלתית</em> ו<em>ללא התנגדות אוויר</em>, רק בהשפעת כבידה.</p>
+
+    <div style="background:var(--blue-d);border:1px solid rgba(74,158,255,.3);border-radius:12px;padding:18px 24px;margin:16px 0;text-align:center">
+      <div style="font-size:26px;font-weight:900;letter-spacing:1px;color:var(--blue)">h = ½ · g · t²</div>
+      <div style="margin-top:10px;font-size:13px;color:var(--text-d);line-height:1.8">
+        h = גובה הנפילה (מטרים)<br>
+        g = 10 מ/ש² (תאוצת הכבידה — תמיד!)<br>
+        t = זמן הנפילה (שניות)
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0">
+      <div style="background:var(--bg3);border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:8px">מצאי גובה מזמן</div>
+        <div style="font-size:13px;line-height:1.9">
+          נתון: t = 3 שניות<br>
+          <span style="color:var(--teal)">h = ½ × 10 × 3² = 5 × 9 = <strong>45 מ'</strong></span>
+        </div>
+      </div>
+      <div style="background:var(--bg3);border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:8px">מצאי זמן מגובה</div>
+        <div style="font-size:13px;line-height:1.9">
+          נתון: h = 80 מ'<br>
+          80 = 5t² → t² = 16<br>
+          <span style="color:var(--teal)">t = √16 = <strong>4 שניות</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:6px"><strong>מציאת מהירות בתחתית — שני דרכים:</strong></p>
+    <div style="background:var(--bg3);border-radius:10px;padding:14px 18px;margin:10px 0;font-size:14px;line-height:2">
+      <strong>דרך 1 — שימור אנרגיה (מומלץ!):</strong><br>
+      Eₕ = Eₖ → mgh = ½mv² → <span style="color:var(--teal)">v = √(2gh)</span><br>
+      לדוגמה: h=45מ' → v = √(2×10×45) = √900 = <strong>30 מ/ש</strong><br><br>
+      <strong>דרך 2 — דרך הנוסחה:</strong><br>
+      מוצאים t מ-h=½gt², ואז v=g×t.<br>
+      t=3שנ' → v = 10 × 3 = <strong>30 מ/ש</strong> ✓
+    </div>
+
+    <div style="background:rgba(255,190,61,0.08);border:1px solid rgba(255,190,61,0.25);border-radius:10px;padding:12px 16px;margin-top:14px;font-size:13px">
+      <strong style="color:var(--amber)">⚠️ שגיאות נפוצות במבחן:</strong><br>
+      • לשכוח לרבע את t — h = ½g<strong>t²</strong>, לא ½g·t<br>
+      • לבלבל בין g=10 ל-g=9.8 — במבחן תמיד g=10<br>
+      • לשכוח שנפילה חופשית = <strong>v₀ = 0</strong> (מהירות התחלתית אפס)
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ VIDEOS ═══════════════ -->
+<div class="sec-label">סרטוני הסבר</div>
+<h2 class="sec-title">לפני שמתרגלים — צפי!</h2>
+<p class="sec-desc">הסרטונים האלה מסבירים את החומר בצורה חזותית. מומלץ לצפות לפחות בשניים לפני שמתחילים בתרגילים.</p>
+
+<div class="videos-grid">
+  <a href="https://www.youtube.com/results?search_query=אנרגיית+גובה+ואנרגיית+תנועה+כיתה+ח+ט" target="_blank" class="video-card">
+    <span class="vc-icon">🎬</span>
+    <div>
+      <span class="vc-label">עברית · YouTube</span>
+      <div class="vc-title">אנרגיית גובה ואנרגיית תנועה — כיתה ח-ט</div>
+      <div class="vc-sub">חיפוש בYouTube → בחרי סרטון עם הכי הרבה צפיות</div>
+    </div>
+  </a>
+  <a href="https://www.youtube.com/results?search_query=חוק+שימור+האנרגיה+פיזיקה+ישראל" target="_blank" class="video-card">
+    <span class="vc-icon">🎬</span>
+    <div>
+      <span class="vc-label">עברית · YouTube</span>
+      <div class="vc-title">חוק שימור האנרגיה — הסבר בעברית</div>
+      <div class="vc-sub">חפשי "חוק שימור האנרגיה" — הרבה סרטונים טובים</div>
+    </div>
+  </a>
+  <a href="https://www.khanacademy.org/science/physics/work-and-energy/potential-energy-tutorial/v/introduction-to-gravitational-potential-energy" target="_blank" class="video-card">
+    <span class="vc-icon">🟢</span>
+    <div>
+      <span class="vc-label">אנגלית · Khan Academy</span>
+      <div class="vc-title">Gravitational Potential Energy</div>
+      <div class="vc-sub">הסבר מצוין עם אנימציות — חזותי מאוד</div>
+    </div>
+  </a>
+  <a href="https://www.khanacademy.org/science/physics/work-and-energy/work-and-energy-tutorial/v/conservation-of-energy" target="_blank" class="video-card">
+    <span class="vc-icon">🟢</span>
+    <div>
+      <span class="vc-label">אנגלית · Khan Academy</span>
+      <div class="vc-title">Conservation of Energy</div>
+      <div class="vc-sub">הדגמה עם גלשן — בדיוק כמו במבחן</div>
+    </div>
+  </a>
+</div>
+
+<!-- ═══════════════ WORKED EXAMPLES ═══════════════ -->
+<div class="sec-label">דוגמאות מודרכות</div>
+<h2 class="sec-title">3 פתרונות מלאים</h2>
+<p class="sec-desc">לפני התרגילים — ראי כיצד פותרים צעד אחר צעד. שימי לב לאופן הכתיבה — המבחן בודק גם את הדרך!</p>
+
+<!-- Example 1 -->
+<div class="example-card">
+  <div class="ex-header">
+    <span class="ex-badge easy">קל</span>
+    <div class="ex-title">דוגמה 1 — אנרגיות בנקודה אחת</div>
+  </div>
+  <div class="ex-question">כדור שמסתו <strong>4 ק"ג</strong> נע במהירות של <strong>6 מ/ש</strong> בגובה <strong>5 מטרים</strong> מעל הקרקע.<br>חשבו: (א) אנרגיית גובה, (ב) אנרגיית תנועה, (ג) אנרגיה מכנית כוללת.</div>
+  <div class="ex-steps">
+    <div class="ex-step"><div class="step-num">א</div><div class="step-body">
+      <strong>אנרגיית גובה:</strong>
+      <span class="eq">Eₕ = m × g × h = 4 × 10 × 5</span>
+      <span class="ans">Eₕ = 200 ג'ול</span>
+    </div></div>
+    <div class="ex-step"><div class="step-num">ב</div><div class="step-body">
+      <strong>אנרגיית תנועה:</strong> (זוכרים — קודם v², אחר כך כופלים!)
+      <span class="eq">Eₖ = ½ × m × v² = ½ × 4 × 6² = ½ × 4 × 36</span>
+      <span class="ans">Eₖ = 72 ג'ול</span>
+    </div></div>
+    <div class="ex-step"><div class="step-num">ג</div><div class="step-body">
+      <strong>אנרגיה מכנית כוללת:</strong>
+      <span class="eq">E_מכנית = Eₕ + Eₖ = 200 + 72</span>
+      <span class="ans">E_מכנית = 272 ג'ול</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- Example 2 -->
+<div class="example-card">
+  <div class="ex-header">
+    <span class="ex-badge medium">בינוני</span>
+    <div class="ex-title">דוגמה 2 — חוק שימור האנרגיה (מצאי מהירות)</div>
+  </div>
+  <div class="ex-question">ילד (מסה <strong>35 ק"ג</strong>) יושב בראש מגלשה בגובה <strong>20 מ'</strong> ומתחיל מ<strong>מנוחה</strong> (v=0). אין חיכוך.<br>(א) חשבו את האנרגיה המכנית הכוללת בראש. (ב) מהי מהירותו בתחתית? (ג) מהי מהירותו בגובה 5 מ'?</div>
+  <div class="ex-steps">
+    <div class="ex-step"><div class="step-num">א</div><div class="step-body">
+      <strong>בראש המגלשה:</strong> v=0, לכן Eₖ=0. כל האנרגיה בגובה.
+      <span class="eq">E_total = Eₕ = m×g×h = 35 × 10 × 20</span>
+      <span class="ans">E_total = 7,000 ג'ול</span>
+    </div></div>
+    <div class="ex-step"><div class="step-num">ב</div><div class="step-body">
+      <strong>בתחתית:</strong> h=0, לכן Eₕ=0. כל האנרגיה הפכה לתנועה.
+      <span class="eq">E_total = Eₖ → 7000 = ½ × 35 × v²</span>
+      <span class="eq">v² = 14000 / 35 = 400</span>
+      <span class="ans">v = √400 = 20 מ/ש</span>
+    </div></div>
+    <div class="ex-step"><div class="step-num">ג</div><div class="step-body">
+      <strong>בגובה 5 מ':</strong> E_total עדיין 7000 ג'ול (שימור!). מחסרים את Eₕ בגובה זה.
+      <span class="eq">Eₕ = 35×10×5 = 1750 J</span>
+      <span class="eq">Eₖ = E_total − Eₕ = 7000 − 1750 = 5250 J</span>
+      <span class="eq">5250 = ½ × 35 × v² → v² = 300</span>
+      <span class="ans">v = √300 ≈ 17.3 מ/ש</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- Example 3 -->
+<div class="example-card">
+  <div class="ex-header">
+    <span class="ex-badge hard">קשה</span>
+    <div class="ex-title">דוגמה 3 — שאלה 4 מהמבחן (2025) — מלאה!</div>
+  </div>
+  <div class="ex-question">בתחנה הידרואלקטרית זורמים <strong>6,500 ק"ג מים</strong> מגובה של <strong>20 מ'</strong>.<br>(א) חשבו את אנרגיית הגובה של המים בסכר. (ב) חשבו את מהירות המים בתחתית הסכר. (ג) אם נצילות התחנה 90% — כמה אחוזים מהאנרגיה הופכים לחשמל?</div>
+  <div class="ex-steps">
+    <div class="ex-step"><div class="step-num">א</div><div class="step-body">
+      <strong>אנרגיית גובה בסכר:</strong>
+      <span class="eq">Eₕ = m × g × h = 6500 × 10 × 20</span>
+      <span class="ans">Eₕ = 1,300,000 ג'ול (= 1.3 מגה-ג'ול)</span>
+    </div></div>
+    <div class="ex-step"><div class="step-num">ב</div><div class="step-body">
+      <strong>מהירות בתחתית:</strong> בראש הסכר, v≈0, לכן כל Eₕ = E_total.<br>בתחתית, h=0, לכן כל E_total הפכה ל-Eₖ.
+      <span class="eq">Eₖ = E_total → ½ × m × v² = 1,300,000</span>
+      <span class="eq">½ × 6500 × v² = 1,300,000</span>
+      <span class="eq">v² = 2,600,000 / 6500 = 400</span>
+      <span class="ans">v = √400 = 20 מ/ש</span>
+    </div></div>
+    <div class="ex-step"><div class="step-num">ג</div><div class="step-body">
+      <strong>נצילות 90% פירושה:</strong>
+      <span class="ans">90% מאנרגיית התנועה של המים הופכים לחשמל שימושי, ו-10% הולכים לאיבוד (חום, חיכוך)</span>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ EXERCISES ═══════════════ -->
+<div class="sec-label">תרגול</div>
+<h2 class="sec-title">14 תרגילים — מקל לקשה</h2>
+<p class="sec-desc">בחרי את התשובה הנכונה וקבלי משוב מיידי. לחצי "הצגת פתרון מלא" כדי לראות את כל השלבים.</p>
+
+<div class="ex-list">
+
+<!-- EX 1 -->
+<div class="exercise" id="ex1">
+  <div class="difficulty-strip" style="--lv-c:var(--green)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 1/5 — קל מאוד</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex1')">
+    <div class="ex-level lv1">1</div>
+    <div style="flex:1">
+      <div class="ex-q-title">חישוב משקל ואנרגיית גובה</div>
+      <div class="ex-q-text">תיק בית ספר שמסתו <strong>3 ק"ג</strong> מונח על מדף בגובה <strong>1.5 מ'</strong>.<br>(א) מה משקל התיק? (ב) מה אנרגיית הגובה שלו?</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>לחלק (א): W = m × g. ש-g=10.<br>לחלק (ב): Eₕ = m × g × h. כל הנתונים נתונים!</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="W = 3 × 10 = 30 N. מסה (ק&quot;ג) × g (10) = משקל (ניוטון)." data-err="W = m × g = 3 × 10 = <strong>30 ניוטון</strong>. זכרי: g = 10 N/kg תמיד.">
+        <div class="mc-part-q">(א) מה משקל התיק?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">20 ניוטון</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">30 ניוטון</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">45 ניוטון</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">15 ניוטון</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="Eₕ = 3 × 10 × 1.5 = 45 J ✓" data-err="Eₕ = m × g × h = 3 × 10 × 1.5 = <strong>45 ג'ול</strong>.">
+        <div class="mc-part-q">(ב) מה אנרגיית הגובה של התיק?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">30 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">45 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">4.5 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">15 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">א</div><div class="ss-body"><strong>משקל:</strong><span class="eq">W = m × g = 3 × 10</span><span class="eq-ans">W = 30 ניוטון</span></div></div>
+          <div class="sol-step"><div class="ss-num">ב</div><div class="ss-body"><strong>אנרגיית גובה:</strong><span class="eq">Eₕ = m × g × h = 3 × 10 × 1.5</span><span class="eq-ans">Eₕ = 45 ג'ול</span></div></div>
+        </div>
+        <div class="final-ans">✓ W = 30 N, Eₕ = 45 J</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 2 -->
+<div class="exercise" id="ex2">
+  <div class="difficulty-strip" style="--lv-c:var(--green)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 1/5 — קל מאוד</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex2')">
+    <div class="ex-level lv1">2</div>
+    <div style="flex:1">
+      <div class="ex-q-title">חישוב אנרגיית תנועה</div>
+      <div class="ex-q-text">אופניים ורוכב שמסתם הכוללת <strong>80 ק"ג</strong> נוסעים במהירות <strong>5 מ/ש</strong>. מה אנרגיית התנועה שלהם?</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>Eₖ = ½mv². קודם מחשבים v² = 5 × 5 = 25, ואז מציבים.</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="Eₖ = ½ × 80 × 5² = ½ × 80 × 25 = 1,000 J ✓" data-err="Eₖ = ½ × m × v² = ½ × 80 × 25 = <strong>1,000 ג'ול</strong>. שים לב: v² = 25, לא v = 25!">
+        <div class="mc-part-q">מה אנרגיית התנועה של האופניים והרוכב?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">400 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">800 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">1,000 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2,000 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">1</div><div class="ss-body"><span class="eq">v² = 5² = 25</span><span class="eq">Eₖ = ½ × 80 × 25 = 40 × 25</span><span class="eq-ans">Eₖ = 1,000 ג'ול</span></div></div>
+        </div>
+        <div class="final-ans">✓ Eₖ = 1,000 J</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 3 -->
+<div class="exercise" id="ex3">
+  <div class="difficulty-strip" style="--lv-c:var(--green)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 2/5 — קל</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex3')">
+    <div class="ex-level lv2">3</div>
+    <div style="flex:1">
+      <div class="ex-q-title">אנרגיה מכנית כוללת</div>
+      <div class="ex-q-text">ציפור (מסה <strong>0.5 ק"ג</strong>) עפה בגובה <strong>10 מ'</strong> במהירות <strong>8 מ/ש</strong>.<br>חשבי: Eₕ, Eₖ, ו-E_מכנית הכוללת.</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>חשבי Eₕ ו-Eₖ בנפרד, ואז חברי. E_total = Eₕ + Eₖ.</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="Eₕ = 0.5 × 10 × 10 = 50 J ✓" data-err="Eₕ = m × g × h = 0.5 × 10 × 10 = <strong>50 J</strong>.">
+        <div class="mc-part-q">(א) מה אנרגיית הגובה של הציפור?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">25 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">50 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">100 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">5 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="Eₖ = ½ × 0.5 × 8² = ½ × 0.5 × 64 = 16 J ✓" data-err="Eₖ = ½ × m × v² = ½ × 0.5 × 64 = <strong>16 J</strong>. v² = 8² = 64, לא 8!">
+        <div class="mc-part-q">(ב) מה אנרגיית התנועה של הציפור?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">32 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">16 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">8 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">64 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="E_total = Eₕ + Eₖ = 50 + 16 = 66 J ✓" data-err="E_total = Eₕ + Eₖ = 50 + 16 = <strong>66 J</strong>.">
+        <div class="mc-part-q">(ג) מה האנרגיה המכנית הכוללת?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">66 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">50 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">34 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">132 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">1</div><div class="ss-body"><span class="eq">Eₕ = 0.5 × 10 × 10 = 50 J</span><span class="eq">Eₖ = ½ × 0.5 × 8² = ½ × 0.5 × 64 = 16 J</span><span class="eq-ans">E_total = 50 + 16 = 66 J</span></div></div>
+        </div>
+        <div class="final-ans">✓ Eₕ=50J, Eₖ=16J, E_total=66J</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 4 -->
+<div class="exercise" id="ex4">
+  <div class="difficulty-strip" style="--lv-c:var(--green)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 2/5 — קל</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex4')">
+    <div class="ex-level lv2">4</div>
+    <div style="flex:1">
+      <div class="ex-q-title">מישור ייחוס — מנורת תקרה (מבחן 2018!)</div>
+      <div class="ex-q-text">מנורה (מסה <strong>0.3 ק"ג</strong>) תלויה בתקרה. גובה החדר מרצפה לתקרה הוא <strong>3 מ'</strong>. גובה שולחן הוא <strong>0.9 מ'</strong>.<br>חשבי את אנרגיית הגובה של המנורה ביחס ל: (א) רצפה, (ב) שולחן, (ג) תקרה.</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>המנורה בתקרה = גובה 3מ' מהרצפה.<br>ביחס לרצפה: h = 3מ'. ביחס לשולחן: h = 3 − 0.9. ביחס לתקרה: המנורה על האפס → h = 0.</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="Eₕ = 0.3 × 10 × 3 = 9 J ✓ — המנורה 3מ' מעל הרצפה." data-err="ביחס לרצפה h = 3מ'. Eₕ = 0.3 × 10 × 3 = <strong>9 J</strong>.">
+        <div class="mc-part-q">(א) אנרגיית גובה ביחס לרצפה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">3 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">6.3 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">9 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">0 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="h = 3 − 0.9 = 2.1מ'. Eₕ = 0.3 × 10 × 2.1 = 6.3 J ✓" data-err="ביחס לשולחן h = 3 − 0.9 = 2.1מ'. Eₕ = 0.3 × 10 × 2.1 = <strong>6.3 J</strong>.">
+        <div class="mc-part-q">(ב) אנרגיית גובה ביחס לשולחן (גובה 0.9מ')?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">9 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">6.3 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2.7 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">3 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="המנורה נמצאת בתקרה — h = 0 ביחס לתקרה. Eₕ = 0 ✓" data-err="המנורה נמצאת בתקרה, כלומר h = 0. Eₕ = 0.3 × 10 × 0 = <strong>0 J</strong>.">
+        <div class="mc-part-q">(ג) אנרגיית גובה ביחס לתקרה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">9 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">6.3 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">3 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">0 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">א</div><div class="ss-body"><strong>ביחס לרצפה (h=3מ'):</strong><span class="eq">Eₕ = 0.3 × 10 × 3 = 9 J</span></div></div>
+          <div class="sol-step"><div class="ss-num">ב</div><div class="ss-body"><strong>ביחס לשולחן (h=2.1מ'):</strong><span class="eq">Eₕ = 0.3 × 10 × 2.1 = 6.3 J</span></div></div>
+          <div class="sol-step"><div class="ss-num">ג</div><div class="ss-body"><strong>ביחס לתקרה (h=0):</strong><span class="eq-ans">Eₕ = 0 J</span></div></div>
+        </div>
+        <div class="final-ans">✓ (א) 9J, (ב) 6.3J, (ג) 0J — שלוש תשובות שונות, כולן נכונות! תלוי במישור הייחוס.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 5 -->
+<div class="exercise" id="ex5">
+  <div class="difficulty-strip" style="--lv-c:var(--amber)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 3/5 — בינוני</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex5')">
+    <div class="ex-level lv3">5</div>
+    <div style="flex:1">
+      <div class="ex-q-title">מציאת מהירות בעזרת שימור אנרגיה</div>
+      <div class="ex-q-text">כדור (מסה <strong>3 ק"ג</strong>) משוחרר ממנוחה בגובה <strong>20 מ'</strong>. אין חיכוך.<br>מהי מהירות הכדור ממש לפני שהוא פוגע בקרקע?</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>בהתחלה v=0 → כל האנרגיה = Eₕ = mgh.<br>בקרקע h=0 → כל האנרגיה = Eₖ.<br>לכן mgh = ½mv² → v = √(2gh).</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="mgh = ½mv² → v = √(2×10×20) = √400 = 20 מ/ש ✓" data-err="mgh = ½mv² → v² = 2gh = 2×10×20 = 400 → v = <strong>20 מ/ש</strong>." data-fact="יוצרי הסדרה ביקשו מבלה רמזי (אלי) במפורש לא לשחק במשחק לפני הצילומים — הם רצו שתביא פרשנות אישית לדמות, ולא תחקה את אשלי ג&#39;ונסון, השחקנית המקורית מהמשחק.">
+        <div class="mc-part-q">מהי מהירות הכדור ממש לפני הפגיעה בקרקע?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">10 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">15 מ/ש</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">20 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">25 מ/ש</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">1</div><div class="ss-body"><span class="eq">E_total = 3 × 10 × 20 = 600 J</span></div></div>
+          <div class="sol-step"><div class="ss-num">2</div><div class="ss-body"><span class="eq">½ × 3 × v² = 600 → v² = 400</span><span class="eq-ans">v = 20 מ/ש</span></div></div>
+        </div>
+        <div class="final-ans">✓ v = 20 מ/ש</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 6 -->
+<div class="exercise" id="ex6">
+  <div class="difficulty-strip" style="--lv-c:var(--amber)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 3/5 — בינוני</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex6')">
+    <div class="ex-level lv3">6</div>
+    <div style="flex:1">
+      <div class="ex-q-title">מציאת גובה ממהירות (הפוך!)</div>
+      <div class="ex-q-text">כדור (מסה <strong>2 ק"ג</strong>) מגיע לקרקע במהירות של <strong>14 מ/ש</strong>. הוא הושלך ממנוחה (v₀=0).<br>מאיזה גובה הושלך הכדור?</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>חשבי Eₖ בקרקע מה-v הנתון. שימור: Eₖ = Eₕ_התחלה = mgh. פתרי ל-h.</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="Eₖ = ½×2×196=196J. mgh=196 → h=196/20 = 9.8מ' ✓" data-err="Eₖ = ½×2×14²=196J. מ-mgh=196: h = 196/(2×10) = <strong>9.8 מ'</strong>." data-fact="פדרו פסקל קיבל את שיחת הטלפון שבישרה לו על קבלתו לתפקיד ג&#39;ואל לאחר שכבר לקח כדור שינה. בבוקר שלמחרת הוא התעורר בלי שום זיכרון מהשיחה — ורק כשהסתכל בטלפון הבין שהתפקיד כבר שלו!">
+        <div class="mc-part-q">מאיזה גובה הושלך הכדור?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">5 מ'</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">7 מ'</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">9.8 מ'</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">14 מ'</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">1</div><div class="ss-body"><span class="eq">Eₖ = ½ × 2 × 14² = ½ × 2 × 196 = 196 J</span></div></div>
+          <div class="sol-step"><div class="ss-num">2</div><div class="ss-body"><span class="eq">mgh = 196 → 2 × 10 × h = 196 → h = 196/20</span><span class="eq-ans">h = 9.8 מ'</span></div></div>
+        </div>
+        <div class="final-ans">✓ h = 9.8 מ'</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 7 -->
+<div class="exercise" id="ex7">
+  <div class="difficulty-strip" style="--lv-c:var(--amber)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot empty"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 3/5 — בינוני</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex7')">
+    <div class="ex-level lv3">7</div>
+    <div style="flex:1">
+      <div class="ex-q-title">מהירות בנקודת אמצע</div>
+      <div class="ex-q-text">כדור (מסה <strong>5 ק"ג</strong>) מתחיל ממנוחה בגובה <strong>10 מ'</strong>. אין חיכוך.<br>מהי מהירותו כשהוא בגובה <strong>5 מ'</strong>?</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>מצאי E_total בהתחלה (v=0 → הכל Eₕ). בגובה 5מ': Eₖ = E_total − Eₕ(5מ'). מ-Eₖ → v.</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="E_total=500J. Eₕ(5מ')=250J. Eₖ=250J. ½×5×v²=250 → v=10 מ/ש ✓" data-err="E_total=500J → Eₖ(5מ')=500−250=250J → ½×5×v²=250 → v = <strong>10 מ/ש</strong>." data-fact="סצנת הג&#39;ירפות המפורסמת בפרק 9 לא נוצרה ב-CGI! ההפקה הביאה את השחקנים לגן החיות בקלגרי, קנדה, שם צילמו עם ג&#39;ירף אמיתי בשם נאבו — על רקע מסכים כחולים שעליהם הולבשה מאוחר יותר העיר ההרוסה.">
+        <div class="mc-part-q">מהי מהירות הכדור בגובה 5 מ'?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">5 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">8 מ/ש</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">10 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">14 מ/ש</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">1</div><div class="ss-body"><span class="eq">E_total = 5 × 10 × 10 = 500 J</span></div></div>
+          <div class="sol-step"><div class="ss-num">2</div><div class="ss-body"><span class="eq">Eₕ(5מ') = 5×10×5 = 250 J → Eₖ = 500−250 = 250 J</span></div></div>
+          <div class="sol-step"><div class="ss-num">3</div><div class="ss-body"><span class="eq">½×5×v²=250 → v²=100</span><span class="eq-ans">v = 10 מ/ש</span></div></div>
+        </div>
+        <div class="final-ans">✓ v = 10 מ/ש — בגובה חצי, Eₕ = Eₖ!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 8 -->
+<div class="exercise" id="ex8">
+  <div class="difficulty-strip" style="--lv-c:var(--amber)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 4/5 — בינוני-קשה</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex8')">
+    <div class="ex-level lv4">8</div>
+    <div style="flex:1">
+      <div class="ex-q-title">טבלת אנרגיות — גלשן (מבחן 2018 — שאלה 7א)</div>
+      <div class="ex-q-text">ילד (מסה <strong>35 ק"ג</strong>) יושב בראש גלשן בגובה <strong>20 מ'</strong> ומתחיל ממנוחה. אין חיכוך.<br>מלאי את הטבלה:</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>E_total = Eₕ בנקודה A (v=0). E_total קבועה בכל הנקודות!</div></div>
+    </div>
+    <div style="padding:14px 28px 0">
+      <div style="font-size:12px;color:var(--text-m);margin-bottom:8px">מלאי את הטבלה:</div>
+      <table class="comp-table">
+        <tr><th>נקודה</th><th>גובה (מ')</th><th>Eₕ (J)</th><th>Eₖ (J)</th><th>E_total (J)</th></tr>
+        <tr><td>A — ראש הגלשן</td><td>20</td><td style="color:var(--amber)">?</td><td style="color:var(--amber)">0</td><td style="color:var(--amber)">?</td></tr>
+        <tr><td>B</td><td>10</td><td style="color:var(--amber)">?</td><td style="color:var(--amber)">?</td><td style="color:var(--amber)">?</td></tr>
+        <tr><td>C</td><td>5</td><td style="color:var(--amber)">?</td><td style="color:var(--amber)">?</td><td style="color:var(--amber)">?</td></tr>
+        <tr><td>D — תחתית</td><td>0</td><td style="color:var(--amber)">0</td><td style="color:var(--amber)">?</td><td style="color:var(--amber)">?</td></tr>
+      </table>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="E_total = 35×10×20 = 7,000 J ✓ — נשמרת בכל הנקודות." data-err="E_total = m×g×h_ראש = 35×10×20 = <strong>7,000 J</strong> (כי v₀=0).">
+        <div class="mc-part-q">(א) מהי האנרגיה המכנית הכוללת בכל נקודה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">3,500 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">5,000 ג'ול</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">7,000 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">14,000 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="½×35×v²=7000 → v²=400 → v=20 מ/ש ✓" data-err="בתחתית כל E_total הפכה ל-Eₖ: ½×35×v²=7000 → v² = 400 → v = <strong>20 מ/ש</strong>." data-fact="טרוי בייקר ואשלי ג&#39;ונסון, שגילמו את ג&#39;ואל ואלי במשחק, מופיעים בסדרה. טרוי גילם את ג&#39;יימס (עוזרו של דיוויד), ואשלי גילמה את אנה — אמא של אלי — מה שהופך אותה למי שממש ילדה את הדמות שהיא עצמה יצרה!">
+        <div class="mc-part-q">(ב) מהי מהירות הילד בתחתית הגלשן?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">10 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">14 מ/ש</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">20 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">28 מ/ש</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">1</div><div class="ss-body"><span class="eq">E_total = 35×10×20 = 7,000 J</span></div></div>
+          <div class="sol-step"><div class="ss-num">2</div><div class="ss-body">
+            <table class="comp-table" style="margin:8px 0">
+              <tr><th>נקודה</th><th>גובה</th><th>Eₕ (J)</th><th>Eₖ (J)</th><th>E_total</th></tr>
+              <tr><td>A (ראש)</td><td>20מ'</td><td>7,000</td><td>0</td><td>7,000</td></tr>
+              <tr><td>B</td><td>10מ'</td><td>3,500</td><td>3,500</td><td>7,000</td></tr>
+              <tr><td>C</td><td>5מ'</td><td>1,750</td><td>5,250</td><td>7,000</td></tr>
+              <tr><td>D (תחתית)</td><td>0</td><td>0</td><td>7,000</td><td>7,000</td></tr>
+            </table>
+          </div></div>
+          <div class="sol-step"><div class="ss-num">3</div><div class="ss-body"><span class="eq">½×35×v²=7000 → v²=400</span><span class="eq-ans">v = 20 מ/ש</span></div></div>
+        </div>
+        <div class="final-ans">✓ E_total = 7,000J בכל נקודה | v_תחתית = 20 מ/ש</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 9 -->
+<div class="exercise" id="ex9">
+  <div class="difficulty-strip" style="--lv-c:var(--amber)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot empty"></div></div>
+    <span>רמת קושי 4/5 — בינוני-קשה</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex9')">
+    <div class="ex-level lv4">9</div>
+    <div style="flex:1">
+      <div class="ex-q-title">זיהוי גרפי אנרגיה (מבחן 2018 + 2025 — שאלה 4א)</div>
+      <div class="ex-q-text">לפניך גרף עם שלושה קווים המתארים אנרגיה כתלות בגובה עבור כדור נופל:<br>
+      • <strong>קו 1</strong>: מתחיל גבוה בצד שמאל ויורד בקו ישר לאפס<br>
+      • <strong>קו 2</strong>: מתחיל באפס בצד שמאל ועולה בקו ישר<br>
+      • <strong>קו 3</strong>: קו אופקי ישר קבוע לאורך כל הגרף<br><br>
+      זהי כל קו — Eₕ, Eₖ, או E_total — ונמקי!</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>Eₕ = mgh — גדלה עם הגובה (קו עולה). E_total = קבועה (קו אופקי). Eₖ — יורדת ככל שגובה עולה.</div></div>
+    </div>
+    <div style="padding:14px 28px 0">
+      <div style="background:rgba(0,0,0,.3);border:1px solid var(--glass-b);border-radius:14px;padding:16px">
+        <div style="font-size:12px;color:var(--text-m);margin-bottom:10px;text-align:center">זהי כל קו — Eₕ, Eₖ, או E_total?</div>
+        <svg viewBox="0 0 300 175" style="width:100%;max-width:420px;display:block;margin:0 auto" dir="ltr">
+          <line x1="44" y1="12" x2="44" y2="148" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+          <line x1="44" y1="148" x2="284" y2="148" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+          <text x="164" y="168" fill="rgba(232,240,254,.35)" font-size="11" text-anchor="middle" font-family="Heebo,sans-serif">גובה (h) ←</text>
+          <text x="14" y="80" fill="rgba(232,240,254,.35)" font-size="11" text-anchor="middle" transform="rotate(-90,14,80)" font-family="Heebo,sans-serif">אנרגיה</text>
+          <line x1="44" y1="20" x2="284" y2="20"  stroke="#a78bfa" stroke-width="2.5" stroke-dasharray="6,3"/>
+          <line x1="44" y1="148" x2="284" y2="20"  stroke="#4a9eff" stroke-width="2.5"/>
+          <line x1="44" y1="20"  x2="284" y2="148" stroke="#ffbe3d" stroke-width="2.5"/>
+          <circle cx="44"  cy="20"  r="3.5" fill="#a78bfa"/>
+          <circle cx="284" cy="20"  r="3.5" fill="#a78bfa"/>
+          <circle cx="44"  cy="148" r="3.5" fill="#4a9eff"/>
+          <circle cx="284" cy="20"  r="3.5" fill="#4a9eff"/>
+          <circle cx="44"  cy="20"  r="3.5" fill="#ffbe3d"/>
+          <circle cx="284" cy="148" r="3.5" fill="#ffbe3d"/>
+          <text x="288" y="24"  fill="#a78bfa" font-size="12" font-weight="bold" font-family="Heebo,sans-serif">3</text>
+          <text x="288" y="100" fill="#4a9eff" font-size="12" font-weight="bold" font-family="Heebo,sans-serif">2</text>
+          <text x="288" y="60"  fill="#ffbe3d" font-size="12" font-weight="bold" font-family="Heebo,sans-serif">1</text>
+          <text x="40" y="153" fill="rgba(232,240,254,.3)" font-size="9" text-anchor="end" font-family="Heebo,sans-serif">0</text>
+          <text x="284" y="160" fill="rgba(232,240,254,.3)" font-size="9" text-anchor="middle" font-family="Heebo,sans-serif">h_max</text>
+        </svg>
+        <div style="display:flex;gap:20px;justify-content:center;margin-top:8px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#ffbe3d;font-weight:700">— קו 1</span>
+          <span style="font-size:12px;color:#4a9eff;font-weight:700">— קו 2</span>
+          <span style="font-size:12px;color:#a78bfa;font-weight:700">- - קו 3</span>
+        </div>
+      </div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="קו 1 יורד עם הגובה = Eₖ ✓ — ככל שעולים גבוה, המהירות קטנה." data-err="קו שיורד עם הגובה = <strong>Eₖ</strong>. ככל שגובה עולה, Eₖ קטנה (מהירות קטנה).">
+        <div class="mc-part-q">קו 1 — יורד בקו ישר ממקסימום (כשגובה=0) לאפס — מה הוא מייצג?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">Eₕ — אנרגיית גובה</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">Eₖ — אנרגיית תנועה</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">E_total — אנרגיה כוללת</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">לא ניתן לדעת</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="קו 2 עולה עם הגובה = Eₕ ✓ — Eₕ = mgh, פרופורציונלי לגובה." data-err="קו שעולה עם הגובה = <strong>Eₕ</strong>. Eₕ = mgh — ישר תלוי בגובה.">
+        <div class="mc-part-q">קו 2 — עולה בקו ישר מאפס ככל שגובה עולה — מה הוא מייצג?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">Eₕ — אנרגיית גובה</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">Eₖ — אנרגיית תנועה</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">E_total — אנרגיה כוללת</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">לא ניתן לדעת</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="קו 3 אופקי = E_total ✓ — חוק שימור: האנרגיה הכוללת לא משתנה!" data-err="קו אופקי קבוע = <strong>E_total</strong>. חוק שימור האנרגיה — E_total קבועה לאורך כל הגרף." data-fact="שנת ההתפרצות במשחק המקורי היא 2013 והעלילה ב-2033. בסדרה הזיזו את ההתפרצות ל-2003 כדי שקפיצת 20 שנה תוביל לשנת 2023 — בדיוק השנה שבה הסדרה שודרה בטלוויזיה!">
+        <div class="mc-part-q">קו 3 — קו אופקי ישר קבוע לאורך כל הגרף — מה הוא מייצג?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">Eₕ — אנרגיית גובה</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">Eₖ — אנרגיית תנועה</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">E_total — אנרגיה מכנית כוללת</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">לא ניתן לדעת</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="final-ans">✓ קו 1 = Eₖ (יורד עם גובה) | קו 2 = Eₕ (עולה עם גובה) | קו 3 = E_total (קבוע — חוק שימור!)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 10 -->
+<div class="exercise" id="ex10">
+  <div class="difficulty-strip" style="--lv-c:var(--pink)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div></div>
+    <span>רמת קושי 5/5 — שאלה 3 מהמבחן (24 נקודות!)</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex10')">
+    <div class="ex-level lv5">10</div>
+    <div style="flex:1">
+      <div class="ex-q-title">ניסוי מדעי — גובה נפילה וזרם חשמלי (מבחן 2025)</div>
+      <div class="ex-q-text">
+        <strong>רקע:</strong> תלמידים בנו מודל של תחנת חשמל. הם שינו את גובה נפילת המים ומדדו את עוצמת הזרם שנוצר.<br><br>
+        <table class="comp-table" style="margin:8px 0">
+          <tr><th>גובה נפילה h [cm]</th><th>10</th><th>30</th><th>50</th><th>60</th><th>70</th></tr>
+          <tr><td>עוצמת זרם I [A]</td><td>0.011</td><td>0.030</td><td>0.049</td><td>0.060</td><td>0.070</td></tr>
+        </table><br>
+        <strong>(א)</strong> מהו הגורם הבלתי תלוי (המשפיע) בניסוי זה? מהו הגורם התלוי (המושפע)? ציין יחידות.<br>
+        <strong>(ב)</strong> ציין <strong>שני גורמים נשלטים</strong> (דברים שנשמרו קבועים) בניסוי.<br>
+        <strong>(ג)</strong> שרטטי גרף של תוצאות הניסוי. ציינו את כל הדרישות לגרף תקין.<br>
+        <strong>(ד)</strong> מה מסקנת הניסוי? הסברי פיזיקלית מדוע.
+      </div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>גורם בלתי תלוי = מה <em>שינו</em> בכל מדידה. גורם תלוי = מה <em>מדדו</em> כתוצאה.</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="גובה נפילת המים הוא הגורם הבלתי תלוי ✓ — זה מה שבחרו לשנות בין מדידה למדידה." data-err="הגורם הבלתי תלוי = מה ששינו = <strong>גובה נפילת המים (h)</strong>.">
+        <div class="mc-part-q">(א) מהו הגורם הבלתי תלוי (המשפיע) בניסוי?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">עוצמת הזרם החשמלי</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">גובה נפילת המים (h)</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">מסת המים</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">גודל הטורבינה</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="עוצמת הזרם היא הגורם התלוי ✓ — זה מה שנמדד כתוצאה מהשינוי בגובה." data-err="הגורם התלוי = מה שמדדו = <strong>עוצמת הזרם החשמלי (I)</strong>.">
+        <div class="mc-part-q">(ב) מהו הגורם התלוי (המושפע) בניסוי?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">עוצמת הזרם החשמלי (I)</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">גובה נפילת המים (h)</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">מסת המים</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">מספר המדידות</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="קו ישר עולה מ-(0,0) ✓ — קשר ישר בין h לבין I. לא לחבר נקודה-לנקודה!" data-err="הגרף צריך להראות <strong>קו ישר עולה מ-(0,0)</strong> — קשר ישר בין גובה הנפילה לעוצמת הזרם." data-fact="עם תקציב של כ-10 עד 15 מיליון דולר לפרק, הסדרה הפכה להפקה הטלוויזיונית הגדולה ביותר שצולמה על אדמת קנדה אי פעם, ותרמה מאות מיליוני דולרים לכלכלה המקומית של מחוז אלברטה.">
+        <div class="mc-part-q">(ג) מה צורת קו המגמה בגרף?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">קו ישר עולה שיוצא מ-(0,0)</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">עקומה (פרבולה)</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">קו יורד</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">קו אופקי</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">א</div><div class="ss-body"><span class="eq-ans">גורם בלתי תלוי: גובה נפילת המים (h) [cm]<br>גורם תלוי: עוצמת הזרם החשמלי (I) [A]</span></div></div>
+          <div class="sol-step"><div class="ss-num">ב</div><div class="ss-body"><span class="eq-ans">גורמים נשלטים: כמות המים הנשפכת | גודל הטורבינה / קוטר הצינור</span></div></div>
+          <div class="sol-step"><div class="ss-num">ג</div><div class="ss-body">כותרת + שם+יחידות לכל ציר + קנה מידה אחיד + 5 נקודות מדויקות + <strong>קו מגמה ישר מ-(0,0)</strong> (לא לחבר נקודה-לנקודה!)</div></div>
+          <div class="sol-step"><div class="ss-num">ד</div><div class="ss-body"><span class="eq-ans">"ככל שגובה נפילת המים גדול יותר, עוצמת הזרם גדולה יותר — קשר ישר."</span>הסבר: גובה גדול → Eₕ גדולה → מים מהירים יותר → טורבינה מהירה → זרם חזק.</div></div>
+        </div>
+        <div class="final-ans">⚠️ במבחן: גרף ידני על נייר משבצות. 12 נקודות מתוך 24 על הגרף בלבד!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 11 -->
+<div class="exercise" id="ex11">
+  <div class="difficulty-strip" style="--lv-c:var(--pink)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div></div>
+    <span>רמת קושי 5/5 — קשה</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex11')">
+    <div class="ex-level lv5">11</div>
+    <div style="flex:1">
+      <div class="ex-q-title">כדור הנזרק כלפי מעלה — שימוש באנרגיה (מספר הלימוד)</div>
+      <div class="ex-q-text">כדור נזרק כלפי מעלה במהירות <strong>15 מ/ש</strong> (ניתן להזניח התנגדות אוויר).<br>
+      (א) מהו הגובה המקסימלי שהכדור מגיע אליו?<br>
+      (ב) מהי מהירות הכדור בגובה 5 מ' מעל נקודת הזריקה?<br>
+      (ג) מה קורה לאנרגיה בשיא הגובה?</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>בשיא: v=0, כל האנרגיה = Eₕ. מ-½mv₀²=mgh_max → h = v₀²/(2g). המסה מתבטלת!</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="h_max = v₀²/(2g) = 225/20 = 11.25מ' ✓" data-err="½mv₀² = mgh_max → h_max = v₀²/(2g) = 15²/20 = 225/20 = <strong>11.25 מ'</strong>.">
+        <div class="mc-part-q">(א) מהו הגובה המקסימלי שהכדור מגיע אליו?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">7.5 מ'</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">10 מ'</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">11.25 מ'</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">15 מ'</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="Eₖ(h=5מ') = 112.5m−50m = 62.5m → v = √125 ≈ 11.2 מ/ש ✓" data-err="E_total=112.5m, Eₕ(5מ')=50m → Eₖ=62.5m → ½mv²=62.5m → v=√125 ≈ <strong>11.2 מ/ש</strong>.">
+        <div class="mc-part-q">(ב) מהי המהירות בגובה 5 מ'?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">8 מ/ש</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">11.2 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">13.5 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">15 מ/ש</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="בשיא הגובה v=0, ולכן כל האנרגיה היא Eₕ. E_total נשמרת ✓" data-err="בשיא v=0 → Eₖ=0 → <strong>כל האנרגיה = Eₕ</strong>. E_total נשמרת!" data-fact="יוצרי הסדרה הביאו לאולפן את שחקני הקול המקוריים של הקליקרים מהמשחק — מיסטי לי ופיליפ קובאק — כדי לשחזר בדיוק את אותם צלילי הנקישות המצמררים, במקום להקליטם מחדש.">
+        <div class="mc-part-q">(ג) מה קורה לאנרגיה בשיא הגובה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">כל האנרגיה הפכה לאנרגיית גובה (Eₕ)</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">כל האנרגיה הפכה לאנרגיית תנועה (Eₖ)</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">האנרגיה נעלמת לחלוטין</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">המהירות שווה למהירות ההתחלתית</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">א</div><div class="ss-body"><span class="eq">½v₀² = g·h_max → h_max = 225/20</span><span class="eq-ans">h_max = 11.25 מ'</span></div></div>
+          <div class="sol-step"><div class="ss-num">ב</div><div class="ss-body"><span class="eq">Eₖ(5מ') = 112.5m−50m = 62.5m → v²=125</span><span class="eq-ans">v ≈ 11.2 מ/ש</span></div></div>
+          <div class="sol-step"><div class="ss-num">ג</div><div class="ss-body"><span class="eq-ans">v=0 → Eₖ=0 → כל האנרגיה = Eₕ. E_total נשמרת!</span></div></div>
+        </div>
+        <div class="final-ans">✓ h_max = 11.25מ' | v(5מ') ≈ 11.2 מ/ש</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 12 -->
+<div class="exercise" id="ex12">
+  <div class="difficulty-strip" style="--lv-c:var(--pink)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div></div>
+    <span>רמת קושי 5/5 — קשה מאוד (בונוס!)</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex12')">
+    <div class="ex-level lv6">12</div>
+    <div style="flex:1">
+      <div class="ex-q-title">שפית זורקת בצק פיצה — בונוס (מספר הלימוד)</div>
+      <div class="ex-q-text">שפית מוכשרת זורקת בצק פיצה כלפי מעלה ותופסת אותו <strong>בדיוק בגובה ממנו נזרק</strong>. הבצק היה באוויר <strong>שנייה אחת</strong> בסך הכל (ניתן להזניח התנגדות אוויר).<br><br>
+      מהי הייתה <strong>מהירות הבצק</strong> ברגע שיצא מידי השפית?</div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>עלייה = ירידה (סימטריה) → זמן עלייה = 0.5 שנ'. בשיא v=0. כבידה האטה: v₀ = g × t_עלייה.</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="t_עלייה=0.5שנ'. v₀ = g×t = 10×0.5 = 5 מ/ש ✓" data-err="t_עלייה=0.5שנ'. v₀ = g × t_עלייה = 10 × 0.5 = <strong>5 מ/ש</strong>." data-fact="פרק 3 הומצא כמעט לגמרי לסדרה. במשחק ביל ופרנק מסתכסכים ופרנק מסיים בטרגדיה. הסדרה העניקה להם סיפור אהבה שלם וסוף משותף ושקט — שינוי שרוב הצופים ראו כשיפור משמעותי על פני המקור.">
+        <div class="mc-part-q">מהי המהירות שבה השפית זרקה את הבצק?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">4 מ/ש</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">5 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">10 מ/ש</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">1</div><div class="ss-body">זמן עלייה = ירידה = 1/2 = <strong>0.5 שניות</strong></div></div>
+          <div class="sol-step"><div class="ss-num">2</div><div class="ss-body"><span class="eq">v₀ = g × t_עלייה = 10 × 0.5</span><span class="eq-ans">v₀ = 5 מ/ש</span></div></div>
+          <div class="sol-step"><div class="ss-num">3</div><div class="ss-body">בדיקה: h_max = 25/20 = 1.25מ' ✓ (הגיוני לבצק פיצה!)</div></div>
+        </div>
+        <div class="final-ans">✓ v₀ = 5 מ/ש</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 13 -->
+<div class="exercise" id="ex13">
+  <div class="difficulty-strip" style="--lv-c:var(--pink)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div></div>
+    <span>רמת קושי 5/5 — מהמבחן העדכני!</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex13')">
+    <div class="ex-level lv5">13</div>
+    <div style="flex:1">
+      <div class="ex-q-title">נדנדה עם חיכוך ותנגדות אוויר (שאלה 1 מהמבחן העדכני — 46 נקודות!)</div>
+      <div class="ex-q-text">
+        נדנדה מורכבת ממוט המחובר בחבלים דקים לקורות. מסת המושב: <strong>2 ק"ג</strong>.<br>
+        כשהנדנדה חופשית לנוע, הנקודה הנמוכה ביותר היא ה"גובה 0" (שיווי משקל). כשהנדנדה נעה, היא מגיעה לגובה <strong>80 ס"מ</strong> בצד השני.<br>
+        קיים חיכוך בין החבלים לקורות <strong>ותנגדות אוויר</strong>.<br><br>
+        <strong>(א)</strong> כאשר הנדנדה הייתה במצב שיווי משקל (גובה 0), משכנו אותה עד לגובה <strong>20 ס"מ מעל</strong> גובה שיווי המשקל. חשבו את השינוי באנרגיית הגובה של הנדנדה כשמשחררים אותה ממצב זה (20 ס"מ) ועד לנקודה הנמוכה ביותר (גובה 0). הציגו את דרך החישוב.<br><br>
+        <strong>(ב)</strong> כשמשחררים את הנדנדה מגובה 20 ס"מ, היא תגיע לצד השני לגובה:
+        <div style="margin:8px 0 0 20px;display:flex;flex-direction:column;gap:4px;font-size:14px">
+          <span>(1) בדיוק 20 ס"מ מעל שיווי משקל</span>
+          <span>(2) פחות מ-20 ס"מ מעל שיווי משקל</span>
+          <span>(3) יותר מ-20 ס"מ מעל שיווי משקל</span>
+          <span>(4) לא ניתן לדעת</span>
+        </div>
+        הסבירי את בחירתך.
+      </div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>ΔEₕ = Eₕ_סוף − Eₕ_התחלה. בחלק ב — אם יש חיכוך, האנרגיה <strong>אינה</strong> נשמרת לגמרי!</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="ΔEₕ = Eₕ(0) − Eₕ(0.2מ') = 0 − 4 = −4 J ✓ — אנרגיית הגובה ירדה ב-4 ג'ול." data-err="Eₕ(0.2מ') = 2×10×0.2 = 4J. Eₕ(0) = 0. ΔEₕ = 0−4 = <strong>−4 ג'ול</strong>.">
+        <div class="mc-part-q">(א) מה השינוי באנרגיית הגובה של הנדנדה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">−4 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">+4 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">0 ג'ול</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">−20 ג'ול</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="(2) נכון ✓ — חיכוך גורם לאובדן אנרגיה לחום, ולכן הנדנדה מגיעה לגובה נמוך יותר." data-err="עם חיכוך ותנגדות אוויר, חלק מהאנרגיה הופך לחום. הנדנדה מגיעה ל-<strong>פחות מ-20 ס&quot;מ</strong>." data-fact="גם פדרו פסקל (אובריין מארטל) וגם בלה רמזי (ליאנה מורמונט) כיכבו ב-Game of Thrones — אבל העלילות שלהם מעולם לא הצטלבו שם. הם נפגשו לראשונה רק על סט The Last of Us!">
+        <div class="mc-part-q">(ב) לאיזה גובה תגיע הנדנדה בצד השני?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">(1) בדיוק 20 ס"מ — שימור אנרגיה</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">(2) פחות מ-20 ס"מ — בגלל חיכוך</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">(3) יותר מ-20 ס"מ — הכבידה מוסיפה</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">(4) לא ניתן לדעת</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">א</div><div class="ss-body"><span class="eq">Eₕ(0.2מ') = 2×10×0.2 = 4J | Eₕ(0) = 0</span><span class="eq-ans">ΔEₕ = 0 − 4 = −4 ג'ול (אנרגיית גובה ירדה)</span></div></div>
+          <div class="sol-step"><div class="ss-num">ב</div><div class="ss-body">חיכוך → חלק מ-4J הופך לחום → פחות Eₖ בתחתית → עלייה לגובה <strong>פחות מ-20 ס"מ</strong>.<br>ללא חיכוך: בדיוק 20 ס"מ. עם חיכוך: פחות!</div></div>
+        </div>
+        <div class="final-ans">✓ א) ΔEₕ = −4J · ב) (2) פחות מ-20 ס"מ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 14 -->
+<div class="exercise" id="ex14">
+  <div class="difficulty-strip" style="--lv-c:var(--pink)">
+    <div class="diff-dots"><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot filled"></div><div class="diff-dot"></div></div>
+    <span>רמת קושי 4/5 — נוסחה חדשה: h = ½gt²</span>
+  </div>
+  <div class="ex-top" onclick="toggleEx('ex14')">
+    <div class="ex-level lv4">14</div>
+    <div style="flex:1">
+      <div class="ex-q-title">נפילה חופשית — h = ½gt² (מדף הנוסחאות!)</div>
+      <div class="ex-q-text">
+        גוף נופל <strong>ללא מהירות התחלתית</strong> (נפילה חופשית). לאחר <strong>3 שניות</strong> של נפילה (g=10 m/s²):<br><br>
+        <strong>(א)</strong> מאיזה גובה נפל? השתמשי בנוסחה h = ½gt²<br>
+        <strong>(ב)</strong> מהי מהירותו ברגע הנחיתה? השתמשי בשימור אנרגיה (Eₕ = Eₖ) לחשב את v.<br>
+        <strong>(ג)</strong> נניח שהגוף נפל 80 מ'. כמה זמן לקחה הנפילה?
+      </div>
+    </div>
+    <div class="ex-chevron">▼</div>
+  </div>
+  <div class="ex-reveal">
+    <div class="ex-hint-wrap">
+      <button class="hint-btn" onclick="toggleHint(this)">💡 רמז <span class="hint-arr">▼</span></button>
+      <div class="hint-content"><div class="hint-body"><span class="hint-icon">💡</span>(א) h = ½gt². (ב) v = √(2gh). (ג) t = √(2h/g).</div></div>
+    </div>
+    <div class="ex-mc-section">
+      <div class="mc-part" data-ok="h = ½×10×3² = ½×10×9 = 45מ' ✓" data-err="h = ½ × g × t² = ½ × 10 × 9 = <strong>45 מ'</strong>. זכרי: t² = 3² = 9.">
+        <div class="mc-part-q">(א) מאיזה גובה נפל הגוף אחרי 3 שניות?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">15 מ'</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">30 מ'</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">45 מ'</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">90 מ'</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="v = √(2gh) = √(2×10×45) = √900 = 30 מ/ש ✓" data-err="mgh = ½mv² → v = √(2gh) = √(900) = <strong>30 מ/ש</strong>.">
+        <div class="mc-part-q">(ב) מהי המהירות ברגע הנחיתה?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">20 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">25 מ/ש</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">30 מ/ש</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">45 מ/ש</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <div class="mc-part" data-ok="80 = 5t² → t²=16 → t=4 שנ' ✓" data-err="h=½gt² → 80=5t² → t²=16 → t = <strong>4 שניות</strong>." data-fact="מותה של טס בפרק 2 הומצא במיוחד לסדרה — אחד הנגועים מעביר לה את הפטרייה ישירות דרך הפה. היוצרים רצו להראות שהפטרייה יכולה להתפשט בשקט, כחלק מתודעת כוורת מחוברת, ולא רק באלימות.">
+        <div class="mc-part-q">(ג) כמה זמן לקחה נפילה מגובה 80 מ'?</div>
+        <div class="mc-opts">
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">2 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">3 שניות</button>
+          <button class="mc-opt" data-c="1" onclick="answerMC(this)">4 שניות</button>
+          <button class="mc-opt" data-c="0" onclick="answerMC(this)">6 שניות</button>
+        </div>
+        <div class="mc-fb"></div>
+      </div>
+      <button class="sol-toggle" onclick="toggleSol(this)">▼ הצגת פתרון מלא</button>
+      <div class="sol-body">
+        <div class="sol-steps">
+          <div class="sol-step"><div class="ss-num">א</div><div class="ss-body"><span class="eq">h = ½×10×3² = 45</span><span class="eq-ans">h = 45 מ'</span></div></div>
+          <div class="sol-step"><div class="ss-num">ב</div><div class="ss-body"><span class="eq">v = √(2×10×45) = √900</span><span class="eq-ans">v = 30 מ/ש</span></div></div>
+          <div class="sol-step"><div class="ss-num">ג</div><div class="ss-body"><span class="eq">80 = 5t² → t²=16</span><span class="eq-ans">t = 4 שניות</span></div></div>
+        </div>
+        <div class="final-ans">✓ א) 45מ' · ב) 30 מ/ש · ג) 4 שניות</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /ex-list -->
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="sec-label" style="margin-top:0">סיכום יום 1</div>
+  <h2 class="sec-title">מה למדת היום?</h2>
+  <div class="sum-grid">
+    <div class="sum-item"><div class="sum-eq">W = mg</div><div class="sum-name">משקל (g=10 N/kg)</div></div>
+    <div class="sum-item"><div class="sum-eq">Eₕ = mgh</div><div class="sum-name">אנרגיית גובה (J)</div></div>
+    <div class="sum-item"><div class="sum-eq">Eₖ = ½mv²</div><div class="sum-name">אנרגיית תנועה (J)</div></div>
+    <div class="sum-item"><div class="sum-eq">E = Eₕ + Eₖ</div><div class="sum-name">אנרגיה מכנית כוללת</div></div>
+    <div class="sum-item"><div class="sum-eq">E_total = קבוע</div><div class="sum-name">חוק שימור האנרגיה</div></div>
+    <div class="sum-item"><div class="sum-eq">h ביחס ל-?</div><div class="sum-name">מישור ייחוס — לבחור ולהישאר!</div></div>
+    <div class="sum-item"><div class="sum-eq">h = ½gt²</div><div class="sum-name">נפילה חופשית (t בשניות)</div></div>
+    <div class="sum-item"><div class="sum-eq">עם חיכוך → E_total קטנה</div><div class="sum-name">חיכוך גורם לאובדן אנרגיה!</div></div>
+    <div class="sum-item"><div class="sum-eq">נצילות = (E_יוצאת ÷ E_כניסה) × 100%</div><div class="sum-name">נצילות — אחוז האנרגיה השימושית</div></div>
+  </div>
+  <div style="margin-top:24px;padding:20px;background:rgba(0,229,192,.06);border:1px solid rgba(0,229,192,.2);border-radius:14px;font-size:14px;color:var(--text-d);line-height:1.8">
+    <strong style="color:var(--teal)">✓ יעד ליום 1:</strong> לפתור שאלות 3 ו-4 מהמבחן לבד ולבדוק מול המחוון. שאלות 3+4 = <strong style="color:var(--amber)">53 נקודות</strong> מתוך ~100!
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<footer>
+  <a href="index.html">← חזרה לדף הראשי</a> &nbsp;·&nbsp;
+  יום 1 מתוך 4 — אנרגיה מכנית &nbsp;·&nbsp;
+  <span style="color:var(--text-m)">המבחן: 26 במאי 2026</span>
+</footer>
+
+<script>
+// Energy graph
+const c = document.getElementById('energyGraph');
+if (c) {
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  const pad = { t:20, b:40, l:50, r:30 };
+  const gw = W - pad.l - pad.r, gh = H - pad.t - pad.b;
+
+  // axes
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t+gh); ctx.lineTo(pad.l+gw, pad.t+gh); ctx.stroke();
+
+  // labels
+  ctx.fillStyle = 'rgba(232,240,254,0.4)'; ctx.font = '13px Heebo'; ctx.textAlign = 'center';
+  ctx.fillText('גובה ←', pad.l + gw/2, H - 6);
+  ctx.save(); ctx.translate(14, pad.t + gh/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('אנרגיה ↑', 0, 0); ctx.restore();
+
+  const x0 = pad.l, y0 = pad.t + gh;
+  const maxE = gh * 0.85;
+
+  function plotLine(pts, color) {
+    ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.beginPath();
+    pts.forEach((p,i) => { const x = x0 + p[0]*gw; const y = y0 - p[1]; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    ctx.stroke();
+  }
+
+  // Eh: linear from (0,0) to (1, maxE)
+  plotLine([[0,0],[1,maxE]], '#4a9eff');
+  // Ek: linear from (0,maxE) to (1,0)
+  plotLine([[0,maxE],[1,0]], '#ffbe3d');
+  // E_total: flat at maxE
+  plotLine([[0,maxE],[1,maxE]], '#a78bfa');
+
+  // legend dots
+  const items = [['#4a9eff','Eₕ'],[' #ffbe3d','Eₖ'],['#a78bfa','E_total']];
+  items.forEach((it,i) => {
+    ctx.fillStyle = it[0]; ctx.beginPath(); ctx.arc(pad.l+20+i*140, pad.t+10, 5, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(232,240,254,.5)'; ctx.font='12px Heebo'; ctx.textAlign='right';
+    ctx.fillText(it[1], pad.l+20+i*140-10, pad.t+14);
+  });
+}
+
+// Exercise toggle
+function toggleEx(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// Multiple-choice answer
+function answerMC(btn) {
+  const part = btn.closest('.mc-part');
+  if (part.dataset.done) return;
+  part.dataset.done = '1';
+  const isOk = btn.dataset.c === '1';
+  part.querySelectorAll('.mc-opt').forEach(o => {
+    o.disabled = true;
+    if (o === btn) o.classList.add(isOk ? 'mc-ok' : 'mc-bad');
+    else if (!isOk && o.dataset.c === '1') o.classList.add('mc-rev');
+  });
+  const fb = part.querySelector('.mc-fb');
+  fb.className = 'mc-fb ' + (isOk ? 'ok' : 'bad');
+  fb.innerHTML = isOk
+    ? '✓ נכון! ' + (part.dataset.ok || '')
+    : '✗ לא נכון. ' + (part.dataset.err || '');
+  if (isOk && part.dataset.fact) {
+    const card = document.createElement('div');
+    card.className = 'fact-card';
+    card.innerHTML =
+      '<img class="fact-img" src="files/lastofus.avif" alt="The Last of Us">' +
+      '<div class="fact-body">' +
+        '<div class="fact-label">🎬 The Last of Us — ידעת?</div>' +
+        '<div class="fact-text">' + part.dataset.fact + '</div>' +
+      '</div>';
+    fb.appendChild(card);
+  }
+}
+
+// Solution reveal
+function toggleSol(btn) {
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open') ? '▲ הסתרת פתרון מלא' : '▼ הצגת פתרון מלא';
+}
+
+// Hint toggle
+function toggleHint(btn) {
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+  btn.querySelector('.hint-arr').textContent = content.classList.contains('open') ? '▲' : '▼';
+}
+</script>
+</body>
+</html>

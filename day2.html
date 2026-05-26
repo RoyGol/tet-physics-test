@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>יום 2 — תחנה הידרואלקטרית | פיזיקה גולי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060c1a;
+    --bg2: #0b1428;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --teal: #00e5c0;
+    --teal-dim: rgba(0,229,192,0.12);
+    --amber: #ffbe3d;
+    --amber-dim: rgba(255,190,61,0.12);
+    --pink: #ff6b9d;
+    --blue: #4a9eff;
+    --blue-dim: rgba(74,158,255,0.12);
+    --purple: #a78bfa;
+    --green: #34d399;
+    --text: #e8f0fe;
+    --text-dim: rgba(232,240,254,0.55);
+    --text-muted: rgba(232,240,254,0.3);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  /* Orbs */
+  .orb { position:fixed; border-radius:50%; filter:blur(120px); opacity:0.15; pointer-events:none; z-index:0; }
+  .orb1 { width:500px; height:500px; background:var(--blue); top:-150px; right:-100px; }
+  .orb2 { width:400px; height:400px; background:var(--teal); bottom:-100px; left:-80px; }
+
+  .wrap { position:relative; z-index:1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; right:0; left:0; z-index:100;
+    padding: 14px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(6,12,26,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .nav-back {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 600; color: var(--blue);
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .nav-back:hover { opacity: 0.75; }
+  .nav-title { font-size: 15px; font-weight: 700; color: var(--text-dim); }
+  .nav-day { font-size: 13px; color: var(--text-muted); background: var(--glass); border: 1px solid var(--glass-border); padding: 4px 12px; border-radius: 20px; }
+
+  /* PROGRESS */
+  .progress-bar {
+    position: fixed; top: 57px; right: 0; left: 0; z-index: 99;
+    background: rgba(6,12,26,0.6);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 10px 40px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .pb-step {
+    flex: 1; height: 4px; border-radius: 2px;
+    background: var(--glass-border);
+    transition: background 0.4s;
+  }
+  .pb-step.done { background: rgba(0,229,192,0.4); }
+  .pb-step.active { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+  .pb-labels { display:flex; gap:8px; align-items:center; font-size:12px; color:var(--text-muted); margin-top:4px; }
+
+  /* HERO */
+  .hero {
+    padding: 140px 40px 60px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--blue);
+    background: var(--blue-dim); border: 1px solid rgba(74,158,255,0.25);
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(32px,5vw,56px); font-weight: 900; line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--blue); }
+  .hero-sub { font-size: 18px; color: var(--text-dim); line-height: 1.6; max-width: 650px; }
+
+  /* SECTION */
+  .section { max-width: 900px; margin: 0 auto; padding: 0 40px 60px; }
+  .section-title {
+    font-size: 22px; font-weight: 800; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::before {
+    content: ''; display: block; width: 4px; height: 24px;
+    background: var(--blue); border-radius: 2px;
+  }
+  .section-desc { font-size: 14px; color: var(--text-dim); margin-bottom: 28px; }
+
+  /* THEORY CARD */
+  .tc {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .tc:hover { transform: translateY(-2px); }
+  .tc::before {
+    content: ''; position: absolute; top:0; right:0;
+    width: 3px; height: 100%;
+    border-radius: 0 16px 16px 0;
+  }
+  .tc-blue::before { background: var(--blue); }
+  .tc-teal::before { background: var(--teal); }
+  .tc-amber::before { background: var(--amber); }
+  .tc-green::before { background: var(--green); }
+  .tc-purple::before { background: var(--purple); }
+  .tc-pink::before { background: var(--pink); }
+  .tc-title {
+    font-size: 18px; font-weight: 800; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .tc-icon { font-size: 22px; }
+  .tc p { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 12px; }
+  .tc p:last-child { margin-bottom: 0; }
+
+  /* FORMULA BOX */
+  .formula-box {
+    background: rgba(74,158,255,0.08);
+    border: 1px solid rgba(74,158,255,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 16px;
+    text-align: center;
+    color: var(--blue);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .formula-box.amber { background: var(--amber-dim); border-color: rgba(255,190,61,0.3); color: var(--amber); }
+  .formula-box.teal  { background: var(--teal-dim);  border-color: rgba(0,229,192,0.3);  color: var(--teal); }
+
+  /* KEY BOX */
+  .key-box {
+    background: rgba(52,211,153,0.07);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--green);
+    line-height: 1.7;
+  }
+  .key-box strong { color: #fff; }
+
+  /* ENERGY CHAIN */
+  .chain {
+    display: flex; align-items: center; gap: 0;
+    flex-wrap: wrap; margin: 18px 0;
+    background: rgba(74,158,255,0.06);
+    border: 1px solid rgba(74,158,255,0.15);
+    border-radius: 12px;
+    padding: 18px 24px;
+    justify-content: center;
+  }
+  .chain-step {
+    text-align: center; padding: 10px 16px;
+    border-radius: 10px;
+    min-width: 110px;
+  }
+  .chain-step .cs-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .chain-step .cs-val { font-size: 15px; font-weight: 800; }
+  .cs-blue { background: var(--blue-dim); color: var(--blue); }
+  .cs-teal { background: var(--teal-dim); color: var(--teal); }
+  .cs-amber { background: var(--amber-dim); color: var(--amber); }
+  .cs-purple { background: rgba(167,139,250,0.12); color: var(--purple); }
+  .chain-arrow { font-size: 20px; color: var(--text-muted); padding: 0 4px; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+  .data-table th {
+    background: rgba(74,158,255,0.1);
+    color: var(--blue);
+    padding: 10px 14px; text-align: right;
+    border-bottom: 1px solid rgba(74,158,255,0.2);
+    font-weight: 700;
+  }
+  .data-table td {
+    padding: 9px 14px; text-align: right;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-dim);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* PROS CONS */
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+  .pros-box, .cons-box {
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .pros-box { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); }
+  .cons-box { background: rgba(255,107,157,0.08); border: 1px solid rgba(255,107,157,0.2); }
+  .pros-box h4 { color: var(--green); font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .cons-box h4 { color: var(--pink); font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .pros-box li, .cons-box li {
+    font-size: 13px; color: var(--text-dim); margin-bottom: 6px;
+    list-style: none; display: flex; align-items: flex-start; gap: 8px;
+  }
+  .pros-box li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .cons-box li::before { content: '✗'; color: var(--pink); font-weight: 700; flex-shrink: 0; }
+
+  /* CANVAS */
+  canvas { border-radius: 12px; display: block; margin: 0 auto; max-width: 100%; }
+
+  /* VIDEOS */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 8px; }
+  .video-card {
+    background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px;
+    padding: 20px; display: flex; flex-direction: column; gap: 10px;
+    text-decoration: none; transition: border-color 0.25s, transform 0.25s;
+  }
+  .video-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+  .video-thumb { font-size: 32px; text-align: center; }
+  .video-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .video-sub   { font-size: 12px; color: var(--text-muted); }
+  .video-tag   { font-size: 11px; font-weight: 600; background: var(--blue-dim); color: var(--blue); border-radius: 6px; padding: 3px 8px; align-self: flex-start; }
+
+  /* WORKED EXAMPLES */
+  .example-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 16px; margin-bottom: 24px; overflow: hidden;
+  }
+  .example-header {
+    padding: 20px 28px; display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .diff-badge {
+    font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .diff-easy   { background: rgba(52,211,153,0.15);   color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .diff-medium { background: rgba(255,190,61,0.15);   color: var(--amber); border: 1px solid rgba(255,190,61,0.3); }
+  .diff-hard   { background: rgba(255,107,157,0.15);  color: var(--pink);  border: 1px solid rgba(255,107,157,0.3); }
+  .example-title { font-size: 16px; font-weight: 700; }
+  .example-body { padding: 24px 28px; }
+  .example-body p { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 10px; }
+  .ex-step {
+    display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start;
+  }
+  .ex-step-num {
+    min-width: 28px; height: 28px; border-radius: 50%;
+    background: var(--blue-dim); border: 1px solid rgba(74,158,255,0.3);
+    color: var(--blue); font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .ex-step-text { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+  .ex-answer {
+    margin-top: 16px; padding: 14px 18px; border-radius: 10px;
+    background: rgba(74,158,255,0.08); border: 1px solid rgba(74,158,255,0.2);
+    font-size: 15px; font-weight: 700; color: var(--blue);
+  }
+
+  /* EXERCISES */
+  .exercise {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 16px; margin-bottom: 14px; overflow: hidden;
+  }
+  .ex-header {
+    padding: 18px 24px; display: flex; align-items: center; gap: 12px;
+    cursor: pointer; user-select: none; transition: background 0.2s;
+  }
+  .ex-header:hover { background: rgba(255,255,255,0.03); }
+  .ex-num {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--blue-dim); border: 1px solid rgba(74,158,255,0.25);
+    color: var(--blue); font-weight: 800; font-size: 14px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .ex-question { flex: 1; font-size: 15px; font-weight: 600; }
+  .lv-strip {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.4px;
+  }
+  .lv1 { background: rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
+  .lv2 { background: rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.3); }
+  .lv3 { background: rgba(255,190,61,0.15);  color:var(--amber); border:1px solid rgba(255,190,61,0.3); }
+  .lv4 { background: rgba(255,190,61,0.15);  color:var(--amber); border:1px solid rgba(255,190,61,0.3); }
+  .lv5 { background: rgba(255,107,157,0.15); color:var(--pink);  border:1px solid rgba(255,107,157,0.3); }
+  .lv6 { background: rgba(255,107,157,0.15); color:var(--pink);  border:1px solid rgba(255,107,157,0.3); }
+  .ex-chevron { color: var(--text-muted); font-size: 14px; transition: transform 0.3s; margin-right: auto; }
+  .exercise.open .ex-chevron { transform: rotate(180deg); }
+
+  .ex-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .exercise.open .ex-body { max-height: 2000px; }
+
+  .ex-content { padding: 0 24px 24px; }
+  .ex-q { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 16px; }
+
+  .tab-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab-btn {
+    padding: 7px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    border: 1px solid var(--glass-border); background: var(--glass);
+    color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+  }
+  .tab-btn.active { background: var(--blue-dim); border-color: rgba(74,158,255,0.3); color: var(--blue); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .hint-box {
+    background: rgba(255,190,61,0.07); border: 1px solid rgba(255,190,61,0.2);
+    border-radius: 10px; padding: 14px 18px; font-size: 14px; color: var(--amber);
+    line-height: 1.75;
+  }
+  .sol-step { display: flex; gap: 12px; margin-bottom: 12px; }
+  .sol-num {
+    min-width: 26px; height: 26px; border-radius: 6px;
+    background: var(--blue-dim); color: var(--blue);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .sol-text { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+  .ans-box {
+    background: rgba(74,158,255,0.08); border: 1px solid rgba(74,158,255,0.25);
+    border-radius: 10px; padding: 12px 18px; margin-top: 12px;
+    font-size: 15px; font-weight: 700; color: var(--blue);
+  }
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <a href="index.html" class="nav-back">→ חזרה לדף הראשי</a>
+  <span class="nav-title">פיזיקה — גולי</span>
+  <span class="nav-day">שבת · 10 במאי</span>
+</nav>
+
+<div class="progress-bar">
+  <div class="pb-step done"></div>
+  <div class="pb-step active"></div>
+  <div class="pb-step"></div>
+  <div class="pb-step"></div>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">💧 יום 2 מתוך 4 · שבת 10 במאי</div>
+  <h1>תחנה <span>הידרואלקטרית</span></h1>
+  <p class="hero-sub">המרות אנרגיה, חישובי נצילות, ויתרונות וחסרונות של הפקת חשמל ממים. נושא זה מופיע ישירות בשאלה 4 במבחן (29 נקודות).</p>
+</div>
+
+<!-- THEORY -->
+<div class="section">
+  <div class="section-title">תיאוריה</div>
+  <div class="section-desc">קראי והבני — כל מושג מוסבר בשפה פשוטה.</div>
+
+  <!-- T1: מהי תחנה הידרואלקטרית -->
+  <div class="tc tc-blue">
+    <div class="tc-title"><span class="tc-icon">🏔️</span>מהי תחנה הידרואלקטרית?</div>
+    <p>תחנה הידרואלקטרית (תחנת כוח מים) היא מתקן שמפיק חשמל מנפילת מים. מים נאגרים בגובה רב (מאגר), ואז נופלים דרך צינורות ענק, מסובבים טורבינה שמפעילה גנרטור שמייצר חשמל.</p>
+    <p>הרעיון הבסיסי: מים גבוהים = אנרגיית גובה גדולה. כשיורדים — האנרגיה הופכת לתנועה ואז לחשמל.</p>
+    <div class="key-box">
+      <strong>לזכור:</strong> ה"הידרו" = מים ביוונית. "אלקטרית" = חשמל. תחנה שמייצרת חשמל ממים.
+    </div>
+  </div>
+
+  <!-- T2: שרשרת המרות האנרגיה -->
+  <div class="tc tc-teal">
+    <div class="tc-title"><span class="tc-icon">🔄</span>שרשרת המרות האנרגיה — הלב של הנושא</div>
+    <p>זו הנקודה הכי חשובה! עקבי אחרי האנרגיה מהתחלה ועד הסוף:</p>
+    <div class="chain">
+      <div class="chain-step cs-blue">
+        <div class="cs-label">מים גבוהים</div>
+        <div class="cs-val">Eₕ מים</div>
+      </div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step cs-teal">
+        <div class="cs-label">מים נופלים בצינור</div>
+        <div class="cs-val">Eₖ מים</div>
+      </div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step cs-amber">
+        <div class="cs-label">טורבינה מסתובבת</div>
+        <div class="cs-val">Eₖ טורבינה</div>
+      </div>
+      <div class="chain-arrow">←</div>
+      <div class="chain-step cs-purple">
+        <div class="cs-label">גנרטור מייצר</div>
+        <div class="cs-val">Eחשמלי</div>
+      </div>
+    </div>
+    <p><strong>בעברית:</strong> אנרגיית גובה של המים הופכת לאנרגיית תנועה של המים, שמסובבת את הטורבינה, שמפעילה את הגנרטור שמייצר חשמל.</p>
+    <div class="key-box">
+      <strong>לשינון:</strong> Eₕ מים → Eₖ מים → Eₖ טורבינה → Eחשמלי<br>
+      שים לב: יש <strong>שתי</strong> אנרגיות תנועה בדרך — של המים ושל הטורבינה!
+    </div>
+  </div>
+
+  <!-- T3: חוק שימור האנרגיה בתחנה -->
+  <div class="tc tc-amber">
+    <div class="tc-title"><span class="tc-icon">⚖️</span>חוק שימור האנרגיה בתחנה</div>
+    <p>בעולם אידיאלי (ללא חיכוך ואובדן): כל האנרגיה שנכנסת (Eₕ) הופכת לחשמל. אבל במציאות — חלק מהאנרגיה אובד כחום (חיכוך בצינורות, בטורבינה ועוד).</p>
+    <div class="formula-box">E_חשמלי + E_חום = E_הגובה_ההתחלתית</div>
+    <p>כלומר: החשמל שיוצא + החום שאבד = האנרגיה שהמים הביאו מלמעלה.</p>
+    <div class="key-box">
+      <strong>בשאלות המבחן:</strong> נאמר שכמות מסוימת מהאנרגיה "הולכת לאיבוד" — צריך לחשב מה נשאר לחשמל.
+    </div>
+  </div>
+
+  <!-- T4: נצילות -->
+  <div class="tc tc-green">
+    <div class="tc-title"><span class="tc-icon">📊</span>נצילות (יעילות) — Efficiency</div>
+    <p>נצילות היא אחוז האנרגיה שמגיע לתפוקה שימושית (חשמל) מתוך האנרגיה הכוללת שהושקעה (Eₕ).</p>
+    <div class="formula-box teal">נצילות (%) = (E_חשמלי ÷ E_גובה) × 100</div>
+    <p><strong>דוגמה:</strong> אם Eₕ = 1000 ג'ול והתחנה מפיקה 800 ג'ול חשמל — הנצילות היא 80%.</p>
+    <p>הנצילות תמיד קטנה מ-100% — כי תמיד יש אובדן אנרגיה. תחנות הידרואלקטריות אמיתיות הן בסביבות 85–95% — הן יעילות מאוד!</p>
+    <div class="key-box">
+      <strong>נוסחה שימושית נוספת:</strong> E_חשמלי = (נצילות/100) × E_גובה<br>
+      <strong>לדוגמה:</strong> נצילות 90%, E_גובה = 500J → E_חשמלי = 0.9 × 500 = 450J
+    </div>
+  </div>
+
+  <!-- T5: יתרונות וחסרונות -->
+  <div class="tc tc-purple">
+    <div class="tc-title"><span class="tc-icon">⚡</span>יתרונות וחסרונות — חייבים לדעת!</div>
+    <p>בשאלות המבחן מבקשים לעתים להסביר יתרון או חיסרון. למדי אחד מכל עמוד עם הסבר!</p>
+    <div class="pros-cons">
+      <div class="pros-box">
+        <h4>✅ יתרונות</h4>
+        <ul>
+          <li>אין זיהום אוויר בעת הפקת החשמל (אנרגיה נקייה)</li>
+          <li>המקור (מים) מתחדש — לא יגמר</li>
+          <li>נצילות גבוהה מאוד (85-95%)</li>
+          <li>ניתן לשלוט בכמות החשמל — פותחים/סוגרים שערים</li>
+          <li>אין פסולת גרעינית</li>
+        </ul>
+      </div>
+      <div class="cons-box">
+        <h4>❌ חסרונות</h4>
+        <ul>
+          <li>תלוי בגשמים — בבצורת אין מים</li>
+          <li>מקומות מוגבלים — צריך הפרשי גובה גדולים</li>
+          <li>פגיעה בסביבה — שינוי נוף, פגיעה באוכלוסיות דגים</li>
+          <li>עלות בנייה גבוהה מאוד</li>
+          <li>הצפת שטחים גדולים בבניית סכר</li>
+        </ul>
+      </div>
+    </div>
+    <div class="key-box">
+      <strong>לשאלות "הסבר יתרון":</strong> תמיד כתבי את היתרון + הסבר למה זה יתרון.<br>
+      דוגמה: "אנרגיה נקייה — לא נפלטים גזי חממה בעת הפקת החשמל, ולכן אינה תורמת לשינויי אקלים."
+    </div>
+  </div>
+
+  <!-- T6: חישוב Eₕ בתחנה -->
+  <div class="tc tc-blue">
+    <div class="tc-title"><span class="tc-icon">🧮</span>חישובים בתחנה הידרואלקטרית</div>
+    <p>בשאלות חישוב, משתמשים בנוסחאות שכבר יודעים מיום 1:</p>
+    <div class="formula-box">Eₕ = m × g × h</div>
+    <p>כאשר בתחנה הידרואלקטרית: m = מסת המים (בק"ג), g = 10 m/s², h = גובה נפילת המים (במ׳).</p>
+    <p><strong>שלבים לפתרון בעיית תחנה:</strong></p>
+    <div class="ex-step"><div class="ex-step-num">1</div><div class="ex-step-text">לחשב את Eₕ של המים: Eₕ = mgh</div></div>
+    <div class="ex-step"><div class="ex-step-num">2</div><div class="ex-step-text">אם ניתן נצילות: E_חשמלי = (נצילות/100) × Eₕ</div></div>
+    <div class="ex-step"><div class="ex-step-num">3</div><div class="ex-step-text">אם שואלים E_חום: E_חום = Eₕ − E_חשמלי</div></div>
+    <div class="ex-step"><div class="ex-step-num">4</div><div class="ex-step-text">לשים לב ליחידות — מסה בק"ג, גובה במטרים</div></div>
+  </div>
+
+  <!-- T7: השוואה לניסוי המים (מיום 1) -->
+  <div class="tc tc-teal">
+    <div class="tc-title"><span class="tc-icon">🔗</span>קשר לניסוי ממבחן 2025 (שאלה 3)</div>
+    <p>שאלה 3 במבחן בדקה את הקשר בין גובה נפילה למהירות המים — זהו בדיוק העיקרון של תחנה הידרואלקטרית! ככל שהמים נופלים ממקום גבוה יותר — הם מגיעים מהר יותר — ומסובבים את הטורבינה מהר יותר — ומייצרים יותר חשמל.</p>
+    <div class="key-box">
+      <strong>הקשר הגרפי:</strong> בגרף גובה מול מהירות (מניסוי המים) — ככל שגובה גדל, מהירות גדלה. זה בדיוק מה שקורה בתחנה: גובה גבוה יותר → Eₕ גדולה יותר → Eₖ גדולה יותר → מהירות גדולה יותר.
+    </div>
+  </div>
+</div>
+
+<!-- DIAGRAM -->
+<div class="section">
+  <div class="section-title">דיאגרמת תחנה הידרואלקטרית</div>
+  <div class="section-desc">ציור סכמטי של רצף המרת האנרגיה</div>
+  <canvas id="hydroCanvas" width="820" height="320"></canvas>
+</div>
+
+<!-- VIDEOS -->
+<div class="section">
+  <div class="section-title">סרטוני לימוד</div>
+  <div class="section-desc">צפי בסרטון אחד לפחות לפני התרגילים</div>
+  <div class="video-grid">
+    <a href="https://www.youtube.com/results?search_query=תחנה+הידרואלקטרית+פיזיקה+עברית" target="_blank" class="video-card">
+      <div class="video-thumb">🎬</div>
+      <div class="video-title">תחנה הידרואלקטרית — סרטון עברי</div>
+      <div class="video-sub">חיפוש YouTube</div>
+      <div class="video-tag">עברית</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=hydroelectric+power+plant+animation" target="_blank" class="video-card">
+      <div class="video-thumb">🌊</div>
+      <div class="video-title">Hydroelectric Power Plant Animation</div>
+      <div class="video-sub">אנימציה ויזואלית</div>
+      <div class="video-tag">אנגלית</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=energy+efficiency+physics+calculation" target="_blank" class="video-card">
+      <div class="video-thumb">📐</div>
+      <div class="video-title">Energy Efficiency Calculations</div>
+      <div class="video-sub">חישובי נצילות</div>
+      <div class="video-tag">אנגלית</div>
+    </a>
+    <a href="https://www.youtube.com/results?search_query=המרת+אנרגיה+פיזיקה+כיתה+ט" target="_blank" class="video-card">
+      <div class="video-thumb">🔄</div>
+      <div class="video-title">המרת אנרגיה — כיתה ט</div>
+      <div class="video-sub">נושא המרות אנרגיה</div>
+      <div class="video-tag">עברית</div>
+    </a>
+  </div>
+</div>
+
+<!-- WORKED EXAMPLES -->
+<div class="section">
+  <div class="section-title">דוגמאות מפורטות</div>
+  <div class="section-desc">קראי את הפתרון שלב אחר שלב, אחר כך נסי לפתור לבד</div>
+
+  <!-- Example 1: Easy -->
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-easy">קל</span>
+      <span class="example-title">זיהוי שלבי האנרגיה בתחנה</span>
+    </div>
+    <div class="example-body">
+      <p>מים נאגרים במאגר בגובה 50 מטר מעל לטורבינה. המים זורמים דרך צינור ומסובבים טורבינה שמפעילה גנרטור. <strong>תארי את שרשרת המרת האנרגיה מהמאגר ועד לנורה הדולקת.</strong></p>
+      <div class="ex-step"><div class="ex-step-num">1</div><div class="ex-step-text"><strong>מאגר:</strong> המים נמצאים בגובה — יש להם <em>אנרגיית גובה</em> (Eₕ). נוסחה: Eₕ = mgh</div></div>
+      <div class="ex-step"><div class="ex-step-num">2</div><div class="ex-step-text"><strong>נפילה בצינור:</strong> Eₕ הופכת ל-Eₖ — המים מאיצים. ממש כמו כדור שנופל!</div></div>
+      <div class="ex-step"><div class="ex-step-num">3</div><div class="ex-step-text"><strong>טורבינה:</strong> המים פוגעים בלפות הטורבינה ומסובבים אותה — Eₖ של המים מועברת כ-Eₖ לטורבינה.</div></div>
+      <div class="ex-step"><div class="ex-step-num">4</div><div class="ex-step-text"><strong>גנרטור:</strong> הטורבינה מסובבת את הגנרטור — Eₖ הופכת לאנרגיה חשמלית (Eחשמלי).</div></div>
+      <div class="ex-step"><div class="ex-step-num">5</div><div class="ex-step-text"><strong>נורה:</strong> הזרם החשמלי מאיר את הנורה — Eחשמלי הופכת לאור וחום.</div></div>
+      <div class="ex-answer">שרשרת: Eₕ(מים) → Eₖ(מים) → Eₖ(טורבינה) → Eחשמלי → אור + חום</div>
+    </div>
+  </div>
+
+  <!-- Example 2: Medium -->
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-medium">בינוני</span>
+      <span class="example-title">חישוב אנרגיה ונצילות</span>
+    </div>
+    <div class="example-body">
+      <p>מים במסה של 200 ק"ג נופלים מגובה 80 מ׳ בתחנה הידרואלקטרית. התחנה מפיקה 128,000 ג'ול חשמל. (g=10)</p>
+      <p><strong>א. חשבי את אנרגיית הגובה של המים.</strong><br>
+      <strong>ב. מה הנצילות של התחנה?</strong><br>
+      <strong>ג. כמה אנרגיה אבדה כחום?</strong></p>
+      <div class="ex-step"><div class="ex-step-num">א</div><div class="ex-step-text">
+        Eₕ = mgh = 200 × 10 × 80 = <strong>160,000 ג'ול</strong>
+      </div></div>
+      <div class="ex-step"><div class="ex-step-num">ב</div><div class="ex-step-text">
+        נצילות = (E_חשמלי ÷ Eₕ) × 100 = (128,000 ÷ 160,000) × 100 = <strong>80%</strong>
+      </div></div>
+      <div class="ex-step"><div class="ex-step-num">ג</div><div class="ex-step-text">
+        E_חום = Eₕ − E_חשמלי = 160,000 − 128,000 = <strong>32,000 ג'ול</strong>
+      </div></div>
+      <div class="ex-answer">א) 160,000 J · ב) 80% · ג) 32,000 J</div>
+    </div>
+  </div>
+
+  <!-- Example 3: Hard (from 2025 exam Q4 style) -->
+  <div class="example-card">
+    <div class="example-header">
+      <span class="diff-badge diff-hard">קשה</span>
+      <span class="example-title">שאלה מלאה — סגנון שאלה 4 במבחן 2025</span>
+    </div>
+    <div class="example-body">
+      <p>בתחנה הידרואלקטרית, 500 ק"ג של מים נופלים מגובה 60 מטר ומסובבים טורבינה. הנצילות הכוללת של התחנה היא 75%. (g=10 m/s²)</p>
+      <p><strong>א. מה אנרגיית הגובה ההתחלתית של המים?</strong><br>
+      <strong>ב. כמה אנרגיה חשמלית מיוצרת?</strong><br>
+      <strong>ג. המים מגיעים לתחתית הסכר (גובה 0). לפי חוק שימור האנרגיה, מה מהירות המים אם <em>לא היה</em> חיכוך? (בלי נצילות)</strong><br>
+      <strong>ד. האם המהירות האמיתית גדולה יותר, קטנה יותר, או שווה? הסבירי.</strong></p>
+      <div class="ex-step"><div class="ex-step-num">א</div><div class="ex-step-text">
+        Eₕ = mgh = 500 × 10 × 60 = <strong>300,000 J</strong>
+      </div></div>
+      <div class="ex-step"><div class="ex-step-num">ב</div><div class="ex-step-text">
+        E_חשמלי = (75/100) × 300,000 = <strong>225,000 J</strong>
+      </div></div>
+      <div class="ex-step"><div class="ex-step-num">ג</div><div class="ex-step-text">
+        ללא חיכוך: Eₕ = Eₖ → mgh = ½mv² → gh = ½v²<br>
+        10 × 60 = ½v² → 600 = ½v² → v² = 1200 → v = √1200 ≈ <strong>34.6 m/s</strong>
+      </div></div>
+      <div class="ex-step"><div class="ex-step-num">ד</div><div class="ex-step-text">
+        המהירות <strong>האמיתית קטנה יותר</strong> — כי בפועל חלק מהאנרגיה הלך לאיבוד כחום (חיכוך), ולכן פחות אנרגיה הופכת למהירות.
+      </div></div>
+      <div class="ex-answer">א) 300,000 J · ב) 225,000 J · ג) ≈34.6 m/s · ד) קטנה יותר בגלל חיכוך</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCISES -->
+<div class="section">
+  <div class="section-title">תרגילים</div>
+  <div class="section-desc">מקל לקשה — נסי לפתור לפני שפותחים רמז/פתרון</div>
+
+  <!-- Ex 1 -->
+  <div class="exercise" id="ex1">
+    <div class="ex-header" onclick="toggleEx('ex1')">
+      <div class="ex-num">1</div>
+      <div class="ex-question">זיהוי המרות אנרגיה בתחנה</div>
+      <span class="lv-strip lv1">רמה 1</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">ציירי/כתבי את שרשרת המרת האנרגיה בתחנה הידרואלקטרית, מהמאגר ועד לנורת החשמל הדולקת בבית. ציינו את שם האנרגיה בכל שלב.</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex1','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex1','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex1-hint">
+        <div class="hint-box">חשבי: מה יש למים לפני הנפילה? מה קורה בזמן הנפילה? מה עושה הטורבינה? מה עושה הגנרטור? מה עושה הנורה?</div>
+      </div>
+      <div class="tab-panel" id="ex1-solution">
+        <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>מאגר בגובה:</strong> אנרגיית גובה (Eₕ)</div></div>
+        <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>נפילה בצינור:</strong> Eₕ → אנרגיית תנועה (Eₖ) של המים</div></div>
+        <div class="sol-step"><div class="sol-num">3</div><div class="sol-text"><strong>פגיעה בטורבינה:</strong> Eₖ מים → Eₖ טורבינה (סיבוב)</div></div>
+        <div class="sol-step"><div class="sol-num">4</div><div class="sol-text"><strong>גנרטור:</strong> Eₖ טורבינה → אנרגיה חשמלית (Eחשמלי)</div></div>
+        <div class="sol-step"><div class="sol-num">5</div><div class="sol-text"><strong>נורה:</strong> Eחשמלי → אנרגיית אור + אנרגיית חום</div></div>
+        <div class="ans-box">Eₕ → Eₖ(מים) → Eₖ(טורבינה) → Eחשמלי → אור + חום</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 2 -->
+  <div class="exercise" id="ex2">
+    <div class="ex-header" onclick="toggleEx('ex2')">
+      <div class="ex-num">2</div>
+      <div class="ex-question">חישוב אנרגיית גובה בסיסי</div>
+      <span class="lv-strip lv1">רמה 1</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">100 ק"ג מים נמצאים במאגר בגובה 50 מ׳ מעל הטורבינה. g=10 m/s².<br>
+      א. חשבי את אנרגיית הגובה של המים.<br>
+      ב. אם כל האנרגיה הופכת לחשמל (נצילות 100%), כמה חשמל מיוצר?</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex2','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex2','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex2-hint">
+        <div class="hint-box">השתמשי בנוסחה: Eₕ = m × g × h. בחלק ב׳ — אם נצילות 100%, כמה % מהאנרגיה הופכת לחשמל?</div>
+      </div>
+      <div class="tab-panel" id="ex2-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">Eₕ = mgh = 100 × 10 × 50 = 50,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">נצילות 100% → E_חשמלי = Eₕ = 50,000 J</div></div>
+        <div class="ans-box">א) 50,000 J · ב) 50,000 J</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 3 -->
+  <div class="exercise" id="ex3">
+    <div class="ex-header" onclick="toggleEx('ex3')">
+      <div class="ex-num">3</div>
+      <div class="ex-question">חישוב נצילות</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">150 ק"ג מים נופלים מגובה 40 מ׳. התחנה מייצרת 48,000 ג'ול חשמל. g=10 m/s².<br>
+      א. מה אנרגיית הגובה ההתחלתית?<br>
+      ב. מה הנצילות של התחנה?<br>
+      ג. כמה אנרגיה הלכה לאיבוד?</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex3','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex3','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex3-hint">
+        <div class="hint-box">נצילות = (E_חשמלי ÷ E_גובה) × 100. לחלק ג׳: E_אובדן = E_גובה − E_חשמלי.</div>
+      </div>
+      <div class="tab-panel" id="ex3-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">Eₕ = 150 × 10 × 40 = 60,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">נצילות = (48,000 ÷ 60,000) × 100 = 80%</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">E_אובדן = 60,000 − 48,000 = 12,000 J</div></div>
+        <div class="ans-box">א) 60,000 J · ב) 80% · ג) 12,000 J</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 4 -->
+  <div class="exercise" id="ex4">
+    <div class="ex-header" onclick="toggleEx('ex4')">
+      <div class="ex-num">4</div>
+      <div class="ex-question">מציאת מסת המים מהאנרגיה</div>
+      <span class="lv-strip lv2">רמה 2</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">תחנה הידרואלקטרית מפיקה 90,000 ג'ול חשמל בנצילות 90%. המים נופלים מגובה 100 מ׳. g=10 m/s².<br>
+      א. מה הייתה אנרגיית הגובה ההכרחית?<br>
+      ב. מה מסת המים שנפלו?</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex4','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex4','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex4-hint">
+        <div class="hint-box">לחלק א׳: E_חשמלי = נצילות × Eₕ → Eₕ = E_חשמלי ÷ נצילות.<br>לחלק ב׳: Eₕ = mgh → m = Eₕ ÷ (g×h).</div>
+      </div>
+      <div class="tab-panel" id="ex4-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">E_חשמלי = (נצילות/100) × Eₕ<br>90,000 = 0.9 × Eₕ<br>Eₕ = 90,000 ÷ 0.9 = 100,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">Eₕ = mgh → m = Eₕ ÷ (g×h) = 100,000 ÷ (10 × 100) = 100,000 ÷ 1000 = 100 ק"ג</div></div>
+        <div class="ans-box">א) 100,000 J · ב) 100 ק"ג</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 5 -->
+  <div class="exercise" id="ex5">
+    <div class="ex-header" onclick="toggleEx('ex5')">
+      <div class="ex-num">5</div>
+      <div class="ex-question">יתרון וחיסרון — שאלת הסבר</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">א. ציינו יתרון אחד של ייצור חשמל בתחנה הידרואלקטרית לעומת תחנת כוח שריפת דלק (גז/פחם). הסבירי.<br>
+      ב. ציינו חיסרון אחד של תחנה הידרואלקטרית לעומת תחנת גז. הסבירי.</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex5','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex5','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex5-hint">
+        <div class="hint-box">לחלק א׳: חשבי על זיהום ועל מחזוריות המקור.<br>לחלק ב׳: חשבי על מיקום גיאוגרפי ועל תלות בגשם.</div>
+      </div>
+      <div class="tab-panel" id="ex5-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text"><strong>יתרון: אנרגיה נקייה.</strong> בתחנה הידרואלקטרית לא נשרף דלק, ולכן לא נפלטים גזי חממה (CO₂) לאטמוספרה. תחנת גז שורפת דלק מאובן ומזהמת את האוויר.</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text"><strong>חיסרון: תלות בגשמים ובמיקום.</strong> תחנה הידרואלקטרית אפשרית רק במקומות עם מפלי מים גדולים ורמת גשם מספקת. בבצורת או באזורים שטוחים — לא ניתן להפעיל אותה. תחנת גז ניתן להקים כמעט בכל מקום.</div></div>
+        <div class="ans-box">תשובות לדוגמה — כל יתרון/חיסרון עם הסבר נכון יתקבל</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 6 -->
+  <div class="exercise" id="ex6">
+    <div class="ex-header" onclick="toggleEx('ex6')">
+      <div class="ex-num">6</div>
+      <div class="ex-question">גובה הנפילה מהנצילות ומסת המים</div>
+      <span class="lv-strip lv3">רמה 3</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">תחנה הידרואלקטרית עם נצילות 75% מייצרת 300,000 ג'ול חשמל מ-500 ק"ג מים. g=10 m/s².<br>
+      א. מה הייתה אנרגיית הגובה ההתחלתית?<br>
+      ב. מאיזה גובה נפלו המים?</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex6','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex6','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex6-hint">
+        <div class="hint-box">לחלק א׳: הפכי את נוסחת הנצילות: Eₕ = E_חשמלי ÷ (נצילות/100).<br>לחלק ב׳: בידוד h מתוך Eₕ = mgh.</div>
+      </div>
+      <div class="tab-panel" id="ex6-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">E_חשמלי = (נצילות/100) × Eₕ<br>300,000 = 0.75 × Eₕ<br>Eₕ = 300,000 ÷ 0.75 = 400,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">Eₕ = mgh → h = Eₕ ÷ (mg) = 400,000 ÷ (500 × 10) = 400,000 ÷ 5,000 = 80 מ׳</div></div>
+        <div class="ans-box">א) 400,000 J · ב) גובה 80 מ׳</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 7 -->
+  <div class="exercise" id="ex7">
+    <div class="ex-header" onclick="toggleEx('ex7')">
+      <div class="ex-num">7</div>
+      <div class="ex-question">השוואת שתי תחנות</div>
+      <span class="lv-strip lv4">רמה 4</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">תחנה א׳: 300 ק"ג מים נופלים מ-50 מ׳, נצילות 80%.<br>
+      תחנה ב׳: 200 ק"ג מים נופלים מ-90 מ׳, נצילות 75%.<br>
+      איזו תחנה מייצרת יותר חשמל? בכמה יותר?</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex7','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex7','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex7-hint">
+        <div class="hint-box">חשבי Eₕ לכל תחנה בנפרד, אחר כך הכפילי בנצילות, ואז השווי.</div>
+      </div>
+      <div class="tab-panel" id="ex7-solution">
+        <div class="sol-step"><div class="sol-num">1</div><div class="sol-text"><strong>תחנה א׳:</strong><br>Eₕ = 300×10×50 = 150,000 J<br>E_חשמלי = 0.8 × 150,000 = 120,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">2</div><div class="sol-text"><strong>תחנה ב׳:</strong><br>Eₕ = 200×10×90 = 180,000 J<br>E_חשמלי = 0.75 × 180,000 = 135,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">תחנה ב׳ > תחנה א׳ (135,000 > 120,000)<br>הפרש: 135,000 − 120,000 = 15,000 J</div></div>
+        <div class="ans-box">תחנה ב׳ מייצרת יותר — 135,000 J לעומת 120,000 J (15,000 J יותר)</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 8 -->
+  <div class="exercise" id="ex8">
+    <div class="ex-header" onclick="toggleEx('ex8')">
+      <div class="ex-num">8</div>
+      <div class="ex-question">מהירות המים בתחתית — ניצול שלם</div>
+      <span class="lv-strip lv4">רמה 4</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">50 ק"ג מים נופלים מגובה 45 מ׳ בתחנה ללא חיכוך (נצילות 100%). g=10 m/s².<br>
+      א. מה Eₕ ההתחלתית?<br>
+      ב. מה Eₖ של המים בתחתית?<br>
+      ג. מה מהירות המים בתחתית?</div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex8','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex8','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex8-hint">
+        <div class="hint-box">ללא חיכוך: כל Eₕ הופכת ל-Eₖ. אחר כך: Eₖ = ½mv² → v = √(2Eₖ/m).</div>
+      </div>
+      <div class="tab-panel" id="ex8-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">Eₕ = 50 × 10 × 45 = 22,500 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">נצילות 100% → Eₖ = Eₕ = 22,500 J</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">Eₖ = ½mv² → 22,500 = ½ × 50 × v²<br>v² = 22,500 × 2 / 50 = 900<br>v = √900 = 30 m/s</div></div>
+        <div class="ans-box">א) 22,500 J · ב) 22,500 J · ג) v = 30 m/s</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 9 -->
+  <div class="exercise" id="ex9">
+    <div class="ex-header" onclick="toggleEx('ex9')">
+      <div class="ex-num">9</div>
+      <div class="ex-question">שאלה מסוג מבחן 2025 — שאלה 4 (חלקים א-ד)</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">
+        <strong>זהו סגנון שאלה 4 מהמבחן האמיתי 2025.</strong><br><br>
+        בתחנה הידרואלקטרית, מים זורמים ממאגר בגובה h=120 מ׳ ומסובבים טורבינה. המים מגיעים לטורבינה במהירות v=40 m/s. מסת המים שנופלת בכל שנייה היא 1000 ק"ג. (g=10 m/s²)<br><br>
+        <strong>א.</strong> מה אנרגיית הגובה של 1000 ק"ג מים במאגר?<br>
+        <strong>ב.</strong> מה אנרגיית התנועה של 1000 ק"ג מים כשמגיעים לטורבינה?<br>
+        <strong>ג.</strong> מה הנצילות של התחנה (כמה אחוז מ-Eₕ הפך ל-Eₖ)?<br>
+        <strong>ד.</strong> הסבירי מדוע Eₖ קטנה מ-Eₕ.
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex9','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex9','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex9-hint">
+        <div class="hint-box">א: Eₕ = mgh. ב: Eₖ = ½mv². ג: נצילות = (Eₖ/Eₕ)×100. ד: חשבי — לאן הלכה האנרגיה שנעלמה?</div>
+      </div>
+      <div class="tab-panel" id="ex9-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">Eₕ = mgh = 1000 × 10 × 120 = 1,200,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">Eₖ = ½mv² = ½ × 1000 × 40² = ½ × 1000 × 1600 = 800,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">נצילות = (800,000 ÷ 1,200,000) × 100 = 66.7%</div></div>
+        <div class="sol-step"><div class="sol-num">ד</div><div class="sol-text">Eₖ קטנה מ-Eₕ כי חלק מהאנרגיה אבד כאנרגיית חום — בגלל חיכוך בין המים לדפנות הצינורות. עקב חוק שימור האנרגיה: Eₕ = Eₖ + E_חום.</div></div>
+        <div class="ans-box">א) 1,200,000 J · ב) 800,000 J · ג) ≈66.7% · ד) חיכוך → חום</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 10 -->
+  <div class="exercise" id="ex10">
+    <div class="ex-header" onclick="toggleEx('ex10')">
+      <div class="ex-num">10</div>
+      <div class="ex-question">טבלת אנרגיות לאורך נפילה — סגנון שאלה 4ג במבחן</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">
+        כדור מים (m=2 ק"ג) מתחיל ממנוחה בגובה 20 מ׳ ונופל לאורך מגלשת מים (ללא חיכוך). g=10 m/s².<br><br>
+        <strong>השלימי את הטבלה:</strong>
+        <table class="data-table" style="margin:16px 0">
+          <tr><th>גובה (מ׳)</th><th>Eₕ (ג'ול)</th><th>Eₖ (ג'ול)</th><th>E_כוללת (ג'ול)</th></tr>
+          <tr><td>20</td><td>?</td><td>0</td><td>?</td></tr>
+          <tr><td>15</td><td>?</td><td>?</td><td>?</td></tr>
+          <tr><td>10</td><td>?</td><td>?</td><td>?</td></tr>
+          <tr><td>5</td><td>?</td><td>?</td><td>?</td></tr>
+          <tr><td>0</td><td>0</td><td>?</td><td>?</td></tr>
+        </table>
+        <strong>ב.</strong> מה תוכלי להסיק על E_כוללת לאורך הנפילה?
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex10','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex10','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex10-hint">
+        <div class="hint-box">E_כוללת = Eₕ + Eₖ. ללא חיכוך — E_כוללת <strong>קבועה</strong> לאורך כל הדרך. חשבי תחילה את E_כוללת בגובה 20מ׳, ואז בכל גובה: Eₖ = E_כוללת − Eₕ.</div>
+      </div>
+      <div class="tab-panel" id="ex10-solution">
+        <div class="sol-step"><div class="sol-num">1</div><div class="sol-text">בגובה 20מ׳: Eₕ = 2×10×20 = 400J, Eₖ=0 → E_כוללת = 400J</div></div>
+        <div class="sol-step"><div class="sol-num">2</div><div class="sol-text">בגובה 15מ׳: Eₕ=2×10×15=300J · Eₖ=400−300=100J · סה"כ=400J</div></div>
+        <div class="sol-step"><div class="sol-num">3</div><div class="sol-text">בגובה 10מ׳: Eₕ=2×10×10=200J · Eₖ=400−200=200J · סה"כ=400J</div></div>
+        <div class="sol-step"><div class="sol-num">4</div><div class="sol-text">בגובה 5מ׳: Eₕ=2×10×5=100J · Eₖ=400−100=300J · סה"כ=400J</div></div>
+        <div class="sol-step"><div class="sol-num">5</div><div class="sol-text">בגובה 0: Eₕ=0 · Eₖ=400J · סה"כ=400J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">E_כוללת נשארת <strong>קבועה</strong> (400J) לאורך כל הנפילה — זהו חוק שימור האנרגיה.</div></div>
+        <div class="ans-box">E_כוללת = 400J בכל גובה. ככל שגובה יורד — Eₕ קטנה ו-Eₖ גדלה באותה כמות.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 11 -->
+  <div class="exercise" id="ex11">
+    <div class="ex-header" onclick="toggleEx('ex11')">
+      <div class="ex-num">11</div>
+      <div class="ex-question">תחנה עם ייצור חשמל לפי זמן</div>
+      <span class="lv-strip lv5">רמה 5</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">
+        תחנה הידרואלקטרית מפעילה 2000 ק"ג מים בשנייה הנופלים מגובה 80 מ׳. נצילות התחנה 85%. (g=10 m/s²)<br><br>
+        <strong>א.</strong> מה E_גובה של המים שנופלים בשנייה אחת?<br>
+        <strong>ב.</strong> מה E_חשמלי המיוצרת בשנייה?<br>
+        <strong>ג.</strong> כמה אנרגיה חשמלית מייצרת התחנה ב-10 שניות?<br>
+        <strong>ד.</strong> כמה אנרגיה הולכת לאיבוד ב-10 שניות?
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex11','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex11','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex11-hint">
+        <div class="hint-box">לחלקים א-ב: חשבי לשנייה אחת. לחלקים ג-ד: הכפילי ב-10.</div>
+      </div>
+      <div class="tab-panel" id="ex11-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">Eₕ = 2000 × 10 × 80 = 1,600,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">E_חשמלי = 0.85 × 1,600,000 = 1,360,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">ב-10 שניות: 1,360,000 × 10 = 13,600,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ד</div><div class="sol-text">E_אובדן לשנייה = 1,600,000 − 1,360,000 = 240,000 J<br>ב-10 שניות: 240,000 × 10 = 2,400,000 J</div></div>
+        <div class="ans-box">א) 1,600,000 J · ב) 1,360,000 J · ג) 13,600,000 J · ד) 2,400,000 J</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Ex 12 BONUS -->
+  <div class="exercise" id="ex12">
+    <div class="ex-header" onclick="toggleEx('ex12')">
+      <div class="ex-num">★</div>
+      <div class="ex-question">בונוס — שאלה מאתגרת: הגנרטור ומהירות הסיבוב</div>
+      <span class="lv-strip lv6">בונוס</span>
+      <span class="ex-chevron">▼</span>
+    </div>
+    <div class="ex-body"><div class="ex-content">
+      <div class="ex-q">
+        בתחנה הידרואלקטרית, כמות מים מסוימת נופלת מגובה H. מהנדס רוצה לשפר את הנצילות מ-70% ל-90%.<br><br>
+        <strong>א.</strong> אם Eₕ = 500,000 J, כמה אנרגיה חשמלית מיוצרת בנצילות 70%? ובנצילות 90%?<br>
+        <strong>ב.</strong> כמה אנרגיה נחסכת (מופנית לחשמל במקום ללכת לאיבוד)?<br>
+        <strong>ג.</strong> מהנדס אחר טוען: "במקום לשפר נצילות, נכפיל את גובה הנפילה מ-50 מ׳ ל-100 מ׳, אבל נשמור על נצילות 70%." מה הייתה Eₕ החדשה (m=1000 ק"ג) ומה E_חשמלי?<br>
+        <strong>ד.</strong> מה עדיף — הצעת המהנדס הראשון (שיפור נצילות) או השני (כפילת גובה)? הסבירי.
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab(this,'ex12','hint')">רמז</button>
+        <button class="tab-btn" onclick="switchTab(this,'ex12','solution')">פתרון מלא</button>
+      </div>
+      <div class="tab-panel active" id="ex12-hint">
+        <div class="hint-box">לחלק ג׳: חשבי Eₕ עם גובה מוכפל: Eₕ = 1000×10×100. לחלק ד׳: השווי את E_חשמלי מחלק א׳ (90%) עם חלק ג׳.</div>
+      </div>
+      <div class="tab-panel" id="ex12-solution">
+        <div class="sol-step"><div class="sol-num">א</div><div class="sol-text">70%: E_חשמלי = 0.7 × 500,000 = 350,000 J<br>90%: E_חשמלי = 0.9 × 500,000 = 450,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ב</div><div class="sol-text">חיסכון = 450,000 − 350,000 = 100,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ג</div><div class="sol-text">Eₕ חדשה = 1000×10×100 = 1,000,000 J<br>E_חשמלי = 0.7 × 1,000,000 = 700,000 J</div></div>
+        <div class="sol-step"><div class="sol-num">ד</div><div class="sol-text">כפילת גובה נותנת 700,000 J לעומת 450,000 J בשיפור נצילות בלבד → כפילת גובה עדיפה מבחינת תפוקת אנרגיה. אבל בפועל — בניית סכר גבוה יותר יקרה מאוד, ויש לקחת בחשבון גם עלויות ופגיעה סביבתית.</div></div>
+        <div class="ans-box">א) 350,000J / 450,000J · ב) 100,000J · ג) Eₕ=1,000,000J, E_חשמלי=700,000J · ד) כפילת גובה נותנת יותר אנרגיה</div>
+      </div>
+    </div></div>
+  </div>
+
+</div><!-- /section exercises -->
+
+<!-- NAV BUTTONS -->
+<div class="section" style="display:flex; justify-content:space-between; align-items:center; padding-bottom:80px">
+  <a href="day1.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-border);color:var(--text-dim);text-decoration:none;font-weight:600;font-size:14px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--glass-border)'">→ יום קודם: אנרגיה מכנית</a>
+  <a href="day3.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;background:var(--blue-dim);border:1px solid rgba(74,158,255,0.3);color:var(--blue);text-decoration:none;font-weight:700;font-size:14px;transition:all 0.2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">← יום הבא: מעגלים חשמליים</a>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function toggleEx(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+function switchTab(btn, exId, tab) {
+  const content = btn.closest('.ex-content');
+  content.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  content.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(exId + '-' + tab).classList.add('active');
+}
+
+// Draw hydroelectric diagram
+(function() {
+  const canvas = document.getElementById('hydroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Background
+  ctx.fillStyle = 'rgba(11,20,40,0.95)';
+  ctx.beginPath();
+  ctx.roundRect(0, 0, W, H, 14);
+  ctx.fill();
+
+  // Color palette
+  const blue   = '#4a9eff';
+  const teal   = '#00e5c0';
+  const amber  = '#ffbe3d';
+  const purple = '#a78bfa';
+  const dim    = 'rgba(232,240,254,0.4)';
+
+  // Draw mountain/reservoir on right
+  ctx.fillStyle = 'rgba(74,158,255,0.12)';
+  ctx.beginPath();
+  ctx.moveTo(660, 30); ctx.lineTo(820, 30); ctx.lineTo(820, 120); ctx.lineTo(660, 120);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = blue; ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = blue; ctx.font = 'bold 13px Heebo';
+  ctx.textAlign = 'center';
+  ctx.fillText('מאגר מים', 740, 55);
+  ctx.font = '12px Heebo';
+  ctx.fillStyle = dim;
+  ctx.fillText('Eₕ = mgh', 740, 75);
+  ctx.fillText('גובה h', 740, 95);
+
+  // Pipe from reservoir going down and left
+  ctx.strokeStyle = teal; ctx.lineWidth = 12;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(660, 75); ctx.lineTo(540, 75); ctx.lineTo(540, 260);
+  ctx.stroke();
+  // Pipe label
+  ctx.fillStyle = teal; ctx.font = '11px Heebo';
+  ctx.textAlign = 'right';
+  ctx.fillText('צינור', 530, 160);
+  ctx.fillText('Eₕ→Eₖ', 530, 175);
+
+  // Turbine circle
+  ctx.fillStyle = 'rgba(0,229,192,0.12)';
+  ctx.beginPath(); ctx.arc(450, 260, 44, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = teal; ctx.lineWidth = 2;
+  ctx.stroke();
+  // Turbine blades
+  for (let i=0; i<6; i++) {
+    const angle = (i/6)*Math.PI*2;
+    ctx.strokeStyle = teal; ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(450, 260);
+    ctx.lineTo(450 + Math.cos(angle)*36, 260 + Math.sin(angle)*36);
+    ctx.stroke();
+  }
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 12px Heebo';
+  ctx.textAlign = 'center';
+  ctx.fillText('טורבינה', 450, 256);
+  ctx.fillStyle = teal; ctx.font = '11px Heebo';
+  ctx.fillText('Eₖ מים→Eₖ טורבינה', 450, 316);
+
+  // Arrow from pipe to turbine
+  ctx.strokeStyle = teal; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(540, 260); ctx.lineTo(494, 260); ctx.stroke();
+  ctx.fillStyle = teal;
+  ctx.beginPath(); ctx.moveTo(494,260); ctx.lineTo(502,255); ctx.lineTo(502,265); ctx.closePath(); ctx.fill();
+
+  // Generator
+  ctx.fillStyle = 'rgba(167,139,250,0.12)';
+  ctx.beginPath(); ctx.roundRect(260, 230, 120, 60, 10); ctx.fill();
+  ctx.strokeStyle = purple; ctx.lineWidth = 2; ctx.stroke();
+  ctx.fillStyle = purple; ctx.font = 'bold 13px Heebo';
+  ctx.textAlign = 'center';
+  ctx.fillText('גנרטור', 320, 256);
+  ctx.font = '11px Heebo'; ctx.fillStyle = dim;
+  ctx.fillText('Eₖ → Eחשמלי', 320, 276);
+
+  // Arrow turbine → generator
+  ctx.strokeStyle = purple; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(406, 260); ctx.lineTo(380, 260); ctx.stroke();
+  ctx.fillStyle = purple;
+  ctx.beginPath(); ctx.moveTo(380,260); ctx.lineTo(388,255); ctx.lineTo(388,265); ctx.closePath(); ctx.fill();
+
+  // Power line
+  ctx.strokeStyle = amber; ctx.lineWidth = 3; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(260, 260); ctx.lineTo(140, 260); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // House / consumer
+  ctx.fillStyle = 'rgba(255,190,61,0.1)';
+  ctx.beginPath(); ctx.roundRect(40, 220, 100, 80, 10); ctx.fill();
+  ctx.strokeStyle = amber; ctx.lineWidth = 2; ctx.stroke();
+  // Roof
+  ctx.beginPath(); ctx.moveTo(30, 220); ctx.lineTo(90, 175); ctx.lineTo(150, 220); ctx.stroke();
+  ctx.fillStyle = amber; ctx.font = 'bold 12px Heebo'; ctx.textAlign = 'center';
+  ctx.fillText('בית / נורה', 90, 255);
+  ctx.font = '11px Heebo'; ctx.fillStyle = dim;
+  ctx.fillText('Eחשמלי→אור+חום', 90, 275);
+
+  // Arrow generator → house
+  ctx.strokeStyle = amber; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(260, 260); ctx.lineTo(160, 260); ctx.stroke();
+  ctx.fillStyle = amber;
+  ctx.beginPath(); ctx.moveTo(160,260); ctx.lineTo(168,255); ctx.lineTo(168,265); ctx.closePath(); ctx.fill();
+
+  // Water out label at bottom of pipe
+  ctx.fillStyle = dim; ctx.font = '11px Heebo'; ctx.textAlign = 'center';
+  ctx.fillText('מים → נהר', 540, 285);
+
+})();
+</script>
+</body>
+</html>
