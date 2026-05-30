@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>דף נוסחאות מודפס — פיזיקה גולי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f7f8fb;
+    --paper:#ffffff;
+    --ink:#0e1a2e;
+    --ink-dim:#475569;
+    --muted:#94a3b8;
+    --line:#e2e8f0;
+    --teal:#0d9488;
+    --teal-bg:#ccfbf1;
+    --blue:#1d4ed8;
+    --blue-bg:#dbeafe;
+    --amber:#b45309;
+    --amber-bg:#fef3c7;
+    --purple:#6d28d9;
+    --purple-bg:#ede9fe;
+    --pink:#be185d;
+    --pink-bg:#fce7f3;
+    --green:#15803d;
+    --green-bg:#dcfce7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Heebo',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    direction:rtl;
+    line-height:1.55;
+    padding:20px 0;
+  }
+
+  .toolbar{
+    max-width:840px;margin:0 auto 16px;padding:0 24px;
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+  }
+  .back{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:14px;font-weight:600;color:var(--ink-dim);
+    text-decoration:none;padding:8px 14px;border-radius:8px;
+    background:#fff;border:1px solid var(--line);transition:all 0.2s;
+  }
+  .back:hover{background:var(--bg);}
+  .print-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:14px;font-weight:700;color:#fff;
+    background:var(--ink);border:none;cursor:pointer;
+    padding:10px 18px;border-radius:8px;font-family:'Heebo',sans-serif;
+    transition:opacity 0.2s;
+  }
+  .print-btn:hover{opacity:0.85;}
+
+  .sheet{
+    max-width:840px;margin:0 auto;
+    background:var(--paper);
+    border-radius:16px;
+    box-shadow:0 4px 24px rgba(15,23,42,0.06);
+    padding:40px 48px;
+  }
+
+  .head{
+    text-align:center;padding-bottom:18px;
+    border-bottom:2px solid var(--ink);margin-bottom:24px;
+  }
+  .head h1{font-size:28px;font-weight:900;letter-spacing:-0.5px;}
+  .head .sub{font-size:13px;color:var(--ink-dim);margin-top:6px;font-weight:500;}
+
+  .topic{
+    margin-bottom:22px;page-break-inside:avoid;break-inside:avoid;
+  }
+  .topic-head{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 14px;border-radius:8px;margin-bottom:12px;
+  }
+  .topic-num{
+    width:26px;height:26px;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:14px;color:#fff;
+  }
+  .topic-name{font-size:16px;font-weight:800;flex:1;}
+  .topic-pts{font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;}
+
+  .t-teal .topic-head{background:var(--teal-bg);}
+  .t-teal .topic-num,.t-teal .topic-pts{background:var(--teal);color:#fff;}
+  .t-blue .topic-head{background:var(--blue-bg);}
+  .t-blue .topic-num,.t-blue .topic-pts{background:var(--blue);color:#fff;}
+  .t-amber .topic-head{background:var(--amber-bg);}
+  .t-amber .topic-num,.t-amber .topic-pts{background:var(--amber);color:#fff;}
+  .t-purple .topic-head{background:var(--purple-bg);}
+  .t-purple .topic-num,.t-purple .topic-pts{background:var(--purple);color:#fff;}
+  .t-pink .topic-head{background:var(--pink-bg);}
+  .t-pink .topic-num,.t-pink .topic-pts{background:var(--pink);color:#fff;}
+  .t-green .topic-head{background:var(--green-bg);}
+  .t-green .topic-num,.t-green .topic-pts{background:var(--green);color:#fff;}
+
+  .formula{
+    border:1px solid var(--line);border-radius:10px;
+    padding:12px 16px;margin-bottom:10px;
+    page-break-inside:avoid;break-inside:avoid;
+  }
+  .f-name{font-size:13px;font-weight:700;color:var(--ink-dim);margin-bottom:4px;}
+  .f-eq{
+    font-size:18px;font-weight:900;letter-spacing:0.3px;
+    padding:6px 12px;border-radius:6px;display:inline-block;
+    margin-bottom:8px;
+  }
+  .t-teal .f-eq{background:var(--teal-bg);color:var(--teal);}
+  .t-blue .f-eq{background:var(--blue-bg);color:var(--blue);}
+  .t-amber .f-eq{background:var(--amber-bg);color:var(--amber);}
+  .t-purple .f-eq{background:var(--purple-bg);color:var(--purple);}
+  .t-pink .f-eq{background:var(--pink-bg);color:var(--pink);}
+  .t-green .f-eq{background:var(--green-bg);color:var(--green);}
+
+  .vars{list-style:none;padding:0;margin:0;}
+  .vars li{
+    font-size:13.5px;color:var(--ink);line-height:1.65;
+    padding:3px 0;
+    display:flex;gap:8px;
+  }
+  .vars li::before{
+    content:"•";color:var(--muted);font-weight:900;
+    flex-shrink:0;
+  }
+  .vars b{
+    font-weight:900;color:var(--ink);
+    background:#f1f5f9;padding:0 6px;border-radius:4px;
+    font-family:'Heebo',sans-serif;
+  }
+
+  .rule{
+    background:#f8fafc;border-right:3px solid var(--ink);
+    border-radius:6px;padding:8px 12px;margin-top:10px;
+    font-size:12.5px;line-height:1.65;color:var(--ink);
+  }
+  .t-teal .rule{border-right-color:var(--teal);}
+  .t-blue .rule{border-right-color:var(--blue);}
+  .t-amber .rule{border-right-color:var(--amber);}
+  .t-purple .rule{border-right-color:var(--purple);}
+  .t-pink .rule{border-right-color:var(--pink);}
+  .t-green .rule{border-right-color:var(--green);}
+
+  .const{
+    margin-top:24px;border-top:2px dashed var(--line);
+    padding-top:20px;page-break-inside:avoid;break-inside:avoid;
+  }
+  .const h2{font-size:16px;font-weight:800;margin-bottom:10px;}
+  .const-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:8px 16px;
+  }
+  .const-item{
+    font-size:13px;padding:6px 10px;border-radius:6px;
+    background:#f1f5f9;display:flex;justify-content:space-between;gap:10px;
+  }
+  .const-item b{font-weight:900;color:var(--ink);}
+  .const-item span{color:var(--ink-dim);}
+
+  .conv{
+    margin-top:20px;page-break-inside:avoid;break-inside:avoid;
+  }
+  .conv h2{font-size:16px;font-weight:800;margin-bottom:10px;}
+  .conv-list{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:6px 14px;
+    font-size:13px;color:var(--ink);
+  }
+  .conv-list div{padding:4px 0;border-bottom:1px dashed var(--line);}
+  .conv-list b{font-weight:800;}
+
+  .foot{
+    margin-top:24px;padding-top:16px;border-top:1px solid var(--line);
+    text-align:center;font-size:11.5px;color:var(--muted);
+  }
+
+  /* ──── PRINT ──── */
+  @media print {
+    body{background:#fff;padding:0;}
+    .toolbar{display:none;}
+    .sheet{
+      box-shadow:none;border-radius:0;
+      max-width:none;margin:0;padding:14mm 14mm;
+    }
+    .head h1{font-size:22px;}
+    .topic{margin-bottom:14px;}
+    .topic-head{padding:6px 10px;}
+    .topic-name{font-size:14px;}
+    .formula{padding:8px 12px;margin-bottom:7px;}
+    .f-eq{font-size:15px;padding:3px 8px;}
+    .vars li{font-size:11.5px;padding:1.5px 0;}
+    .rule{font-size:11px;padding:5px 9px;margin-top:6px;}
+    .const-item,.conv-list{font-size:11.5px;}
+    @page{margin:8mm;size:A4;}
+  }
+
+  @media (max-width:600px){
+    .sheet{padding:24px 18px;}
+    .toolbar{padding:0 16px;}
+    .const-grid,.conv-list{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a href="index.html" class="back">→ חזרה לדף הראשי</a>
+  <button class="print-btn" onclick="window.print()">🖨️ הדפס / שמור כ-PDF</button>
+</div>
+
+<div class="sheet">
+
+  <div class="head">
+    <h1>דף נוסחאות — פיזיקה כיתה ט׳</h1>
+    <div class="sub">עתודה מדעית טכנולוגית · כל הנוסחאות + הסבר כל משתנה ויחידותיו</div>
+  </div>
+
+  <!-- ════════ 1. אנרגיה מכנית ════════ -->
+  <div class="topic t-teal">
+    <div class="topic-head">
+      <div class="topic-num">1</div>
+      <div class="topic-name">אנרגיה מכנית — Eₕ ו-Eₖ</div>
+      <div class="topic-pts">23 נק׳</div>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">משקל (כוח הכובד)</div>
+      <div class="f-eq">W = m × g</div>
+      <ul class="vars">
+        <li><span><b>W</b> — זהו <b>המשקל</b> (כוח הכובד הפועל על הגוף). נמדד בניוטון <b>(N)</b>.</span></li>
+        <li><span><b>m</b> — זוהי <b>המסה</b> של הגוף. נמדדת בקילוגרם <b>(ק"ג)</b>.</span></li>
+        <li><span><b>g</b> — זוהי <b>תאוצת הכובד</b>. ערך קבוע = <b>10 N/kg</b> (בארץ).</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">אנרגיית גובה (אנרגיה פוטנציאלית)</div>
+      <div class="f-eq">Eₕ = m × g × h</div>
+      <ul class="vars">
+        <li><span><b>Eₕ</b> — זוהי <b>אנרגיית הגובה</b> (פוטנציאלית). נמדדת בג'ול <b>(J)</b>.</span></li>
+        <li><span><b>m</b> — זוהי <b>המסה</b>. נמדדת בקילוגרם <b>(ק"ג)</b>.</span></li>
+        <li><span><b>g</b> — <b>תאוצת הכובד</b> = 10 N/kg.</span></li>
+        <li><span><b>h</b> — זהו <b>הגובה</b> מעל נקודת הייחוס. נמדד במטר <b>(מ׳)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">אנרגיית תנועה (אנרגיה קינטית)</div>
+      <div class="f-eq">Eₖ = ½ × m × v²</div>
+      <ul class="vars">
+        <li><span><b>Eₖ</b> — זוהי <b>אנרגיית התנועה</b> (קינטית). נמדדת בג'ול <b>(J)</b>.</span></li>
+        <li><span><b>m</b> — <b>מסה</b> בקילוגרם <b>(ק"ג)</b>.</span></li>
+        <li><span><b>v</b> — זוהי <b>המהירות</b> של הגוף. נמדדת במטר לשנייה <b>(מ"ש)</b>. שימי לב — בריבוע!</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">אנרגיה מכנית כוללת</div>
+      <div class="f-eq">E_מכנית = Eₕ + Eₖ</div>
+      <ul class="vars">
+        <li><span><b>E_מכנית</b> — סך כל האנרגיה המכנית של הגוף. נמדדת בג'ול <b>(J)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="rule">⚖️ <b>חוק שימור האנרגיה (ללא חיכוך):</b> E_מכנית קבועה. בעלייה: Eₕ עולה · Eₖ יורדת. בירידה: Eₕ יורדת · Eₖ עולה.</div>
+    <div class="rule">🔻 <b>בתחתית (h=0):</b> כל Eₕ הופכת ל-Eₖ → ½mv² = mgh → <b>v = √(2gh)</b>.</div>
+  </div>
+
+  <!-- ════════ 2. תחנה הידרואלקטרית ════════ -->
+  <div class="topic t-blue">
+    <div class="topic-head">
+      <div class="topic-num">2</div>
+      <div class="topic-name">תחנה הידרואלקטרית — המרות אנרגיה ונצילות</div>
+      <div class="topic-pts">18 נק׳</div>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">נצילות (יעילות)</div>
+      <div class="f-eq">η = (E_מופקת ÷ E_מושקעת) × 100%</div>
+      <ul class="vars">
+        <li><span><b>η</b> (אטא) — זוהי <b>הנצילות</b>. נמדדת באחוזים <b>(%)</b>.</span></li>
+        <li><span><b>E_מושקעת</b> — האנרגיה ש<b>נכנסה</b> למערכת. תמיד 100%. נמדדת בג'ול <b>(J)</b>.</span></li>
+        <li><span><b>E_מופקת</b> — האנרגיה ה<b>שימושית שיצאה</b> מהמערכת. נמדדת בג'ול <b>(J)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="rule">⚡ <b>רצף ההמרות בתחנה:</b> אנרגיית גובה של המים → אנרגיה קינטית של המים → אנרגיה קינטית של הטורבינה → אנרגיה חשמלית (במחולל).</div>
+    <div class="rule">📉 <b>נצילות 90% =</b> 90% מהאנרגיה הופכת לחשמל, 10% מתבזבזת לחום וחיכוך. E_מושקעת = תמיד 100%.</div>
+  </div>
+
+  <!-- ════════ 3. מעגלים חשמליים ════════ -->
+  <div class="topic t-amber">
+    <div class="topic-head">
+      <div class="topic-num">3</div>
+      <div class="topic-name">מעגלים חשמליים — חוק אוהם, טור ומקביל</div>
+      <div class="topic-pts">23 נק׳</div>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">עוצמת זרם</div>
+      <div class="f-eq">I = q ÷ t</div>
+      <ul class="vars">
+        <li><span><b>I</b> — זוהי <b>עוצמת הזרם</b> (כמות מטען שעוברת בשנייה). נמדדת באמפר <b>(A)</b>.</span></li>
+        <li><span><b>q</b> — זהו <b>המטען החשמלי</b>. נמדד בקולון <b>(C)</b>.</span></li>
+        <li><span><b>t</b> — זהו <b>הזמן</b>. נמדד בשניות <b>(שנ׳ / s)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">חוק אוהם</div>
+      <div class="f-eq">I = V ÷ R</div>
+      <ul class="vars">
+        <li><span><b>I</b> — <b>עוצמת הזרם</b>. נמדדת באמפר <b>(A)</b>.</span></li>
+        <li><span><b>V</b> — זהו <b>המתח</b> (הפרש פוטנציאלים). נמדד בוולט <b>(V)</b>.</span></li>
+        <li><span><b>R</b> — זוהי <b>ההתנגדות</b> החשמלית. נמדדת באוהם <b>(Ω)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">התנגדות כוללת — חיבור בטור</div>
+      <div class="f-eq">R_כולל = R₁ + R₂ + R₃ + ...</div>
+      <ul class="vars">
+        <li><span><b>R_כולל</b> — סך ההתנגדות במעגל. נמדדת באוהם <b>(Ω)</b>.</span></li>
+        <li><span><b>R₁, R₂, R₃</b> — ההתנגדויות של כל נגד בנפרד <b>(Ω)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="rule">🔗 <b>בטור:</b> I זהה בכל נקודה · V מתחלק בין המכשירים · R_כולל = R₁+R₂+... · אם נגד אחד נשבר — כל המעגל נפסק.</div>
+    <div class="rule">⫠ <b>במקביל:</b> V זהה בכל ענף = מתח המקור · I מתחלק בין הענפים · R_כולל קטן מהנגד הקטן ביותר · אם נגד נשבר — שאר הענפים ממשיכים.</div>
+  </div>
+
+  <!-- ════════ 4. הספק ════════ -->
+  <div class="topic t-purple">
+    <div class="topic-head">
+      <div class="topic-num">4</div>
+      <div class="topic-name">הספק וצריכת אנרגיה חשמלית</div>
+      <div class="topic-pts">4 נק׳</div>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">הספק (כללי)</div>
+      <div class="f-eq">P = E ÷ t</div>
+      <ul class="vars">
+        <li><span><b>P</b> — זהו <b>ההספק</b> (כמה אנרגיה מועברת בשנייה). נמדד בוואט <b>(W)</b>.</span></li>
+        <li><span><b>E</b> — זוהי <b>האנרגיה</b>. נמדדת בג'ול <b>(J)</b>.</span></li>
+        <li><span><b>t</b> — זהו <b>הזמן</b>. נמדד בשניות <b>(שנ׳ / s)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">הספק חשמלי</div>
+      <div class="f-eq">P = V × I</div>
+      <ul class="vars">
+        <li><span><b>P</b> — <b>הספק חשמלי</b> בוואט <b>(W)</b>.</span></li>
+        <li><span><b>V</b> — <b>מתח</b> בוולט <b>(V)</b>.</span></li>
+        <li><span><b>I</b> — <b>עוצמת זרם</b> באמפר <b>(A)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">אנרגיה חשמלית</div>
+      <div class="f-eq">E = V × I × t   או   E = P × t</div>
+      <ul class="vars">
+        <li><span><b>E</b> — <b>אנרגיה חשמלית</b>. נמדדת בג'ול <b>(J)</b>.</span></li>
+        <li><span><b>P</b> — הספק <b>(W)</b>, <b>V</b> — מתח <b>(V)</b>, <b>I</b> — זרם <b>(A)</b>.</span></li>
+        <li><span><b>t</b> — זמן <b>בשניות</b>! חובה להמיר מדקות/שעות.</span></li>
+      </ul>
+    </div>
+
+    <div class="rule">💡 <b>טריק:</b> הספק גבוה יותר = יותר אנרגיה באותו זמן. מכשיר 2200W צורך פי 2 ממכשיר 1100W. תמיד להמיר זמן לשניות!</div>
+  </div>
+
+  <!-- ════════ 5. אנרגיית חום ════════ -->
+  <div class="topic t-pink">
+    <div class="topic-head">
+      <div class="topic-num">5</div>
+      <div class="topic-name">אנרגיית חום — Q = mcΔT</div>
+      <div class="topic-pts">8 נק׳</div>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">אנרגיית חום (כמות חום)</div>
+      <div class="f-eq">Q = m × c × ΔT</div>
+      <ul class="vars">
+        <li><span><b>Q</b> — זוהי <b>אנרגיית החום</b> שנקלטה/נפלטה. נמדדת בג'ול <b>(J)</b>.</span></li>
+        <li><span><b>m</b> — זוהי <b>המסה</b> של החומר. נמדדת בקילוגרם <b>(ק"ג)</b>. <u>לא גרם!</u></span></li>
+        <li><span><b>c</b> — זהו <b>קיבול חום סגולי</b> (כמה אנרגיה צריך לק"ג כדי להעלות ב-1°C). יחידותיו <b>J/(kg·°C)</b>. למים: c = 4200.</span></li>
+        <li><span><b>ΔT</b> — זהו <b>שינוי הטמפרטורה</b> (סופית פחות התחלתית). נמדד במעלות צלסיוס <b>(°C)</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">חשמל → חום (נצילות 100%)</div>
+      <div class="f-eq">P × t = m × c × ΔT</div>
+      <ul class="vars">
+        <li><span>כאשר כל האנרגיה החשמלית הופכת לחום — האגף השמאלי (חשמלי) שווה לימני (תרמי).</span></li>
+        <li><span><b>P</b> — הספק <b>(W)</b>, <b>t</b> — זמן <b>בשניות</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="rule">🌡️ <b>ΔT = T_סופית − T_התחלתית</b>. תמיד לוודא שהמסה בק"ג (500g = 0.5 kg) ושהזמן בשניות!</div>
+    <div class="rule">♨️ <b>דוגמה:</b> קומקום P=1200W, מים m=0.5 ק"ג, ΔT=80°C → t = (0.5×4200×80) ÷ 1200 = <b>140 שניות</b>.</div>
+  </div>
+
+  <!-- ════════ 6. ניסוי וגרפים ════════ -->
+  <div class="topic t-green">
+    <div class="topic-head">
+      <div class="topic-num">6</div>
+      <div class="topic-name">ניסוי מדעי וגרפים</div>
+      <div class="topic-pts">24 נק׳</div>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">גורם בלתי-תלוי (מה ששינינו ביוזמתנו)</div>
+      <div class="f-eq">→ ציר X (אופקי)</div>
+      <ul class="vars">
+        <li><span>הגורם שאנחנו בוחרים ומשנים. שם הציר + יחידות מידה <b>חובה</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="formula">
+      <div class="f-name">גורם תלוי (מה שמדדנו כתוצאה)</div>
+      <div class="f-eq">→ ציר Y (אנכי)</div>
+      <ul class="vars">
+        <li><span>התוצאה שמדדנו. תלוי בגורם הבלתי-תלוי. שם הציר + יחידות <b>חובה</b>.</span></li>
+      </ul>
+    </div>
+
+    <div class="rule">📊 <b>גרף תקין חייב לכלול:</b> כותרת לגרף · שם ציר X + יחידות · שם ציר Y + יחידות · נקודות מדויקות לפי הטבלה · קו מגמה (מהראשית אם מתאים).</div>
+    <div class="rule">⚠️ <b>שרטוט גרף = 12 נקודות!</b> שווה במיוחד לתרגל — בלי כותרת או יחידות מאבדים נקודות!</div>
+  </div>
+
+  <!-- ════════ קבועים ════════ -->
+  <div class="const">
+    <h2>📌 קבועים חשובים לזכור</h2>
+    <div class="const-grid">
+      <div class="const-item"><b>g = 10 N/kg</b><span>תאוצת הכובד</span></div>
+      <div class="const-item"><b>c_מים = 4200 J/(kg·°C)</b><span>חום סגולי של מים</span></div>
+      <div class="const-item"><b>V_בית = 230 V</b><span>מתח רשת ביתי</span></div>
+      <div class="const-item"><b>T_רתיחה = 100°C</b><span>טמפרטורת רתיחת מים</span></div>
+    </div>
+  </div>
+
+  <!-- ════════ המרות יחידות ════════ -->
+  <div class="conv">
+    <h2>🔄 המרות יחידות שכיחות</h2>
+    <div class="conv-list">
+      <div><b>1 ק"ג</b> = 1000 גרם · <b>500 גרם</b> = 0.5 ק"ג</div>
+      <div><b>1 מטר</b> = 100 ס"מ · <b>50 ס"מ</b> = 0.5 מ׳</div>
+      <div><b>1 דקה</b> = 60 שניות</div>
+      <div><b>1 שעה</b> = 3600 שניות</div>
+      <div><b>1 ק"ו (kW)</b> = 1000 W</div>
+      <div><b>1 ק"ו"ש (kWh)</b> = 3,600,000 J</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    דף נוסחאות לפיזיקה כיתה ט׳ · עתודה מדעית טכנולוגית · גולי 2026
+  </div>
+
+</div>
+
+</body>
+</html>
