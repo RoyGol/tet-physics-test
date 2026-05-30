@@ -105,10 +105,14 @@
     .box{padding:5px 9px;}
     .box h2{font-size:10px;margin-bottom:3px;}
     .box ul{font-size:9px;line-height:1.5;}
+    /* force 2-column layout in print regardless of viewport width */
+    .grid{grid-template-columns:1fr 1fr !important;}
+    .rules{grid-template-columns:1fr 1fr !important;}
+    .footer-grid{grid-template-columns:1fr 1fr !important;}
     @page{margin:0;size:A4;}
   }
 
-  @media (max-width:700px){
+  @media screen and (max-width:700px){
     .sheet{padding:20px 16px;}
     .toolbar{padding:0 12px;}
     .grid,.rules,.footer-grid,.box ul{grid-template-columns:1fr;}
